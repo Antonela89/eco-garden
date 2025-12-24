@@ -3,10 +3,43 @@
         "id": "acelga",
         "nombre": "Acelga",
         "familia": "Quenopodiáceas",
-        "siembra": "Todo el año",
-        "metodo": "Almácigo o siembra directa",
-        "distancia": "15 x 40 cm",
-        "diasCosecha": "130 (3 a 5 cortes)",
+        "siembra": [
+            "Enero",
+            "Febrero",
+            "Marzo",
+            "Abril",
+            "Mayo",
+            "Junio",
+            "Julio",
+            "Agosto",
+            "Septiembre",
+            "Octubre",
+            "Noviembre",
+            "Diciembre"
+        ],
+        "metodo": [
+            "Directa",
+            "Almácigo"
+        ],
+        "diasCosecha": {
+            "min": 90,
+            "max": 130
+        },
+        "distancia": {
+            "entrePlantas": 15,
+            "entreLineas": 40
+        },
+        "asociacion": [
+            "Maíz",
+            "Lechuga",
+            "Escarola"
+        ],
+        "rotacion": [
+            "Legumbres"
+        ],
+        "toleranciaSombra": true,
+        "aptoMaceta": true,
+        "dificultad": "Fácil",
         "clima": "Muy resistente",
         "imagen": "🥬"
     },
@@ -14,10 +47,33 @@
         "id": "ajo",
         "nombre": "Ajo",
         "familia": "Liliáceas",
-        "siembra": "Otoño - Invierno (Marzo-Abril)",
-        "metodo": "Directa (diente de ajo)",
-        "distancia": "10 x 40 cm",
-        "diasCosecha": "150 - 180",
+        "siembra": [
+            "Marzo",
+            "Abril",
+            "Mayo"
+        ],
+        "metodo": [
+            "Directa (Diente)"
+        ],
+        "diasCosecha": {
+            "min": 150,
+            "max": 180
+        },
+        "distancia": {
+            "entrePlantas": 10,
+            "entreLineas": 40
+        },
+        "asociacion": [
+            "Lechuga",
+            "Escarola",
+            "Remolacha"
+        ],
+        "rotacion": [
+            "Legumbres"
+        ],
+        "toleranciaSombra": false,
+        "aptoMaceta": true,
+        "dificultad": "Fácil",
         "clima": "Muy resistente",
         "imagen": "🧄"
     },
@@ -25,21 +81,78 @@
         "id": "albahaca",
         "nombre": "Albahaca",
         "familia": "Labiadas",
-        "siembra": "Primavera - Verano (Agosto-Septiembre)",
-        "metodo": "Almácigo (Transplante Oct-Nov)",
-        "distancia": "15 x 40 cm",
-        "diasCosecha": "90 - 100",
-        "clima": "Muy sensible al frío",
+        "siembra": [
+            "Agosto",
+            "Septiembre",
+            "Octubre"
+        ],
+        "metodo": [
+            "Almácigo",
+            "Transplante"
+        ],
+        "diasCosecha": {
+            "min": 90,
+            "max": 90
+        },
+        "distancia": {
+            "entrePlantas": 20,
+            "entreLineas": 40
+        },
+        "asociacion": [
+            "Tomate",
+            "Pimiento"
+        ],
+        "rotacion": [
+            "Hortalizas de hoja"
+        ],
+        "toleranciaSombra": false,
+        "aptoMaceta": true,
+        "dificultad": "Media",
+        "clima": "Sensible al frío",
         "imagen": "🌿"
     },
     {
         "id": "apio",
         "nombre": "Apio",
         "familia": "Umbelíferas",
-        "siembra": "Todo el año",
-        "metodo": "Almácigo (Transplante a los 45 días)",
-        "distancia": "20 x 40 cm",
-        "diasCosecha": "70 - 100",
+        "siembra": [
+            "Enero",
+            "Febrero",
+            "Marzo",
+            "Abril",
+            "Mayo",
+            "Junio",
+            "Julio",
+            "Agosto",
+            "Septiembre",
+            "Octubre",
+            "Noviembre",
+            "Diciembre"
+        ],
+        "metodo": [
+            "Almácigo",
+            "Transplante"
+        ],
+        "diasCosecha": {
+            "min": 100,
+            "max": 130
+        },
+        "distancia": {
+            "entrePlantas": 25,
+            "entreLineas": 45
+        },
+        "asociacion": [
+            "Puerro",
+            "Repollo",
+            "Lechuga"
+        ],
+        "rotacion": [
+            "Raíces",
+            "Bulbos"
+        ],
+        "toleranciaSombra": true,
+        "aptoMaceta": true,
+        "dificultad": "Difícil",
         "clima": "Resistente",
         "imagen": "🎋"
     },
@@ -47,10 +160,35 @@
         "id": "arveja",
         "nombre": "Arveja",
         "familia": "Leguminosas",
-        "siembra": "Otoño - Invierno (Junio-Agosto)",
-        "metodo": "Directa",
-        "distancia": "5 x 40 cm",
-        "diasCosecha": "120 - 150",
+        "siembra": [
+            "Mayo",
+            "Junio",
+            "Julio",
+            "Agosto"
+        ],
+        "metodo": [
+            "Directa"
+        ],
+        "diasCosecha": {
+            "min": 120,
+            "max": 150
+        },
+        "distancia": {
+            "entrePlantas": 10,
+            "entreLineas": 50
+        },
+        "asociacion": [
+            "Repollo",
+            "Ajo",
+            "Zanahoria"
+        ],
+        "rotacion": [
+            "Frutos",
+            "Hortalizas de hoja"
+        ],
+        "toleranciaSombra": false,
+        "aptoMaceta": false,
+        "dificultad": "Fácil",
         "clima": "Resistente",
         "imagen": "🫛"
     },
@@ -58,10 +196,34 @@
         "id": "batata",
         "nombre": "Batata",
         "familia": "Convolvuláceas",
-        "siembra": "Primavera (Agosto-Octubre)",
-        "metodo": "Almácigo (Guías)",
-        "distancia": "40 x 80 cm",
-        "diasCosecha": "140 - 150",
+        "siembra": [
+            "Agosto",
+            "Septiembre",
+            "Octubre"
+        ],
+        "metodo": [
+            "Guías",
+            "brotes"
+        ],
+        "diasCosecha": {
+            "min": 150,
+            "max": 150
+        },
+        "distancia": {
+            "entrePlantas": 40,
+            "entreLineas": 80
+        },
+        "asociacion": [
+            "Choclo",
+            "Chaucha",
+            "Zapallo"
+        ],
+        "rotacion": [
+            "Hortalizas de hoja"
+        ],
+        "toleranciaSombra": false,
+        "aptoMaceta": false,
+        "dificultad": "Media",
         "clima": "Sensible",
         "imagen": "🍠"
     },
@@ -69,21 +231,66 @@
         "id": "berenjena",
         "nombre": "Berenjena",
         "familia": "Solanáceas",
-        "siembra": "Primavera (Agosto-Septiembre)",
-        "metodo": "Almácigo (Transplante Oct-Nov)",
-        "distancia": "50 x 70 cm",
-        "diasCosecha": "90 - 120",
-        "clima": "Muy sensible al frío",
+        "siembra": [
+            "Agosto",
+            "Septiembre",
+            "Octubre"
+        ],
+        "metodo": [
+            "Almácigo",
+            "Transplante"
+        ],
+        "diasCosecha": {
+            "min": 120,
+            "max": 120
+        },
+        "distancia": {
+            "entrePlantas": 50,
+            "entreLineas": 70
+        },
+        "asociacion": [
+            "Poroto",
+            "Lechuga"
+        ],
+        "rotacion": [
+            "Legumbres"
+        ],
+        "toleranciaSombra": false,
+        "aptoMaceta": true,
+        "dificultad": "Media",
+        "clima": "Muy sensible",
         "imagen": "🍆"
     },
     {
         "id": "brocoli",
-        "nombre": "Brócoli",
-        "familia": "Brasicáceas",
-        "siembra": "Otoño - Invierno (Febrero-Marzo)",
-        "metodo": "Almácigo (Transplante Mar-Abr)",
-        "distancia": "45 x 50 cm",
-        "diasCosecha": "80 - 100",
+        "nombre": "Brasicáceas",
+        "siembra": [
+            "Febrero",
+            "Marzo"
+        ],
+        "metodo": [
+            "Almácigo",
+            "Transplante"
+        ],
+        "diasCosecha": {
+            "min": 100,
+            "max": 100
+        },
+        "distancia": {
+            "entrePlantas": 40,
+            "entreLineas": 70
+        },
+        "asociacion": [
+            "Taco de reina",
+            "Remolacha"
+        ],
+        "rotacion": [
+            "Legumbres",
+            "Bulbos"
+        ],
+        "toleranciaSombra": true,
+        "aptoMaceta": true,
+        "dificultad": "Media",
         "clima": "Resistente",
         "imagen": "🥦"
     },
@@ -91,32 +298,148 @@
         "id": "cebolla",
         "nombre": "Cebolla",
         "familia": "Liliáceas",
-        "siembra": "Otoño - Invierno (Febrero-Abril)",
-        "metodo": "Almácigo (Transplante Mayo-Junio)",
-        "distancia": "10 x 40 cm",
-        "diasCosecha": "270",
+        "siembra": [
+            "Febrero",
+            "Marzo",
+            "Abril"
+        ],
+        "metodo": [
+            "Almácigo",
+            "Transplante"
+        ],
+        "diasCosecha": {
+            "min": 270,
+            "max": 270
+        },
+        "distancia": {
+            "entrePlantas": 15,
+            "entreLineas": 40
+        },
+        "asociacion": [
+            "Zanahoria",
+            "Lechuga",
+            "Remolacha"
+        ],
+        "rotacion": [
+            "Hojas",
+            "Raíces",
+            "Legumbres"
+        ],
+        "toleranciaSombra": false,
+        "aptoMaceta": true,
+        "dificultad": "Media",
         "clima": "Resistente",
         "imagen": "🧅"
+    },
+    {
+        "id": "chaucha",
+        "nombre": "Chaucha",
+        "familia": "Leguminosas",
+        "siembra": [
+            "Septiembre",
+            "Octubre",
+            "Noviembre",
+            "Diciembre",
+            "Enero"
+        ],
+        "metodo": [
+            "Directa"
+        ],
+        "diasCosecha": {
+            "min": 70,
+            "max": 90
+        },
+        "distancia": {
+            "entrePlantas": 25,
+            "entreLineas": 80
+        },
+        "asociacion": [
+            "Maíz",
+            "Zapallo"
+        ],
+        "rotacion": [
+            "Raíces",
+            "Bulbos",
+            "Frutos"
+        ],
+        "toleranciaSombra": false,
+        "aptoMaceta": false,
+        "dificultad": "Fácil",
+        "clima": "Sensible",
+        "imagen": "🫘"
     },
     {
         "id": "choclo",
         "nombre": "Choclo",
         "familia": "Gramíneas",
-        "siembra": "Primavera - Verano (Agosto-Septiembre)",
-        "metodo": "Directa (a golpe)",
-        "distancia": "30 x 70 cm",
-        "diasCosecha": "100 - 130",
-        "clima": "Sensible",
+        "siembra": [
+            "Agosto",
+            "Septiembre",
+            "Octubre",
+            "Noviembre"
+        ],
+        "metodo": [
+            "Directa (a golpe)"
+        ],
+        "diasCosecha": {
+            "min": 100,
+            "max": 130
+        },
+        "distancia": {
+            "entrePlantas": 30,
+            "entreLineas": 70
+        },
+        "asociacion": [
+            "Batata",
+            "Maní",
+            "Zapallo",
+            "Chaucha"
+        ],
+        "rotacion": [
+            "Frutos",
+            "Bulbos",
+            "Raíces"
+        ],
+        "toleranciaSombra": false,
+        "aptoMaceta": false,
+        "dificultad": "Fácil",
+        "clima": "Muy sensible",
         "imagen": "🌽"
     },
     {
         "id": "espinaca",
         "nombre": "Espinaca",
         "familia": "Quenopodiáceas",
-        "siembra": "Otoño - Invierno (Febrero-Junio)",
-        "metodo": "Directa o Almácigo",
-        "distancia": "10 x 40 cm",
-        "diasCosecha": "45 - 60",
+        "siembra": [
+            "Febrero",
+            "Marzo",
+            "Abril",
+            "Mayo",
+            "Junio"
+        ],
+        "metodo": [
+            "Directa"
+        ],
+        "diasCosecha": {
+            "min": 45,
+            "max": 60
+        },
+        "distancia": {
+            "entrePlantas": 10,
+            "entreLineas": 35
+        },
+        "asociacion": [
+            "Repollo",
+            "Coliflor",
+            "Remolacha"
+        ],
+        "rotacion": [
+            "Legumbres",
+            "Bulbos"
+        ],
+        "toleranciaSombra": true,
+        "aptoMaceta": true,
+        "dificultad": "Fácil",
         "clima": "Resistente",
         "imagen": "🍃"
     },
@@ -124,10 +447,33 @@
         "id": "frutilla",
         "nombre": "Frutilla",
         "familia": "Rosáceas",
-        "siembra": "Otoño (Abril-Mayo)",
-        "metodo": "Transplante de estolones",
-        "distancia": "25 x 40 cm",
-        "diasCosecha": "150 (en adelante)",
+        "siembra": [
+            "Abril",
+            "Mayo"
+        ],
+        "metodo": [
+            "Transplante"
+        ],
+        "diasCosecha": {
+            "min": 150,
+            "max": 150
+        },
+        "distancia": {
+            "entrePlantas": 25,
+            "entreLineas": 40
+        },
+        "asociacion": [
+            "Hojas",
+            "Bulbos"
+        ],
+        "rotacion": [
+            "Bulbos",
+            "Raíces",
+            "Legumbres"
+        ],
+        "toleranciaSombra": false,
+        "aptoMaceta": true,
+        "dificultad": "Media",
         "clima": "Resistente",
         "imagen": "🍓"
     },
@@ -135,21 +481,121 @@
         "id": "haba",
         "nombre": "Haba",
         "familia": "Leguminosas",
-        "siembra": "Otoño - Invierno (Abril-Agosto)",
-        "metodo": "Directa (a golpe)",
-        "distancia": "25 x 70 cm",
-        "diasCosecha": "150 - 180",
-        "clima": "Muy resistente",
+        "siembra": [
+            "Abril",
+            "Mayo",
+            "Junio",
+            "Julio",
+            "Agosto"
+        ],
+        "metodo": [
+            "Directa (a golpe)"
+        ],
+        "diasCosecha": {
+            "min": 150,
+            "max": 180
+        },
+        "distancia": {
+            "entrePlantas": 25,
+            "entreLineas": 70
+        },
+        "asociacion": [
+            "Chaucha de metro",
+            "Repollo",
+            "Hojas",
+            "Frutos"
+        ],
+        "rotacion": [
+            "Bulbos",
+            "Raíces",
+            "Hojas",
+            "Frutos"
+        ],
+        "toleranciaSombra": false,
+        "aptoMaceta": false,
+        "dificultad": "Fácil",
+        "clima": "Resistente",
         "imagen": "🫘"
+    },
+    {
+        "id": "hinojo",
+        "nombre": "Hinojo",
+        "familia": "Apiáceas",
+        "siembra": [
+            "Febrero",
+            "Marzo",
+            "Abril"
+        ],
+        "metodo": [
+            "Almácigo",
+            "Transplante"
+        ],
+        "diasCosecha": {
+            "min": 150,
+            "max": 150
+        },
+        "distancia": {
+            "entrePlantas": 30,
+            "entreLineas": 60
+        },
+        "asociacion": [
+            "Lechuga",
+            "Acelga",
+            "Bulbos"
+        ],
+        "rotacion": [
+            "Bulbos",
+            "Raíces",
+            "Legumbres"
+        ],
+        "toleranciaSombra": false,
+        "aptoMaceta": true,
+        "dificultad": "Media",
+        "clima": "Resistente",
+        "imagen": "🥗"
     },
     {
         "id": "lechuga",
         "nombre": "Lechuga",
         "familia": "Compuestas",
-        "siembra": "Todo el año",
-        "metodo": "Almácigo y transplante",
-        "distancia": "20 x 20 cm",
-        "diasCosecha": "50 - 80",
+        "siembra": [
+            "Enero",
+            "Febrero",
+            "Marzo",
+            "Abril",
+            "Mayo",
+            "Junio",
+            "Julio",
+            "Agosto",
+            "Septiembre",
+            "Octubre",
+            "Noviembre",
+            "Diciembre"
+        ],
+        "metodo": [
+            "Almácigo",
+            "Directa"
+        ],
+        "diasCosecha": {
+            "min": 60,
+            "max": 90
+        },
+        "distancia": {
+            "entrePlantas": 20,
+            "entreLineas": 25
+        },
+        "asociacion": [
+            "Bulbos",
+            "Raíces",
+            "Zanahoria",
+            "Remolacha"
+        ],
+        "rotacion": [
+            "Legumbres"
+        ],
+        "toleranciaSombra": true,
+        "aptoMaceta": true,
+        "dificultad": "Fácil",
         "clima": "Resistente",
         "imagen": "🥗"
     },
@@ -157,32 +603,147 @@
         "id": "melon",
         "nombre": "Melón",
         "familia": "Cucurbitáceas",
-        "siembra": "Primavera (Octubre)",
-        "metodo": "Directa (a golpe)",
-        "distancia": "90 x 120 cm",
-        "diasCosecha": "100",
+        "siembra": [
+            "Septiembre",
+            "Octubre"
+        ],
+        "metodo": [
+            "Directa (a golpe)"
+        ],
+        "diasCosecha": {
+            "min": 100,
+            "max": 100
+        },
+        "distancia": {
+            "entrePlantas": 90,
+            "entreLineas": 1200
+        },
+        "asociacion": [
+            "Maíz",
+            "Poroto"
+        ],
+        "rotacion": [
+            "Raíces",
+            "Legumbres",
+            "Hojas"
+        ],
+        "toleranciaSombra": false,
+        "aptoMaceta": false,
+        "dificultad": "Difícil",
         "clima": "Muy sensible",
         "imagen": "🍈"
+    },
+    {
+        "id": "papa",
+        "nombre": "Papa",
+        "familia": "Solanáceas",
+        "siembra": [
+            "Agosto",
+            "Septiembre"
+        ],
+        "metodo": [
+            "Directa (tubérculo)"
+        ],
+        "diasCosecha": {
+            "min": 120,
+            "max": 120
+        },
+        "distancia": {
+            "entrePlantas": 30,
+            "entreLineas": 70
+        },
+        "asociacion": [
+            "Lechuga",
+            "Cardo",
+            "Berro",
+            "Espinaca"
+        ],
+        "rotacion": [
+            "Legumbres",
+            "Bulbos"
+        ],
+        "toleranciaSombra": false,
+        "aptoMaceta": false,
+        "dificultad": "Media",
+        "clima": "Sensible",
+        "imagen": "🥔"
     },
     {
         "id": "pepino",
         "nombre": "Pepino",
         "familia": "Cucurbitáceas",
-        "siembra": "Primavera (Octubre)",
-        "metodo": "Directa (a golpe)",
-        "distancia": "50 x 100 cm",
-        "diasCosecha": "50 - 70",
+        "siembra": [
+            "Septiembre",
+            "Octubre"
+        ],
+        "metodo": [
+            "Directa (a golpe)"
+        ],
+        "diasCosecha": {
+            "min": 60,
+            "max": 80
+        },
+        "distancia": {
+            "entrePlantas": 70,
+            "entreLineas": 120
+        },
+        "asociacion": [
+            "Chaucha de veraneo",
+            "Maíz"
+        ],
+        "rotacion": [
+            "Raíces",
+            "Legumbres",
+            "Hojas"
+        ],
+        "toleranciaSombra": false,
+        "aptoMaceta": false,
+        "dificultad": "Media",
         "clima": "Muy sensible",
         "imagen": "🥒"
     },
     {
         "id": "perejil",
         "nombre": "Perejil",
-        "familia": "Umbelíferas",
-        "siembra": "Todo el año",
-        "metodo": "Directa a chorrillo",
-        "distancia": "1 x 25 cm",
-        "diasCosecha": "75 (1er corte)",
+        "familia": "Apiáceas",
+        "siembra": [
+            "Enero",
+            "Febrero",
+            "Marzo",
+            "Abril",
+            "Mayo",
+            "Junio",
+            "Julio",
+            "Agosto",
+            "Septiembre",
+            "Octubre",
+            "Noviembre",
+            "Diciembre"
+        ],
+        "metodo": [
+            "Directa (a chorrillo)"
+        ],
+        "diasCosecha": {
+            "min": 75,
+            "max": 75
+        },
+        "distancia": {
+            "entrePlantas": 1,
+            "entreLineas": 25
+        },
+        "asociacion": [
+            "Tomate",
+            "Coles",
+            "Zanahoria"
+        ],
+        "rotacion": [
+            "Bulbos",
+            "Raíces",
+            "Legumbres"
+        ],
+        "toleranciaSombra": true,
+        "aptoMaceta": true,
+        "dificultad": "Fácil",
         "clima": "Resistente",
         "imagen": "🌿"
     },
@@ -190,10 +751,33 @@
         "id": "pimiento",
         "nombre": "Pimiento",
         "familia": "Solanáceas",
-        "siembra": "Primavera (Julio-Agosto)",
-        "metodo": "Almácigo (Transplante Octubre)",
-        "distancia": "40 x 70 cm",
-        "diasCosecha": "80 - 100",
+        "siembra": [
+            "Julio",
+            "Agosto",
+            "Septiembre"
+        ],
+        "metodo": [
+            "Almácigo",
+            "Transplante"
+        ],
+        "diasCosecha": {
+            "min": 80,
+            "max": 100
+        },
+        "distancia": {
+            "entrePlantas": 45,
+            "entreLineas": 75
+        },
+        "asociacion": [
+            "Zanahoria",
+            "Albahaca"
+        ],
+        "rotacion": [
+            "Legumbres"
+        ],
+        "toleranciaSombra": false,
+        "aptoMaceta": true,
+        "dificultad": "Media",
         "clima": "Muy sensible",
         "imagen": "🫑"
     },
@@ -201,10 +785,45 @@
         "id": "puerro",
         "nombre": "Puerro",
         "familia": "Liliáceas",
-        "siembra": "Todo el año",
-        "metodo": "Almácigo (Transplante a los 60 días)",
-        "distancia": "10 x 40 cm",
-        "diasCosecha": "120 - 150",
+        "siembra": [
+            "Enero",
+            "Febrero",
+            "Marzo",
+            "Abril",
+            "Mayo",
+            "Junio",
+            "Julio",
+            "Agosto",
+            "Septiembre",
+            "Octubre",
+            "Noviembre",
+            "Diciembre"
+        ],
+        "metodo": [
+            "Almácigo",
+            "Transplante"
+        ],
+        "diasCosecha": {
+            "min": 120,
+            "max": 150
+        },
+        "distancia": {
+            "entrePlantas": 10,
+            "entreLineas": 40
+        },
+        "asociacion": [
+            "Zanahoria",
+            "Apio",
+            "Lechuga"
+        ],
+        "rotacion": [
+            "Hojas",
+            "Raíces",
+            "Legumbres"
+        ],
+        "toleranciaSombra": true,
+        "aptoMaceta": true,
+        "dificultad": "Media",
         "clima": "Resistente",
         "imagen": "🧅"
     },
@@ -212,10 +831,45 @@
         "id": "rabanito",
         "nombre": "Rabanito",
         "familia": "Brasicáceas",
-        "siembra": "Todo el año",
-        "metodo": "Directa a chorrillo",
-        "distancia": "10 x 20 cm",
-        "diasCosecha": "25 - 30",
+        "siembra": [
+            "Enero",
+            "Febrero",
+            "Marzo",
+            "Abril",
+            "Mayo",
+            "Junio",
+            "Julio",
+            "Agosto",
+            "Septiembre",
+            "Octubre",
+            "Noviembre",
+            "Diciembre"
+        ],
+        "metodo": [
+            "Directa (a chorrillo)"
+        ],
+        "diasCosecha": {
+            "min": 25,
+            "max": 30
+        },
+        "distancia": {
+            "entrePlantas": 5,
+            "entreLineas": 25
+        },
+        "asociacion": [
+            "Taco de reina",
+            "Lechuga",
+            "Zanahoria",
+            "Acelga"
+        ],
+        "rotacion": [
+            "Bulbos",
+            "Raíces",
+            "Legumbres"
+        ],
+        "toleranciaSombra": true,
+        "aptoMaceta": true,
+        "dificultad": "Fácil",
         "clima": "Resistente",
         "imagen": "🎯"
     },
@@ -223,10 +877,42 @@
         "id": "radicheta",
         "nombre": "Radicheta",
         "familia": "Compuestas",
-        "siembra": "Todo el año",
-        "metodo": "Directa a chorrillo",
-        "distancia": "1 x 15 cm",
-        "diasCosecha": "70 - 90",
+        "siembra": [
+            "Agosto",
+            "Septiembre",
+            "Octubre",
+            "Noviembre",
+            "Diciembre",
+            "Enero",
+            "Febrero",
+            "Marzo",
+            "Abril",
+            "Mayo"
+        ],
+        "metodo": [
+            "Directa (a chorrillo)"
+        ],
+        "diasCosecha": {
+            "min": 70,
+            "max": 90
+        },
+        "distancia": {
+            "entrePlantas": 1,
+            "entreLineas": 20
+        },
+        "asociacion": [
+            "Coles",
+            "Bulbos",
+            "Raíces"
+        ],
+        "rotacion": [
+            "Bulbos",
+            "Raíces",
+            "Legumbres"
+        ],
+        "toleranciaSombra": false,
+        "aptoMaceta": true,
+        "dificultad": "Fácil",
         "clima": "Resistente",
         "imagen": "🥗"
     },
@@ -234,10 +920,46 @@
         "id": "remolacha",
         "nombre": "Remolacha",
         "familia": "Quenopodiáceas",
-        "siembra": "Todo el año",
-        "metodo": "Directa o transplante",
-        "distancia": "15 x 40 cm",
-        "diasCosecha": "100 - 130",
+        "siembra": [
+            "Enero",
+            "Febrero",
+            "Marzo",
+            "Abril",
+            "Mayo",
+            "Junio",
+            "Julio",
+            "Agosto",
+            "Septiembre",
+            "Octubre",
+            "Noviembre",
+            "Diciembre"
+        ],
+        "metodo": [
+            "Directa",
+            "Almácigo"
+        ],
+        "diasCosecha": {
+            "min": 100,
+            "max": 130
+        },
+        "distancia": {
+            "entrePlantas": 10,
+            "entreLineas": 40
+        },
+        "asociacion": [
+            "Repollo",
+            "Lechuga",
+            "Ajo"
+        ],
+        "rotacion": [
+            "Legumbres",
+            "Bulbos",
+            "Raíces",
+            "Hojas"
+        ],
+        "toleranciaSombra": true,
+        "aptoMaceta": true,
+        "dificultad": "Fácil",
         "clima": "Resistente",
         "imagen": "🟣"
     },
@@ -245,10 +967,45 @@
         "id": "repollo",
         "nombre": "Repollo",
         "familia": "Brasicáceas",
-        "siembra": "Todo el año",
-        "metodo": "Almácigo (Transplante)",
-        "distancia": "40 x 70 cm",
-        "diasCosecha": "90 - 130",
+        "siembra": [
+            [
+                "Febrero",
+                "Marzo"
+            ],
+            [
+                "Septiembre",
+                "Octubre",
+                "Noviembre"
+            ]
+        ],
+        "metodo": [
+            "Almácigo",
+            "Transplante"
+        ],
+        "diasCosecha": {
+            "min": 90,
+            "max": 130
+        },
+        "distancia": {
+            "entrePlantas": 45,
+            "entreLineas": 70
+        },
+        "asociacion": [
+            "Remolacha",
+            "Taco de reina",
+            "Ajenjo",
+            "Lechuga"
+        ],
+        "rotacion": [
+            "Legumbres",
+            "Bulbos",
+            "Raíces",
+            "Hojas",
+            "Frutos"
+        ],
+        "toleranciaSombra": false,
+        "aptoMaceta": true,
+        "dificultad": "Media",
         "clima": "Resistente",
         "imagen": "🥬"
     },
@@ -256,10 +1013,43 @@
         "id": "rucula",
         "nombre": "Rúcula",
         "familia": "Brasicáceas",
-        "siembra": "Todo el año (preferencia Otoño)",
-        "metodo": "Directa a chorrillo",
-        "distancia": "1 x 20 cm",
-        "diasCosecha": "30 - 60",
+        "siembra": [
+            "Enero",
+            "Febrero",
+            "Marzo",
+            "Abril",
+            "Mayo",
+            "Junio",
+            "Julio",
+            "Agosto",
+            "Septiembre",
+            "Octubre",
+            "Noviembre",
+            "Diciembre"
+        ],
+        "metodo": [
+            "Directa (a chorrillo)"
+        ],
+        "diasCosecha": {
+            "min": 30,
+            "max": 60
+        },
+        "distancia": {
+            "entrePlantas": 1,
+            "entreLineas": 20
+        },
+        "asociacion": [
+            "Raíces",
+            "Bulbos"
+        ],
+        "rotacion": [
+            "Bulbos",
+            "Raíces",
+            "Legumbres"
+        ],
+        "toleranciaSombra": true,
+        "aptoMaceta": true,
+        "dificultad": "Fácil",
         "clima": "Resistente",
         "imagen": "🥗"
     },
@@ -267,10 +1057,36 @@
         "id": "tomate",
         "nombre": "Tomate",
         "familia": "Solanáceas",
-        "siembra": "Primavera (Septiembre-Octubre)",
-        "metodo": "Almácigo (Transplante Oct-Nov)",
-        "distancia": "40 x 70 cm",
-        "diasCosecha": "80 - 100",
+        "siembra": [
+            "Julio",
+            "Agosto",
+            "Septiembre",
+            "Octubre"
+        ],
+        "metodo": [
+            "Almácigo",
+            "Transplante"
+        ],
+        "diasCosecha": {
+            "min": 80,
+            "max": 100
+        },
+        "distancia": {
+            "entrePlantas": 45,
+            "entreLineas": 80
+        },
+        "asociacion": [
+            "Albahaca",
+            "Copete",
+            "Zanahoria"
+        ],
+        "rotacion": [
+            "Legumbres",
+            "Crucíferas"
+        ],
+        "toleranciaSombra": false,
+        "aptoMaceta": true,
+        "dificultad": "Difícil",
         "clima": "Muy sensible",
         "imagen": "🍅"
     },
@@ -278,10 +1094,46 @@
         "id": "zanahoria",
         "nombre": "Zanahoria",
         "familia": "Umbelíferas",
-        "siembra": "Todo el año",
-        "metodo": "Directa a chorrillo",
-        "distancia": "5 x 40 cm",
-        "diasCosecha": "110 - 130",
+        "siembra": [
+            "Enero",
+            "Febrero",
+            "Marzo",
+            "Abril",
+            "Mayo",
+            "Junio",
+            "Julio",
+            "Agosto",
+            "Septiembre",
+            "Octubre",
+            "Noviembre",
+            "Diciembre"
+        ],
+        "metodo": [
+            "Directa (a chorrillo)"
+        ],
+        "diasCosecha": {
+            "min": 110,
+            "max": 130
+        },
+        "distancia": {
+            "entrePlantas": 5,
+            "entreLineas": 40
+        },
+        "asociacion": [
+            "Repollo",
+            "Romero",
+            "Salvia",
+            "Puerro",
+            "Cebolla"
+        ],
+        "rotacion": [
+            "Bulbos",
+            "Raíces",
+            "Legumbres"
+        ],
+        "toleranciaSombra": false,
+        "aptoMaceta": true,
+        "dificultad": "Media",
         "clima": "Resistente",
         "imagen": "🥕"
     },
@@ -289,10 +1141,34 @@
         "id": "zapallo",
         "nombre": "Zapallo",
         "familia": "Cucurbitáceas",
-        "siembra": "Primavera - Verano (Octubre-Noviembre)",
-        "metodo": "Directa (a golpe)",
-        "distancia": "100 x 250 cm",
-        "diasCosecha": "120 - 150",
+        "siembra": [
+            "Septiembre",
+            "Octubre",
+            "Noviembre"
+        ],
+        "metodo": [
+            "Directa (a golpe)"
+        ],
+        "diasCosecha": {
+            "min": 120,
+            "max": 150
+        },
+        "distancia": {
+            "entrePlantas": 1,
+            "entreLineas": 2.5
+        },
+        "asociacion": [
+            "Maíz",
+            "Poroto"
+        ],
+        "rotacion": [
+            "Raíces",
+            "Legumbres",
+            "Hojas"
+        ],
+        "toleranciaSombra": false,
+        "aptoMaceta": false,
+        "dificultad": "Fácil",
         "clima": "Sensible",
         "imagen": "🎃"
     },
@@ -300,11 +1176,37 @@
         "id": "zapallito",
         "nombre": "Zapallito",
         "familia": "Cucurbitáceas",
-        "siembra": "Primavera - Verano (Octubre-Enero)",
-        "metodo": "Directa (a golpe)",
-        "distancia": "100 x 100 cm",
-        "diasCosecha": "45 - 60",
-        "clima": "Sensible",
+        "siembra": [
+            "Septiembre",
+            "Octubre",
+            "Noviembre",
+            "Diciembre",
+            "Enero"
+        ],
+        "metodo": [
+            "Directa (a golpe)"
+        ],
+        "diasCosecha": {
+            "min": 45,
+            "max": 60
+        },
+        "distancia": {
+            "entrePlantas": 100,
+            "entreLineas": 100
+        },
+        "asociacion": [
+            "Maíz",
+            "Poroto"
+        ],
+        "rotacion": [
+            "Raíces",
+            "Legumbres",
+            "Hojas"
+        ],
+        "toleranciaSombra": false,
+        "aptoMaceta": false,
+        "dificultad": "Fácil",
+        "clima": "Muy sensible",
         "imagen": "🟢"
     }
 ]

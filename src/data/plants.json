@@ -203,7 +203,7 @@
         ],
         "metodo": [
             "Guías",
-            "brotes"
+            "Brotes"
         ],
         "diasCosecha": {
             "min": 150,
@@ -367,44 +367,6 @@
         "dificultad": "Fácil",
         "clima": "Sensible",
         "imagen": "🫘"
-    },
-    {
-        "id": "choclo",
-        "nombre": "Choclo",
-        "familia": "Gramíneas",
-        "siembra": [
-            "Agosto",
-            "Septiembre",
-            "Octubre",
-            "Noviembre"
-        ],
-        "metodo": [
-            "Directa (a golpe)"
-        ],
-        "diasCosecha": {
-            "min": 100,
-            "max": 130
-        },
-        "distancia": {
-            "entrePlantas": 30,
-            "entreLineas": 70
-        },
-        "asociacion": [
-            "Batata",
-            "Maní",
-            "Zapallo",
-            "Chaucha"
-        ],
-        "rotacion": [
-            "Frutos",
-            "Bulbos",
-            "Raíces"
-        ],
-        "toleranciaSombra": false,
-        "aptoMaceta": false,
-        "dificultad": "Fácil",
-        "clima": "Muy sensible",
-        "imagen": "🌽"
     },
     {
         "id": "espinaca",
@@ -598,6 +560,44 @@
         "dificultad": "Fácil",
         "clima": "Resistente",
         "imagen": "🥗"
+    },
+    {
+        "id": "maiz",
+        "nombre": "Maíz - Choclo",
+        "familia": "Gramíneas",
+        "siembra": [
+            "Agosto",
+            "Septiembre",
+            "Octubre",
+            "Noviembre"
+        ],
+        "metodo": [
+            "Directa (a golpe)"
+        ],
+        "diasCosecha": {
+            "min": 100,
+            "max": 130
+        },
+        "distancia": {
+            "entrePlantas": 30,
+            "entreLineas": 70
+        },
+        "asociacion": [
+            "Batata",
+            "Maní",
+            "Zapallo",
+            "Chaucha"
+        ],
+        "rotacion": [
+            "Frutos",
+            "Bulbos",
+            "Raíces"
+        ],
+        "toleranciaSombra": false,
+        "aptoMaceta": false,
+        "dificultad": "Fácil",
+        "clima": "Muy sensible",
+        "imagen": "🌽"
     },
     {
         "id": "melon",

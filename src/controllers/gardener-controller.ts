@@ -4,6 +4,9 @@ import jwt from 'jsonwebtoken';
 import { GardenerModel } from '../models/gardener-model';
 import { PlantModel } from '../models/plant-model';
 
+// Clave
+const SECRET = process.env.JWT_SECRET || 'mi_semilla'
+
 export class GardenerController {
 	// AUTH
     // Registro
@@ -24,7 +27,7 @@ export class GardenerController {
 		if (!user || !bcrypt.compareSync(password, user.password)) {
 			return res.status(401).json({ message: 'Error de credenciales' });
 		}
-		const token = jwt.sign({ id: user.id, role: user.role }, 'SECRET');
+		const token = jwt.sign({ id: user.id, role: user.role }, SECRET);
 		res.json({
 			token,
 			user: { username: user.username, role: user.role, id: user.id },

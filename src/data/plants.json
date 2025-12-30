@@ -616,7 +616,7 @@
         },
         "distancia": {
             "entrePlantas": 90,
-            "entreLineas": 1200
+            "entreLineas": 120
         },
         "asociacion": [
             "Maíz",

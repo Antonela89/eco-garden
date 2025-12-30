@@ -1,5 +1,5 @@
 import path from 'path';
-import { Plant } from '../types/plant';
+import { Plant, Dificultad } from '../types/plant';
 import { readJSON, writeJSON } from '../utils/fileHandle';
 
 const pathFile = path.join(__dirname, '../data/plants.json');
@@ -15,39 +15,17 @@ export class PlantModel {
 		writeJSON(pathFile, list);
 	};
 
-	// traer por id
+	// Traer por id
 	static getById = (id: string): Plant | undefined => {
 		const plants = this.getAll();
 		return plants.find((p) => p.id === id);
 	};
 
-	// --- MÉTODOS DE ADMIN ---
-
-	static create = (plantData: Plant): Plant => {
+	// Lógica para filtrar por dificultad
+	static getByDifficulty = (level: Dificultad): Plant[] => {
 		const plants = this.getAll();
-		plants.push(plantData);
-
-		this.save(plants);
-		return plantData;
-	};
-
-	static update = (id: string, newData: Partial<Plant>): Plant | null => {
-		const plants = this.getAll();
-		const index = plants.findIndex((p) => p.id === id);
-		if (index === -1) return null;
-
-		plants[index] = { ...plants[index]!, ...newData };
-
-		this.save(plants);
-		return plants[index]!;
-	};
-
-	static delete = (id: string): boolean => {
-		const plants = this.getAll();
-		const filtered = plants.filter((p) => p.id !== id);
-		if (filtered.length === plants.length) return false;
-		this.save(filtered);
-		return true;
+		// Filtrar las plantas cuyo campo 'dificultad' coincida con el level recibido
+		return plants.filter((p) => p.dificultad === level);
 	};
 
 	// Lógica para saber si se puede plantar ahora
@@ -73,5 +51,36 @@ export class PlantModel {
 
 		// flat() por si hay arreglos anidados (como en Repollo)
 		return plant.siembra.flat().includes(mesActual);
+	};
+
+	// --- MÉTODOS DE ADMIN ---
+	// Crear
+	static create = (plantData: Plant): Plant => {
+		const plants = this.getAll();
+		plants.push(plantData);
+
+		this.save(plants);
+		return plantData;
+	};
+
+	// Modificar
+	static update = (id: string, newData: Partial<Plant>): Plant | null => {
+		const plants = this.getAll();
+		const index = plants.findIndex((p) => p.id === id);
+		if (index === -1) return null;
+
+		plants[index] = { ...plants[index]!, ...newData };
+
+		this.save(plants);
+		return plants[index]!;
+	};
+
+	// Eliminar
+	static delete = (id: string): boolean => {
+		const plants = this.getAll();
+		const filtered = plants.filter((p) => p.id !== id);
+		if (filtered.length === plants.length) return false;
+		this.save(filtered);
+		return true;
 	};
 }

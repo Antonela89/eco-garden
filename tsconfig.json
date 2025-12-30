@@ -7,10 +7,10 @@
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
-    "target": "esnext",
+    "module": "CommonJS",
+    "target": "ESNext",
     // "types": [],
-    "moduleResolution": "NodeNext",
+    // "moduleResolution": "node",
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],

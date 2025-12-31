@@ -1,4 +1,4 @@
-import path from 'path';
+import * as path from 'path';;
 import { Plant, Dificultad } from '../types/plant';
 import { readJSON, writeJSON } from '../utils/fileHandle';
 

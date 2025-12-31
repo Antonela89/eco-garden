@@ -1,4 +1,4 @@
-import fs from 'fs';
+import * as fs from 'fs';
 
 // Leer json
 export const readJSON = (path: string): any[] => {

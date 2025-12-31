@@ -20,7 +20,7 @@ const pathFile = path.join(__dirname, '../data/gardeners.json');
  */
 export class GardenerModel {
 	// ---------------------------
-	// LÓGICA DE JARDINERO - CRUD
+	// MÉTODOS DE LECTURA
 	// ---------------------------
 
 	/**
@@ -39,6 +39,9 @@ export class GardenerModel {
 		writeJSON(pathFile, list);
 	};
 
+	// ---------------------------
+	// LÓGICA DE JARDINERO - CRUD
+	// ---------------------------
 	/**
 	 * Busca un jardinero específico mediante su identificador único (ID).
 	 * @param {string} id - UUID del jardinero.
@@ -140,6 +143,10 @@ export class GardenerModel {
 		return true;
 	};
 
+	// ---------------------------
+	//  MÉTODOS PRIVADOS (DRY)
+	// ---------------------------
+	
 	/**
 	 * Método privado para obtener la lista de jardineros y el índice del usuario específico.
 	 * Centraliza la búsqueda inicial que se repite en todos los métodos de huerta.

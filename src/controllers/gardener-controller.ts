@@ -5,32 +5,60 @@ import { GardenerModel } from '../models/gardener-model';
 import { PlantModel } from '../models/plant-model';
 
 // Clave
-const SECRET = process.env.JWT_SECRET || 'mi_semilla'
+const JWT_SECRET = process.env.JWT_SECRET || 'Mi_Semilla';
 
 export class GardenerController {
 	// AUTH
-    // Registro
+	// Registro
 	static register = (req: Request, res: Response) => {
+		// Extraer los datos del body
 		const { password, ...rest } = req.body;
+		// Encriptar
 		const hashedPassword = bcrypt.hashSync(password, 10);
+		// Crear -> datos + contraseña encriptada
 		const newUser = GardenerModel.create({
 			...rest,
 			password: hashedPassword,
 		});
-		res.status(201).json(newUser);
+
+		// SEGURIDAD: Quitar la contraseña del objeto antes de responder
+		const { password: _, ...userResponse } = newUser;
+
+		res.status(201).json({ message: 'Usuario registrado', userResponse });
 	};
 
-    // Login
+	// Login
 	static login = (req: Request, res: Response) => {
+		// Desestructuracion
 		const { email, password } = req.body;
+		// Buscar usuario
 		const user = GardenerModel.getByEmail(email);
+
+		// Validación -> Si no existe o la contraseña no coincide
 		if (!user || !bcrypt.compareSync(password, user.password)) {
 			return res.status(401).json({ message: 'Error de credenciales' });
 		}
-		const token = jwt.sign({ id: user.id, role: user.role }, SECRET);
+
+		// Generar Token con datos no sensibles
+		const token = jwt.sign(
+			{
+				id: user.id,
+				role: user.role,
+				email: user.email,
+			},
+			JWT_SECRET,
+			{ expiresIn: '1h' }
+		);
+
+		// Respuesta
 		res.json({
-			token,
-			user: { username: user.username, role: user.role, id: user.id },
+			message: '¡Bienvenido de nuevo!',
+			token: token,
+			user: {
+				id: user.id,
+				username: user.username,
+				role: user.role,
+			},
 		});
 	};
 
@@ -63,7 +91,7 @@ export class GardenerController {
 		res.json(detailedGarden);
 	};
 
-    // Agregar a la huerta
+	// Agregar a la huerta
 	static addToGarden = (req: Request, res: Response) => {
 		const { plantId } = req.body;
 		const success = GardenerModel.addPlantToHuerta(req.user!.id, plantId);

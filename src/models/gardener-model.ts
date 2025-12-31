@@ -1,4 +1,4 @@
-import * as path from 'path';;
+import path from 'path';;
 import crypto from 'crypto';
 import { Gardener, UserPlant } from '../types/gardener';
 import { readJSON, writeJSON } from '../utils/fileHandle';

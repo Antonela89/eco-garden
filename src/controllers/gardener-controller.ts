@@ -5,6 +5,8 @@ import jwt from 'jsonwebtoken';
 // Importación de modelos
 import { GardenerModel } from '../models/gardener-model';
 import { PlantModel } from '../models/plant-model';
+// Importación de función auxiliar
+import { formatInputData, slugify } from '../utils/formatters';
 
 /**
  * Clave secreta para la firma de los tokens JWT.
@@ -27,12 +29,16 @@ export class GardenerController {
 	 * Procesa la contraseña para guardarla de forma segura (Hash).
 	 */
 	static register = (req: Request, res: Response) => {
+		// Formatear datos (esto ignorará el campo 'password' gracias a la lista protegida)
+		const formattedBody = formatInputData(req.body);
+
 		// Desestructuración para separar la contraseña del resto de los datos
-		const { password, ...rest } = req.body;
+		const { password, ...rest } = formattedBody;
+
 		// Encriptar
 		const hashedPassword = bcrypt.hashSync(password, 10);
 
-		// Crear usuario-> datos + contraseña encriptada
+		// Crear usuario -> datos + contraseña encriptada
 		const newUser = GardenerModel.create({
 			...rest,
 			password: hashedPassword,
@@ -134,22 +140,25 @@ export class GardenerController {
 	 * Agrega una planta del catálogo general (.json) a la huerta personal del jardinero.
 	 */
 	static addToGarden = (req: Request, res: Response) => {
-		const { plantId } = req.body;
+		// Normalizar el ID de la planta antes de intentar agregarla
+		const plantId = slugify(req.body.plantId as string);
 
 		// usar metodo del modelo para agregar
 		const success = GardenerModel.addPlantToGarden(req.user!.id, plantId);
-		
+
 		// Validación
 		success
 			? res.json({ message: 'Planta agregada con éxito a tu huerta' })
-			: res.status(400).json({ message: 'No se pudo agregar la planta (posible duplicado)' });
+			: res.status(400).json({
+					message: 'No se pudo agregar la planta (posible duplicado)',
+			  });
 	};
 
 	/**
 	 * Actualiza el estado de evolución de un cultivo (ej: de 'creciendo' a 'listo').
 	 */
 	static updatePlantStatus = (req: Request, res: Response) => {
-		// Desestrucutrar 
+		// Desestrucutrar
 		const { plantId, status } = req.body;
 
 		// Usar el modelo
@@ -162,7 +171,9 @@ export class GardenerController {
 		// Validación
 		success
 			? res.json({ message: 'Estado de cultivo actualizado' })
-			: res.status(400).json({ message: 'Error al actualizar el estado'})
+			: res
+					.status(400)
+					.json({ message: 'Error al actualizar el estado' });
 	};
 
 	/**
@@ -177,7 +188,7 @@ export class GardenerController {
 			req.user!.id,
 			plantId as string
 		);
-		
+
 		// Validación
 		success
 			? res.json({ message: 'Planta eliminada de tu huerta' })

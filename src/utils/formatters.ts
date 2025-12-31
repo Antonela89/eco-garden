@@ -29,3 +29,37 @@ export const formatInputData = (data: any): any => {
 
     return formattedData;
 };
+
+/**
+ * Transformar un texto a minúsculas, eliminar acentos y reemplazar espacios por guiones.
+ * Útil para generar IDs amigables (slugs).
+ * @param {string} text - Cadena de texto a procesar.
+ * @returns {string} Texto normalizado en formato slug.
+ */
+export const slugify = (text: string): string => {
+    if (!text || typeof text !== 'string') return text;
+
+    return text
+        .trim()                 // Eliminar espacios al inicio y al final
+        .toLowerCase()          // Convertir todo a minúsculas
+        .normalize("NFD")       // Descomponer caracteres especiales (acentos)
+        .replace(/[\u0300-\u036f]/g, "") // Eliminar los acentos mediante Regex
+        .replace(/\s+/g, "-")   // Reemplazar todos los espacios por guiones
+        .replace(/[^\w-]+/g, ""); // Eliminar cualquier caracter que no sea letra, número o guion
+};
+
+/**
+ * Recorrer un objeto y aplicar el formato de minúsculas (slug) únicamente al campo ID.
+ * @param {any} data - Objeto con los datos de entrada.
+ * @returns {any} Objeto con el ID formateado.
+ */
+export const formatIdData = (data: any): any => {
+    const formattedData = { ...data };
+
+    // Validar si existe la clave 'id' y si su valor es una cadena de texto
+    if (formattedData.id && typeof formattedData.id === 'string') {
+        formattedData.id = slugify(formattedData.id);
+    }
+
+    return formattedData;
+};

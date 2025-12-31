@@ -17,9 +17,12 @@ export const capitalize = (text: string): string => {
 export const formatInputData = (data: any): any => {
     const formattedData = { ...data };
 
+    // Definir una lista de claves que NO deben ser modificadas bajo ningún concepto
+    const protectedFields = ['password', 'email', 'id', 'token', 'imagen'];
+
     for (const key in formattedData) {
-        // Verificar si el valor es un string y no es una clave protegida (como email o id)
-        if (typeof formattedData[key] === 'string' && key !== 'email' && key !== 'id') {
+        // Validar que sea un string y que la clave no esté en la lista protegida
+        if (typeof formattedData[key] === 'string' && !protectedFields.includes(key)) {
             formattedData[key] = capitalize(formattedData[key]);
         }
     }

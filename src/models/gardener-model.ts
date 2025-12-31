@@ -1,4 +1,4 @@
-import path from 'path';;
+import path from 'path';
 import crypto from 'crypto';
 import { Gardener, UserPlant } from '../types/gardener';
 import { readJSON, writeJSON } from '../utils/fileHandle';
@@ -86,6 +86,11 @@ export class GardenerModel {
 		const gardeners = this.getAll();
 		const index = gardeners.findIndex((g) => g.id === gardenerId);
 		if (index === -1) return false;
+
+		// Validación
+		if (!gardeners[index]!.misPlantas) {
+			gardeners[index]!.misPlantas = [];
+		}
 
 		const newEntry: UserPlant = {
 			plantId,

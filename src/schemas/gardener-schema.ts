@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Role } from '../types/gardener.js';
+import { Role } from '../types/gardener';
 
 // Schema para el Registro
 export const registerGardenerSchema = z.object({

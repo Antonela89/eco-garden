@@ -2,6 +2,15 @@
 import { Request, Response } from 'express';
 // Importación de modelo
 import { PlantModel } from '../models/plant-model';
+// Importación de Enum
+import { Dificultad } from '../types/plant';
+// Importación de función auxiliar
+import {
+	formatInputData,
+	capitalize,
+	formatIdData,
+	slugify,
+} from '../utils/formatters';
 
 /**
  * Clase PlantController
@@ -25,8 +34,10 @@ export class PlantController {
 	 * Busca y devuelve los detalles de una planta específica mediante su ID.
 	 */
 	static getPlantById = (req: Request, res: Response) => {
-		// Obtener el ID de los parámetros de la URL
-		const plant = PlantModel.getById(req.params.id as string);
+		// Normalizar el ID recibido: "Tomate Perita" -> "tomate-perita"
+		const id = slugify(req.params.id as string);
+		// Llamar al modelo
+		const plant = PlantModel.getById(id);
 
 		// Validación: Si no existe en el JSON, devolver error 404
 		if (!plant)
@@ -39,10 +50,11 @@ export class PlantController {
 	 * Útil para interfaces de usuario que categorizan plantas por experiencia.
 	 */
 	static getByDifficulty = (req: Request, res: Response) => {
-		const { level } = req.params; // Ejemplo: 'Fácil', 'Media', 'Difícil'
+		// Capitalizar el parámetro de la URL (ej: "fácil" -> "Fácil")
+		const level = capitalize(req.params.level as string);
 
 		// Delegar el filtrado al modelo
-		const plants = PlantModel.getByDifficulty(level as any);
+		const plants = PlantModel.getByDifficulty(level as Dificultad);
 		res.json(plants);
 	};
 
@@ -55,11 +67,12 @@ export class PlantController {
 	 * Cruza la fecha actual del sistema con los datos del calendario del INTA.
 	 */
 	static checkSeason = (req: Request, res: Response) => {
-		const { id } = req.params;
+		// Normalizar antes de consultar
+		const id = slugify(req.params.id as string);
 
 		// Se consulta al modelo
-		const can = PlantModel.canBePlanted(id as string);
-		const plant = PlantModel.getById(id as string);
+		const can = PlantModel.canBePlanted(id);
+		const plant = PlantModel.getById(id);
 
 		if (can) {
 			res.json({
@@ -83,8 +96,14 @@ export class PlantController {
 	 * Solo accesible para usuarios con rol 'admin'.
 	 */
 	static createPlant = (req: Request, res: Response) => {
-		// Crear la planta con el modelo
-		const newPlant = PlantModel.create(req.body);
+		// Formatear nombres y descripciones (Primer Mayúscula)
+		let plantData = formatInputData(req.body);
+
+		// Formatear el ID (Todo a minúsculas y con guiones)
+		plantData = formatIdData(plantData);
+
+		// Llamar al modelo
+		const newPlant = PlantModel.create(plantData);
 
 		/**
 		 * Validación de duplicados:
@@ -102,8 +121,12 @@ export class PlantController {
 	 * Actualiza parcialmente la información técnica de una planta existente.
 	 */
 	static updatePlant = (req: Request, res: Response) => {
-		// Obtener los datos: ID de la url y nuevos datos: Body
-		const updated = PlantModel.update(req.params.id as string, req.body);
+		// Normalizar el ID de búsqueda
+		const id = slugify(req.params.id as string);
+		// Formatear solo los campos que vienen para actualizar
+		const formattedBody = formatInputData(req.body);
+		// Llamar al modelo con ID obtenido de la url y los datos formateados
+		const updated = PlantModel.update(id, formattedBody);
 
 		// Verificación
 		if (!updated)
@@ -117,12 +140,18 @@ export class PlantController {
 	 * Elimina una especie del catálogo maestro de forma permanente.
 	 */
 	static deletePlant = (req: Request, res: Response) => {
+		 // Normalizar el ID antes de solicitar la eliminación
+        const id = slugify(req.params.id as string);
 		// Llamar al modelo
-		const deleted = PlantModel.delete(req.params.id as string);
+		const deleted = PlantModel.delete(id);
 
 		// Verificación
 		if (!deleted)
-			return res.status(404).json({ message: 'No se pudo eliminar: la planta no existe' });
-		res.json({ message: 'La planta ha sido eliminada del catálogo maestro' });
+			return res
+				.status(404)
+				.json({ message: 'No se pudo eliminar: la planta no existe' });
+		res.json({
+			message: 'La planta ha sido eliminada del catálogo maestro',
+		});
 	};
 }

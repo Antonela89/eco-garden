@@ -148,10 +148,9 @@ export class GardenerController {
 
 		// Validación
 		success
-			? res.json({ message: 'Planta agregada con éxito a tu huerta' })
+			? res.status(200).json({ message: 'Planta agregada con éxito a tu huerta' })
 			: res.status(400).json({
-					message: 'No se pudo agregar la planta (posible duplicado)',
-			  });
+					message: 'No se pudo agregar la planta (posible duplicado)'});
 	};
 
 	/**

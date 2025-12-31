@@ -1,4 +1,4 @@
-import { Role } from './gardener.js';
+import { Role } from './gardener';
 
 declare global {
 	namespace Express {

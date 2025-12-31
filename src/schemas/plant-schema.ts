@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Dificultad } from '../types/plant.js';
+import { Dificultad } from '../types/plant';
 
 export const plantSchema = z.object({
     id: z.string().min(1, "El ID es obligatorio (ej: 'tomate')"),

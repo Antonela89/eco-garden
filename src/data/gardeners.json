@@ -1,9 +1,28 @@
 [
-    {
-        "id": "1",
-        "username": "admin_inta",
-        "role": "admin",
-        "password": "...",
-        "misPlantas": []
-    }
+  {
+    "username": "Franco",
+    "email": "franco@huerta.com",
+    "role": "gardener",
+    "password": "$2b$10$fPudFUGnAqTb7EoJMuKtgu0w/lGviEj0PTll4GlI6HPXcyuR0iyPC",
+    "id": "dae5b9d7-5801-4939-8da0-f3eee5fe12e2",
+    "misPlantas": [
+      {
+        "plantId": "tomate",
+        "plantedAt": "2025-12-31T01:02:24.500Z",
+        "status": "creciendo"
+      },
+      {
+        "plantId": "tomate",
+        "plantedAt": "2025-12-31T01:02:58.288Z",
+        "status": "creciendo"
+      }
+    ]
+  },
+  {
+    "username": "Antonela",
+    "email": "admin@huerta.com",
+    "role": "admin",
+    "password": "$2b$10$ApT2IF8oSuS7yrvpCw1oX.YbWfM2nRZXcw4BlpCf8Ki5DPxnfNEb2",
+    "id": "5af6c2ab-3dfe-4bf1-b746-b047d44300ab"
+  }
 ]

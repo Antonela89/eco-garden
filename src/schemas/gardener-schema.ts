@@ -11,15 +11,15 @@ export const registerGardenerSchema = z.object({
         .min(8, "La contraseña debe tener al menos 8 caracteres")
         .regex(/[A-Z]/, "Debe contener al menos una mayúscula")
         .regex(/[0-9]/, "Debe contener al menos un número"),
-    role: z.nativeEnum(Role, {
+    role: z.enum(Role, {
         error: () => ({ message: "Rol inválido. Debe ser 'admin' o 'gardener'" })
     }),
-    misPlantas: z.array(z.any()).optional().default([]) // Por defecto empieza vacío
+    myPlants: z.array(z.any()).optional().default([]) // Por defecto empieza vacío
 });
 
 // Schema para el Login
 export const loginSchema = z.object({
-    email: z.string().email("Email inválido"),
+    email: z.email("Email inválido"),
     password: z.string().min(1, "La contraseña es requerida")
 });
 

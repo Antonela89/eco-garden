@@ -5,7 +5,7 @@
     "role": "gardener",
     "password": "$2b$10$fPudFUGnAqTb7EoJMuKtgu0w/lGviEj0PTll4GlI6HPXcyuR0iyPC",
     "id": "dae5b9d7-5801-4939-8da0-f3eee5fe12e2",
-    "misPlantas": [
+    "myPlants": [
       {
         "plantId": "tomate",
         "plantedAt": "2025-12-31T01:02:24.500Z",

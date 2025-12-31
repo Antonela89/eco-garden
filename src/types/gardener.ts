@@ -17,6 +17,6 @@ export interface Gardener {
     email: string,
 	role: Role; // enum
 	password: string;
-	misPlantas: UserPlant[]; // Array de objetos con la interfaz UserPlant
+	myPlants: UserPlant[]; // Array de objetos con la interfaz UserPlant
 }
 

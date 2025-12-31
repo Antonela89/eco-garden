@@ -79,7 +79,7 @@ export class GardenerModel {
 	// LÓGICA DE HUERTA
 
 	// AGREGAR PLANTA A LA HUERTA
-	static addPlantToHuerta = (
+	static addPlantToGarden = (
 		gardenerId: string,
 		plantId: string
 	): boolean => {
@@ -88,8 +88,8 @@ export class GardenerModel {
 		if (index === -1) return false;
 
 		// Validación
-		if (!gardeners[index]!.misPlantas) {
-			gardeners[index]!.misPlantas = [];
+		if (!gardeners[index]!.myPlants) {
+			gardeners[index]!.myPlants = [];
 		}
 
 		const newEntry: UserPlant = {
@@ -98,13 +98,13 @@ export class GardenerModel {
 			status: 'creciendo',
 		};
 
-		gardeners[index]!.misPlantas.push(newEntry);
+		gardeners[index]!.myPlants.push(newEntry);
 		this.save(gardeners);
 		return true;
 	};
 
 	// EDITAR ESTADO DE UNA PLANTA EN LA HUERTA
-	static updateHuertaStatus = (
+	static updateGardenStatus = (
 		gardenerId: string,
 		plantId: string,
 		newStatus: 'listo' | 'cosechado'
@@ -114,18 +114,18 @@ export class GardenerModel {
 		if (gIndex === -1) return false;
 
 		// Buscar la planta dentro del array del usuario
-		const pIndex = gardeners[gIndex]!.misPlantas.findIndex(
+		const pIndex = gardeners[gIndex]!.myPlants.findIndex(
 			(p) => p.plantId === plantId
 		);
 		if (pIndex === -1) return false;
 
-		gardeners[gIndex]!.misPlantas[pIndex]!.status = newStatus;
+		gardeners[gIndex]!.myPlants[pIndex]!.status = newStatus;
 		this.save(gardeners);
 		return true;
 	};
 
 	// ELIMINAR PLANTA DE LA HUERTA
-	static removePlantFromHuerta = (
+	static removePlantFromGarden = (
 		gardenerId: string,
 		plantId: string
 	): boolean => {
@@ -133,7 +133,7 @@ export class GardenerModel {
 		const index = gardeners.findIndex((g) => g.id === gardenerId);
 		if (index === -1) return false;
 
-		gardeners[index]!.misPlantas = gardeners[index]!.misPlantas.filter(
+		gardeners[index]!.myPlants = gardeners[index]!.myPlants.filter(
 			(p) => p.plantId !== plantId
 		);
 		this.save(gardeners);

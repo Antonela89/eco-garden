@@ -1,9 +1,17 @@
-// Importación del manejador de logueo
-import { handleLogin } from './auth.js';
+// Importación de manejadores
+import { handleRegister, handleLogin } from './auth.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Si está en la página de login, activar el manejador
-    if (document.getElementById('login-form')) {
-        handleLogin();
-    }
+    // Obtener el nombre del archivo (index.html, register.html)
+	const page = window.location.pathname.split('/').pop(); 
+
+	if (page === 'index.html' || page === '') {
+		// Lógica para la página de Login
+		if (document.getElementById('login-form')) {
+			handleLogin();
+		}
+	} else if (page === 'register.html') {
+		// Lógica para la página de registro
+		handleRegister();
+	}
 });

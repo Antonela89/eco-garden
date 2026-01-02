@@ -1,7 +1,7 @@
 // Importación de modulos
 import express from 'express';
 import cors from 'cors';
-// import morgan from 'morgan';
+import morgan from 'morgan';
 import dotenv from 'dotenv';
 // Importación de Rutas
 import router from './routes/index';
@@ -26,7 +26,7 @@ const app = express();
 app.use(cors());
 
 // Registrar las peticiones HTTP en la consola durante el desarrollo.
-// app.use(morgan('dev'));     
+app.use(morgan('dev'));     
 
 /** Habilitar el procesamiento de datos en formato JSON en el cuerpo de las peticiones. */
 app.use(express.json());   

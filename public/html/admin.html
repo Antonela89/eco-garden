@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Eco-Garden</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { 'nunito': ['Nunito', 'sans-serif'] }, colors: { 'eco-green-light': '#4ADE80', 'eco-green-dark': '#22C55E', 'eco-brown': '#5D4037', 'dark-bg': '#111827', 'dark-surface': '#1F2937' } } } } </script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style> body { font-family: 'Nunito', sans-serif; } </style>
+</head>
+<body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-gray-200">
+
+    <!-- HEADER DEL ADMINISTRADOR -->
+    <header class="bg-white dark:bg-dark-surface shadow-md">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <span class="text-2xl font-extrabold text-eco-green-dark">Panel de Administrador 🛡️</span>
+                <div class="flex items-center gap-4">
+                    <a href="/html/dashboard.html" class="text-gray-600 dark:text-gray-300 hover:text-eco-green-dark">Ir al Dashboard</a>
+                    <button id="logout-button" class="bg-red-500 text-white px-4 py-2 rounded-md font-bold">Cerrar Sesión</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- CONTENIDO DEL PANEL ADMIN -->
+    <main class="max-w-7xl mx-auto py-8 px-4">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-extrabold">Gestionar Catálogo</h1>
+            <button id="add-plant-button" class="bg-blue-500 text-white px-6 py-2 rounded-md font-bold hover:bg-blue-600">
+                <i class="fas fa-plus mr-2"></i>Añadir Nueva Especie
+            </button>
+        </div>
+        
+        <!-- Tabla de plantas -->
+        <div class="bg-white dark:bg-dark-surface shadow-lg rounded-lg overflow-x-auto">
+            <table class="w-full text-sm text-left">
+                <thead class="bg-gray-50 dark:bg-gray-700 text-xs uppercase">
+                    <tr>
+                        <th class="px-6 py-3">Nombre</th>
+                        <th class="px-6 py-3">Familia</th>
+                        <th class="px-6 py-3">Dificultad</th>
+                        <th class="px-6 py-3 text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-plant-table">
+                    <!-- JS inyectará las filas aquí -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script type="module" src="/js/main.js"></script>
+</body>
+</html>

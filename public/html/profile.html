@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Eco-Garden</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { 'nunito': ['Nunito', 'sans-serif'] },
+                    colors: { 'eco-green-light': '#4ADE80', 'eco-green-dark': '#22C55E', 'eco-brown': '#5D4037', 'dark-bg': '#111827', 'dark-surface': '#1F2937' }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style> body { font-family: 'Nunito', sans-serif; } </style>
+</head>
+<body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-gray-200 transition-colors duration-300">
+
+    <!-- =========== HEADER DEL USUARIO LOGUEADO =========== -->
+    <header class="bg-white dark:bg-dark-surface shadow-md">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="/html/dashboard.html" class="text-eco-green-dark font-bold hover:underline"><i class="fas fa-arrow-left mr-2"></i>Volver al Dashboard</a>
+                <div class="flex items-center gap-4">
+                    <button id="theme-toggle" class="text-xl text-gray-600 dark:text-gray-300 hover:text-eco-green-dark transition"><i class="fas fa-moon"></i></button>
+                    <button id="logout-button" class="bg-red-500 text-white px-4 py-2 rounded-md font-bold hover:bg-red-600 transition active:scale-95">Cerrar Sesión</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- =========== CONTENIDO DEL PERFIL =========== -->
+    <main class="max-w-2xl mx-auto py-12 px-4">
+        <h1 class="text-4xl font-extrabold text-gray-900 dark:text-white mb-8">Mi Perfil</h1>
+        
+        <div class="bg-white dark:bg-dark-surface p-8 rounded-lg shadow-lg">
+            <div class="flex items-center gap-6 mb-6">
+                <div class="w-24 h-24 bg-eco-green-light rounded-full flex items-center justify-center">
+                    <i class="fas fa-user text-4xl text-eco-green-dark"></i>
+                </div>
+                <div>
+                    <h2 id="profile-username" class="text-2xl font-bold">Cargando...</h2>
+                    <p id="profile-email" class="text-gray-500 dark:text-gray-400">...</p>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+                <h3 class="text-lg font-bold mb-4">Información de la Cuenta</h3>
+                <p><strong>Rol de Usuario:</strong> <span id="profile-role" class="font-mono bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded"></span></p>
+                <!-- Aquí se añande la info-->
+            </div>
+        </div>
+    </main>
+    
+    <script type="module" src="/js/main.js"></script>
+</body>
+</html>

@@ -1,49 +1,148 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="light"> <!-- Modo claro por defecto -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eco-Garden</title>
-    <!-- Script de Tailwind -->
+    <title>Bienvenido a Eco-Garden</title>
+
+    <!-- Tailwind CSS (CDN) y Configuración -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Configuración de Tailwind -->
     <script>
         tailwind.config = {
+            darkMode: 'class', // Habilitar modo oscuro basado en una clase en <html>
             theme: {
                 extend: {
+                    fontFamily: {
+                        'nunito': ['Nunito', 'sans-serif'],
+                    },
                     colors: {
-                        'eco-green': '#2D5A27', 
+                        'eco-green-light': '#4ADE80',
+                        'eco-green-dark': '#22C55E',
                         'eco-brown': '#5D4037',
+                        // Colores para modo oscuro
+                        'dark-bg': '#111827',
+                        'dark-surface': '#1F2937',
                     }
                 }
             }
         }
     </script>
-</head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
 
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
-        <h1 class="text-3xl font-bold text-eco-green mb-6 text-center">Eco-Garden</h1>
-        
-        <!-- Formulario de Login -->
-        <form id="login-form" class="flex flex-col gap-4">
-            <div>
-                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                <input type="email" id="email" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-eco-green focus:ring-eco-green">
+    <!-- Google Fonts: Nunito -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Estilos personalizados -->
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-gray-200 transition-colors duration-300">
+
+    <!-- =========== HEADER Y NAVEGACIÓN =========== -->
+    <header class="bg-white dark:bg-dark-surface shadow-md sticky top-0 z-10">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="/" class="flex items-center gap-2 text-2xl font-extrabold text-eco-green-dark">
+                    <i class="fas fa-seedling"></i>
+                    <span>Eco-Garden</span>
+                </a>
+                <div class="flex items-center gap-4">
+                    <button id="theme-toggle"
+                        class="text-xl text-gray-600 dark:text-gray-300 hover:text-eco-green-dark transition">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button id="login-button"
+                        class="bg-eco-green-dark text-white px-4 py-2 rounded-md font-bold hover:bg-opacity-80 transition active:scale-95">
+                        Ingresar
+                    </button>
+                </div>
             </div>
-            <div>
-                <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
-                <input type="password" id="password" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-eco-green focus:ring-eco-green">
+        </nav>
+    </header>
+
+    <!-- =========== CONTENIDO PRINCIPAL =========== -->
+    <main class="max-w-7xl mx-auto py-8 sm:px-6 lg:px-8">
+
+        <!-- Sección de Bienvenida -->
+        <section class="text-center mb-12 px-4">
+            <h1 class="text-4xl font-extrabold text-gray-900 dark:text-white">Planifica tu Huerta Urbana</h1>
+            <p class="mt-4 text-lg text-gray-600 dark:text-gray-300">Descubre qué plantar hoy con datos del INTA
+                ProHuerta.</p>
+        </section>
+
+        <!-- Sección del Catálogo de Plantas -->
+        <section id="catalogo">
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 px-4">Catálogo de Cultivos</h2>
+            <!-- El contenedor donde JS inyectará las tarjetas -->
+            <div id="plant-catalog" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
+                <!-- Loader de Carga -->
+                <p id="loader" class="text-center col-span-full">Cargando catálogo...</p>
             </div>
-            <button type="submit" class="w-full bg-eco-green text-white py-2 rounded-md hover:bg-opacity-90 transition">
-                Ingresar
-            </button>
-        </form>
-        <p id="error-message" class="text-red-500 text-sm mt-4 text-center"></p>
+        </section>
+    </main>
+
+    <!-- =========== MODAL DE LOGIN (Oculto por defecto) =========== -->
+    <div id="login-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50">
+        <div
+            class="bg-white dark:bg-dark-surface p-8 rounded-lg shadow-2xl w-full max-w-sm m-4 transform transition-all animate-fade-in-down">
+            <header class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-eco-green-dark">Iniciar Sesión</h2>
+                <button id="close-login-modal"
+                    class="text-3xl text-gray-400 hover:text-red-500 transition transform hover:rotate-90">
+                    <i class="fas fa-times"></i>
+                </button>
+            </header>
+
+            <form id="login-form" class="flex flex-col gap-4">
+                <div class="relative group">
+                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                    <div class="relative mt-1">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i class="fas fa-envelope text-gray-400 group-focus-within:text-eco-green-dark transition"></i>
+                        </span>
+                        <input type="email" id="email" name="email" required placeholder="tu@email.com"
+                            class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 pl-10 shadow-sm focus:border-eco-green-dark focus:ring-eco-green-dark">
+                    </div>
+                </div>
+                <div class="relative group">
+                    <label for="password"
+                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contraseña</label>
+                    <div class="relative mt-1">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i class="fas fa-lock text-gray-400 group-focus-within:text-eco-green-dark transition"></i>
+                        </span>
+                        <input type="password" id="password" name="password" required placeholder="••••••••"
+                            class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 pl-10 shadow-sm focus:border-eco-green-dark focus:ring-eco-green-dark">
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-eco-green-dark text-white py-2 rounded-md font-bold hover:bg-opacity-80 transition active:scale-95 mt-4">
+                    Ingresar
+                </button>
+            </form>
+
+            <p id="login-error-message" class="text-red-500 text-sm mt-4 text-center h-5"></p>
+
+            <footer class="text-center mt-4 text-sm">
+                <p>¿No tienes cuenta? <a href="/html/register.html"
+                        class="text-eco-green-dark font-bold hover:underline">Regístrate aquí</a></p>
+            </footer>
+        </div>
     </div>
 
-    <!-- Script js -->
+    <!-- Scripts de JS -->
     <script type="module" src="/js/main.js"></script>
+
 </body>
+
 </html>

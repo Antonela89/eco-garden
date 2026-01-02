@@ -1,58 +1,110 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - Eco-Garden</title>
-    <!-- Script de Tailwind -->
+    <title>Crea tu cuenta - Eco-Garden</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
+                    fontFamily: { 'nunito': ['Nunito', 'sans-serif'] },
                     colors: {
-                        'eco-green': '#2D5A27',
+                        'eco-green-light': '#4ADE80',
+                        'eco-green-dark': '#22C55E',
                         'eco-brown': '#5D4037',
+                        'dark-bg': '#111827',
+                        'dark-surface': '#1F2937',
                     }
                 }
             }
         }
     </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
 
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
-        <h1 class="text-3xl font-bold text-eco-green mb-6 text-center">Crear Cuenta</h1>
-        
-        <!-- Formulario de Registro -->
+<body class="bg-gray-100 dark:bg-dark-bg min-h-screen flex items-center justify-center p-4">
+
+    <main class="bg-white dark:bg-dark-surface p-8 rounded-lg shadow-2xl w-full max-w-md">
+        <header class="text-center mb-8">
+            <a href="/" class="flex items-center justify-center gap-2 text-2xl font-extrabold text-eco-green-dark">
+                <i class="fas fa-seedling"></i>
+                <span>Eco-Garden</span>
+            </a>
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-white mt-4">Crea tu Cuenta</h1>
+        </header>
+
         <form id="register-form" class="flex flex-col gap-4">
-            <div>
-                <label for="username" class="block text-sm font-medium text-gray-700">Nombre de Usuario</label>
-                <input type="text" id="username" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-eco-green focus:ring-eco-green">
+            <div class="relative group">
+                <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre de
+                    Usuario</label>
+                <div class="relative mt-1">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                        <i class="fas fa-user text-gray-400 group-focus-within:text-eco-green-dark transition"></i>
+                    </span>
+                    <input type="text" id="username" name="username" required placeholder="Ej: Jardineria_Pro"
+                        class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 pl-10 shadow-sm focus:border-eco-green-dark focus:ring-eco-green-dark">
+                </div>
             </div>
-            <div>
-                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                <input type="email" id="email" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-eco-green focus:ring-eco-green">
+            <div class="relative group">
+                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                <div class="relative mt-1">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                        <i class="fas fa-envelope text-gray-400 group-focus-within:text-eco-green-dark transition"></i>
+                    </span>
+                    <input type="email" id="email" name="email" required placeholder="tu@email.com"
+                        class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 pl-10 shadow-sm focus:border-eco-green-dark focus:ring-eco-green-dark">
+                </div>
             </div>
-            <div>
-                <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
-                <input type="password" id="password" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-eco-green focus:ring-eco-green">
+            <div class="relative group">
+                <label for="password"
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contraseña</label>
+                <div class="relative mt-1">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                        <i class="fas fa-lock text-gray-400 group-focus-within:text-eco-green-dark transition"></i>
+                    </span>
+                    <input type="password" id="password" name="password" required
+                        placeholder="Mín. 8 caracteres, 1 mayús, 1 núm."
+                        class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 pl-10 shadow-sm focus:border-eco-green-dark focus:ring-eco-green-dark">
+                </div>
+
+                <!-- Barra de Fortaleza -->
+                <div class="mt-2 flex items-center gap-2">
+                    <div id="strength-bar" class="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
+                        <div id="strength-indicator" class="h-full bg-red-500 transition-all duration-300"
+                            style="width: 0%;"></div>
+                    </div>
+                    <span id="strength-text" class="text-xs font-bold text-gray-500 w-20 text-right">Débil</span>
+                </div>
             </div>
-            <button type="submit" class="w-full bg-eco-green text-white py-2 rounded-md hover:bg-opacity-90 transition">
-                Registrarse
+
+            <button type="submit"
+                class="w-full bg-eco-green-dark text-white py-2 rounded-md font-bold hover:bg-opacity-80 transition active:scale-95 mt-4">
+                Crear mi Cuenta
             </button>
         </form>
 
-        <!-- Mensajes para el usuario (éxito y error) -->
-        <p id="message" class="text-sm mt-4 text-center"></p>
+        <p id="register-message" class="text-sm mt-4 text-center h-5"></p>
 
-        <p class="text-center text-sm text-gray-600 mt-4">
-            ¿Ya tienes una cuenta? 
-            <a href="/index.html" class="font-medium text-eco-green hover:underline">Inicia sesión</a>
-        </p>
-    </div>
+        <footer class="text-center mt-6 text-sm">
+            <p>¿Ya tienes una cuenta? <a href="/index.html" class="text-eco-green-dark font-bold hover:underline">Inicia
+                    sesión aquí</a></p>
+        </footer>
+    </main>
 
-    <!-- Script JS -->
     <script type="module" src="/js/main.js"></script>
 </body>
+
 </html>

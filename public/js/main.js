@@ -2,16 +2,18 @@
 import { handleRegister, handleLogin } from './auth.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Obtener el nombre del archivo (index.html, register.html)
-	const page = window.location.pathname.split('/').pop(); 
+	// Obtener el nombre del archivo (index.html, register.html)
+	const page = window.location.pathname;
 
 	if (page === 'index.html' || page === '') {
-		// Lógica para la página de Login
-		if (document.getElementById('login-form')) {
-			handleLogin();
+		if (path.includes('register.html')) {
+			// Lógica para la página de registro
+			handleRegister();
+		} else {
+			// Lógica para la página principal (index.html)
+			if (document.getElementById('login-form')) {
+				handleLogin();
+			}
 		}
-	} else if (page === 'register.html') {
-		// Lógica para la página de registro
-		handleRegister();
 	}
 });

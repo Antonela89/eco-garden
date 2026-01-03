@@ -6,6 +6,7 @@ import { initDashboard } from './dashboard.js';
 import { initProfile } from './profile.js';
 import { initAdmin } from './admin.js';
 import { initPasswordStrengthMeter } from './password-strength.js';
+import { initThemeSwitcher } from './theme.js';
 
 // Función para decodificar JWT (simple, sin librerías)
 const decodeToken = (token) => {
@@ -17,6 +18,10 @@ const decodeToken = (token) => {
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
+	// INICIALIZAR EL TEMA (Funcionalidad global)
+    initThemeSwitcher();
+
+	// LÓGICA DE ENRUTAMIENTO Y SEGURIDAD (Específica de cada página)
 	// Obtener el nombre del archivo (index.html, register.html)
 	const path = window.location.pathname;
 	const token = localStorage.getItem('token');
@@ -25,7 +30,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 	// Elemento para mostrar mensajes de carga o error
 	const catalogContainer = document.getElementById('plant-catalog');
 
-	// Lógica de enrutamiento y seguridad
 	if (path.includes('dashboard.html')) {
 		if (!token) {
 			window.location.href = '/index.html';

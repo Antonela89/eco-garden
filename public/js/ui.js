@@ -1,0 +1,94 @@
+/**
+ * Crear el HTML para una tarjeta de planta individual.
+ * @param {object} plant - El objeto de la planta con todos sus datos.
+ * @returns {string} - El string HTML de la tarjeta.
+ */
+export const createPlantCard = (plant) => {
+    // Pequeño helper para los badges de dificultad
+    const difficultyColors = {
+        "Fácil": "bg-green-100 text-green-800",
+        "Media": "bg-yellow-100 text-yellow-800",
+        "Difícil": "bg-red-100 text-red-800",
+    };
+
+    return `
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+            <!-- Imagen de la planta -->
+            <img src="${plant.imagen}" alt="${plant.nombre}" class="w-full h-48 object-cover">
+            
+            <div class="p-4">
+                <!-- Nombre y Familia -->
+                <h3 class="text-xl font-bold text-gray-800">${plant.nombre}</h3>
+                <p class="text-sm text-gray-500 mb-2">${plant.familia}</p>
+                
+                <!-- Badges de información rápida -->
+                <div class="flex flex-wrap gap-2 text-xs mb-4">
+                    <span class="font-semibold px-2 py-1 rounded-full ${difficultyColors[plant.dificultad]}">
+                        ${plant.dificultad}
+                    </span>
+                    ${plant.aptoMaceta 
+                        ? '<span class="font-semibold px-2 py-1 rounded-full bg-blue-100 text-blue-800">Apto Maceta 🌱</span>' 
+                        : ''
+                    }
+                </div>
+                
+                <!-- Tiempos de Cosecha -->
+                <div class="text-sm text-gray-700">
+                    <p><strong>Cosecha en:</strong> ${plant.diasCosecha.min} - ${plant.diasCosecha.max} días</p>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+/**
+ * Renderizar el catálogo completo en el DOM.
+ * @param {object[]} plants - El array de plantas obtenido de la API.
+ */
+export const renderCatalog = (plants) => {
+    const catalogContainer = document.getElementById('plant-catalog');
+    if (!catalogContainer) return;
+
+    // Limpiamos el contenedor por si había algo antes
+    catalogContainer.innerHTML = '';
+
+    // Generamos y añadimos cada tarjeta
+    plants.forEach(plant => {
+        const cardHTML = createPlantCard(plant);
+        catalogContainer.innerHTML += cardHTML;
+    });
+};
+
+/**
+ * Crear el HTML para una tarjeta de cultivo dentro de "Mi Huerta".
+ * @param {object} myPlant - El objeto de la planta del usuario.
+ * @returns {string} - El string HTML de la tarjeta.
+ */
+export const createMyGardenCard = (myPlant) => {
+    const statusInfo = {
+        creciendo: { text: "Creciendo", color: "bg-blue-100 text-blue-800", icon: "fa-leaf" },
+        listo: { text: "Listo para Cosechar", color: "bg-green-100 text-green-800", icon: "fa-check-circle" },
+        cosechado: { text: "Cosechado", color: "bg-yellow-100 text-yellow-800", icon: "fa-seedling" }
+    };
+    const currentStatus = statusInfo[myPlant.status] || statusInfo.creciendo;
+
+    return `
+        <article class="bg-white dark:bg-dark-surface rounded-lg shadow-lg overflow-hidden flex flex-col">
+            <img src="${myPlant.imagen}" alt="${myPlant.nombre}" class="w-full h-40 object-cover">
+            <div class="p-4 flex flex-col flex-grow">
+                <h3 class="text-lg font-bold text-gray-800 dark:text-white">${myPlant.nombre}</h3>
+                <span class="font-semibold px-2 py-1 rounded-full text-xs self-start my-2 ${currentStatus.color}">
+                    <i class="fas ${currentStatus.icon} mr-1"></i>
+                    ${currentStatus.text}
+                </span>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Siembra: ${new Date(myPlant.plantedAt).toLocaleDateString()}</p>
+                <!-- Aquí podría ir el loader de crecimiento -->
+                <div class="mt-auto pt-4 flex justify-end gap-2">
+                    <button class="text-gray-500 hover:text-red-500 transition" aria-label="Eliminar planta">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </article>
+    `;
+};

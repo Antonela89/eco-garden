@@ -53,6 +53,32 @@ export const loginUser = async (email, password) => {
 };
 
 /**
+ * Obtener la huerta personal del usuario. Requiere token.
+ * @returns {Promise<any>}
+ */
+export const getMyGarden = async () => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/gardener/garden`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!response.ok) throw new Error('No se pudo cargar la huerta.');
+    return response.json();
+};
+
+/**
+ * Obtener el perfil del usuario. Requiere token.
+ * @returns {Promise<any>}
+ */
+export const getProfile = async () => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/gardener/profile`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!response.ok) throw new Error('No se pudo cargar el perfil.');
+    return response.json();
+};
+
+/**
  * Función para obtener el catálogo de plantas.
  * @returns {Promise<any>}
  */

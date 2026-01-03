@@ -1,7 +1,7 @@
 // Importación de manejadores
 import { handleRegister, handleLogin } from './auth.js';
-import { getPlants } from './api.js';
-import { renderCatalog } from './ui.js';
+import { getPlants, getPlantById } from './api.js';
+import { renderCatalog, createPlantDetailsContent } from './ui.js';
 import { initDashboard } from './dashboard.js';
 import { initProfile } from './profile.js';
 import { initAdmin } from './admin.js';
@@ -19,7 +19,7 @@ const decodeToken = (token) => {
 
 document.addEventListener('DOMContentLoaded', async () => {
 	// INICIALIZAR EL TEMA (Funcionalidad global)
-    initThemeSwitcher();
+	initThemeSwitcher();
 
 	// LÓGICA DE ENRUTAMIENTO Y SEGURIDAD (Específica de cada página)
 	// Obtener el nombre del archivo (index.html, register.html)
@@ -73,6 +73,49 @@ document.addEventListener('DOMContentLoaded', async () => {
 				'<p class="text-center text-red-500 col-span-full">No se pudo cargar el catálogo. Inténtalo de nuevo más tarde.</p>';
 			console.error('Error al cargar el catálogo:', error);
 		}
+	}
+
+	const plantCatalog = document.getElementById('plant-catalog');
+	const modal = document.getElementById('plant-details-modal');
+	const modalContent = document.getElementById('modal-content');
+
+	const openModal = () => modal.classList.remove('hidden');
+	const closeModal = () => modal.classList.add('hidden');
+
+	// Lógica para abrir el modal al hacer clic en una tarjeta
+	if (plantCatalog) {
+		plantCatalog.addEventListener('click', async (e) => {
+			// Buscamos el ancestro más cercano que sea una tarjeta
+			const card = e.target.closest('[data-plant-id]');
+			if (!card) return;
+
+			const plantId = card.dataset.plantId;
+			openModal();
+			modalContent.innerHTML =
+				'<div class="p-8 text-center"><i class="fas fa-spinner fa-spin text-4xl text-eco-green-dark"></i></div>'; // Loader
+
+			try {
+				// Obtenemos los detalles de ESA planta
+				const plant = await getPlantById(plantId);
+				// Renderizamos los detalles en el modal
+				modalContent.innerHTML = createPlantDetailsContent(plant);
+
+				// Añadimos el listener para el botón de cierre DENTRO del modal
+				document
+					.getElementById('close-details-modal')
+					.addEventListener('click', closeModal);
+			} catch (error) {
+				modalContent.innerHTML =
+					'<p class="p-8 text-red-500">Error al cargar los detalles.</p>';
+			}
+		});
+	}
+
+	// Cerrar modal al hacer clic fuera del contenido
+	if (modal) {
+		modal.addEventListener('click', (e) => {
+			if (e.target === modal) closeModal();
+		});
 	}
 
 	// --- LÓGICA DE INTERFAZ COMÚN ---

@@ -12,7 +12,7 @@ export const createPlantCard = (plant) => {
     };
 
     return `
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+        <div data-plant-id="${plant.id}" class="cursor-pointer bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
             <!-- Imagen de la planta -->
             <img src="${plant.imagen}" alt="${plant.nombre}" class="w-full h-48 object-cover">
             
@@ -90,5 +90,61 @@ export const createMyGardenCard = (myPlant) => {
                 </div>
             </div>
         </article>
+    `;
+};
+
+/**
+ * Crear el contenido HTML para el modal de detalles de una planta.
+ * @param {object} plant - El objeto completo de la planta.
+ * @returns {string} - El string HTML para el interior del modal.
+ */
+export const createPlantDetailsContent = (plant) => {
+    return `
+        <header class="p-6 border-b dark:border-gray-700 flex justify-between items-start">
+            <div>
+                <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white">${plant.nombre}</h2>
+                <p class="text-md text-gray-500">${plant.familia}</p>
+            </div>
+            <button id="close-details-modal" class="text-3xl text-gray-400 hover:text-red-500 transition transform hover:rotate-90">
+                <i class="fas fa-times"></i>
+            </button>
+        </header>
+
+        <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Columna de Imagen y Badges -->
+            <div>
+                <img src="${plant.imagen}" alt="${plant.nombre}" class="w-full h-64 object-cover rounded-lg shadow-md mb-4">
+                <div class="flex flex-wrap gap-2 text-sm">
+                    <span class="font-semibold px-3 py-1 rounded-full bg-green-100 text-green-800">${plant.dificultad}</span>
+                    <span class="font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-800">${plant.aptoMaceta ? 'Apto Maceta' : 'No Apto Maceta'}</span>
+                    <span class="font-semibold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">${plant.toleranciaSombra ? 'Tolera Sombra' : 'Requiere Sol'}</span>
+                </div>
+            </div>
+
+            <!-- Columna de Detalles Técnicos -->
+            <div>
+                <div class="mb-4">
+                    <h4 class="font-bold text-lg mb-2 border-b dark:border-gray-600 pb-1">Siembra</h4>
+                    <p><strong>Método:</strong> ${plant.metodo.join(', ')}</p>
+                    <p><strong>Meses Ideales:</strong> ${plant.siembra.flat().join(', ')}</p>
+                </div>
+                <div class="mb-4">
+                    <h4 class="font-bold text-lg mb-2 border-b dark:border-gray-600 pb-1">Cosecha y Espacio</h4>
+                    <p><strong>Tiempo de Cosecha:</strong> ${plant.diasCosecha.min} - ${plant.diasCosecha.max} días</p>
+                    <p><strong>Distancia:</strong> ${plant.distancia.entrePlantas}cm entre plantas, ${plant.distancia.entreLineas}cm entre líneas</p>
+                </div>
+                <div class="mb-4">
+                    <h4 class="font-bold text-lg mb-2 border-b dark:border-gray-600 pb-1">Asociaciones y Rotación</h4>
+                    <p><strong>Cultivos Amigos:</strong> ${plant.asociacion.join(', ')}</p>
+                    <p><strong>Rotación Recomendada:</strong> ${plant.rotacion.join(', ')}</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="p-6 bg-gray-50 dark:bg-gray-800 border-t dark:border-gray-700 text-right">
+            <button class="bg-eco-green-dark text-white font-bold px-6 py-2 rounded-md hover:bg-opacity-80 transition active:scale-95">
+                <i class="fas fa-plus-circle mr-2"></i>Añadir a mi Huerta
+            </button>
+        </footer>
     `;
 };

@@ -86,3 +86,9 @@ export const getPlants = async () => {
     const response = await fetch(`${API_URL}/plants`);
     return response.json();
 };
+
+export const getPlantById = async (id) => {
+    const response = await fetch(`${API_URL}/plants/${id}`);
+    if (!response.ok) throw new Error('Planta no encontrada');
+    return response.json();
+};

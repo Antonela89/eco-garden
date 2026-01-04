@@ -11,6 +11,14 @@ export const createPlantCard = (plant) => {
         "Difícil": "bg-red-100 text-red-800",
     };
 
+    const diasCosecha = () => {
+        if (plant.diasCosecha.min === plant.diasCosecha.max) {
+            return `${plant.diasCosecha.max}`
+        } else {
+            return `${plant.diasCosecha.min} - ${plant.diasCosecha.max}`
+        }
+    }
+
     return `
         <div data-plant-id="${plant.id}" class="cursor-pointer bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
             <!-- Imagen de la planta -->
@@ -34,7 +42,7 @@ export const createPlantCard = (plant) => {
                 
                 <!-- Tiempos de Cosecha -->
                 <div class="text-sm text-gray-700">
-                    <p><strong>Cosecha en:</strong> ${plant.diasCosecha.min} - ${plant.diasCosecha.max} días</p>
+                    <p><strong>Cosecha en:</strong> ${diasCosecha()} días</p>
                 </div>
             </div>
         </div>

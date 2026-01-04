@@ -6,17 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crea tu cuenta - Eco-Garden</title>
 
+    <!-- Tailwind CSS (CDN) y Configuración -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            darkMode: 'class',
+            darkMode: 'class', // Habilitar modo oscuro basado en una clase en <html>
             theme: {
                 extend: {
-                    fontFamily: { 'nunito': ['Nunito', 'sans-serif'] },
+                    fontFamily: {
+                        'nunito': ['Nunito', 'sans-serif'],
+                    },
                     colors: {
                         'eco-green-light': '#4ADE80',
                         'eco-green-dark': '#22C55E',
                         'eco-brown': '#5D4037',
+                        // Colores para modo oscuro
                         'dark-bg': '#111827',
                         'dark-surface': '#1F2937',
                     }
@@ -24,15 +28,17 @@
             }
         }
     </script>
+
+    <!-- Google Fonts: Nunito -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Nunito', sans-serif;
-        }
-    </style>
+
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 
 <body class="bg-gray-100 dark:bg-dark-bg min-h-screen flex items-center justify-center p-4">

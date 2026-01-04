@@ -81,7 +81,14 @@
             <!-- El contenedor donde JS inyectará las tarjetas -->
             <div id="plant-catalog" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
                 <!-- Loader de Carga -->
-                <p id="loader" class="text-center col-span-full">Cargando catálogo...</p>
+                <div id="loader" class="col-span-full py-16 flex flex-col items-center justify-center gap-4">
+                    <div class="seed-loader">
+                        <div class="sprout"></div>
+                        <div class="seed"></div>
+                        <div class="ground"></div>
+                    </div>
+                    <p class="text-gray-500 dark:text-gray-400 font-semibold animate-pulse">Cargando cultivos...</p>
+                </div>
             </div>
         </section>
     </main>
@@ -103,7 +110,8 @@
                     <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
                     <div class="relative mt-1">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                            <i class="fas fa-envelope text-gray-400 group-focus-within:text-eco-green-dark transition"></i>
+                            <i
+                                class="fas fa-envelope text-gray-400 group-focus-within:text-eco-green-dark transition"></i>
                         </span>
                         <input type="email" id="email" name="email" required placeholder="tu@email.com"
                             class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 pl-10 shadow-sm focus:border-eco-green-dark focus:ring-eco-green-dark">

@@ -91,8 +91,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 			const plantId = card.dataset.plantId;
 			openModal();
-			modalContent.innerHTML =
-				'<div class="p-8 text-center"><i class="fas fa-spinner fa-spin text-4xl text-eco-green-dark"></i></div>'; // Loader
+			// Loader
+			modalContent.innerHTML = `
+			<div class="p-8 text-center flex flex-col items-center justify-center gap-4">
+        		<div class="seed-loader">
+            		<div class="sprout"></div>
+            		<div class="seed"></div>
+            		<div class="ground"></div>
+        		</div>
+        		<p class="text-gray-500 dark:text-gray-400 font-semibold">Cargando detalles...</p>
+    		</div>
+				`;
 
 			try {
 				// Obtenemos los detalles de ESA planta

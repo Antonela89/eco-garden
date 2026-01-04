@@ -263,7 +263,8 @@
     },
     {
         "id": "brocoli",
-        "nombre": "Brasicáceas",
+        "nombre": "Brocoli",
+        "familia": "Brasicáceas",
         "siembra": [
             "Febrero",
             "Marzo"

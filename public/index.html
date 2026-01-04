@@ -38,11 +38,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Estilos personalizados -->
-    <style>
-        body {
-            font-family: 'Nunito', sans-serif;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 
 <body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-gray-200 transition-colors duration-300">
@@ -85,7 +81,14 @@
             <!-- El contenedor donde JS inyectará las tarjetas -->
             <div id="plant-catalog" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
                 <!-- Loader de Carga -->
-                <p id="loader" class="text-center col-span-full">Cargando catálogo...</p>
+                <div id="loader" class="col-span-full py-16 flex flex-col items-center justify-center gap-4">
+                    <div class="seed-loader">
+                        <div class="sprout"></div>
+                        <div class="seed"></div>
+                        <div class="ground"></div>
+                    </div>
+                    <p class="text-gray-500 dark:text-gray-400 font-semibold animate-pulse">Cargando cultivos...</p>
+                </div>
             </div>
         </section>
     </main>

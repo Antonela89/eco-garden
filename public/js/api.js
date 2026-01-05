@@ -53,6 +53,34 @@ export const loginUser = async (email, password) => {
 };
 
 /**
+ * Añadir una planta a la huerta personal del usuario.
+ * @param {string} plantId - El ID de la planta a añadir.
+ * @returns {Promise<any>}
+ */
+export const addPlantToGarden = async (plantId) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        throw new Error('No estás autenticado. Inicia sesión para añadir plantas.');
+    }
+
+    const response = await fetch(`${API_URL}/gardener/garden`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ plantId })
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'No se pudo añadir la planta.');
+    }
+
+    return response.json();
+};
+
+/**
  * Obtener la huerta personal del usuario. Requiere token.
  * @returns {Promise<any>}
  */

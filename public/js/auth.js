@@ -73,21 +73,58 @@ export const handleLogin = () => {
  */
 export const updateNavOnLogin = (user) => {
     const navMenu = document.getElementById('nav-menu');
-    if (!navMenu) {
-		console.log(navMenu);
-		
-		return};
+    if (!navMenu) return;
 
     const themeButtonHTML = document.getElementById('theme-toggle')?.outerHTML || '<button id="theme-toggle" class="text-xl text-gray-600 hover:text-eco-green-dark transition dark:text-gray-300 dark:hover:text-green-300"><i class="fas fa-moon"></i></button>';
 
+    // --- HTML CON DROPDOWN ---
     navMenu.innerHTML = `
-        <span class="font-bold text-gray-700 dark:text-gray-300 hidden sm:block">¡Hola, ${user.username}!</span>
-        <a href="/html/profile.html" class="text-gray-600 dark:text-gray-300 hover:text-eco-green-dark">Mi Perfil</a>
-        ${user.role === 'admin' ? '<a href="/html/admin.html" class="font-bold text-yellow-400 hover:text-yellow-300">Admin</a>' : ''}
+        <!-- Botón principal a la Huerta -->
+        <a href="/html/dashboard.html" class="bg-eco-green-dark text-white px-4 py-2 rounded-md font-bold hover:bg-opacity-80 transition active:scale-95 flex items-center gap-2">
+            <i class="fas fa-leaf"></i>
+            <span>Mi Huerta</span>
+        </a>
+
         ${themeButtonHTML}
-        <button id="logout-button" class="bg-red-500 text-white px-4 py-2 rounded-md font-bold">Cerrar Sesión</button>
+
+        <!-- Contenedor del Menú Desplegable -->
+        <div class="relative" id="profile-menu-container">
+            <!-- Botón que abre el menú -->
+            <button id="profile-menu-button" class="flex items-center gap-2 font-bold text-gray-700 dark:text-gray-300">
+                <span>¡Hola, ${user.username}!</span>
+                <i class="fas fa-chevron-down text-xs"></i>
+            </button>
+            
+            <!-- El menú (oculto por defecto) -->
+            <div id="profile-dropdown" class="absolute right-0 mt-2 w-48 bg-white dark:bg-dark-surface rounded-md shadow-lg py-1 hidden">
+                <a href="/html/profile.html" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Mi Perfil</a>
+                ${user.role === 'admin' ? '<a href="/html/admin.html" class="block px-4 py-2 text-sm text-yellow-500 hover:bg-gray-100 dark:hover:bg-gray-700">Panel Admin</a>' : ''}
+                <div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
+                <button id="logout-button" class="block w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700">Cerrar Sesión</button>
+            </div>
+        </div>
     `;
 
+    // --- LÓGICA PARA EL DROPDOWN ---
+    const menuContainer = document.getElementById('profile-menu-container');
+    const menuButton = document.getElementById('profile-menu-button');
+    const dropdown = document.getElementById('profile-dropdown');
+
+    if (menuButton && dropdown) {
+        menuButton.addEventListener('click', (e) => {
+            e.stopPropagation(); // Evita que el clic se propague al 'document'
+            dropdown.classList.toggle('hidden');
+        });
+    }
+
+    // Cerrar el dropdown si se hace clic fuera
+    document.addEventListener('click', (e) => {
+        if (dropdown && !dropdown.classList.contains('hidden') && !menuContainer.contains(e.target)) {
+            dropdown.classList.add('hidden');
+        }
+    });
+
+    // Listener de Logout
     document.getElementById('logout-button').addEventListener('click', () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
@@ -96,7 +133,6 @@ export const updateNavOnLogin = (user) => {
 
     if (window.reInitThemeButton) window.reInitThemeButton();
 };
-
 /**
  * Restaurar la barra de navegación al estado "Visitante".
  */

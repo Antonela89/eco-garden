@@ -3,7 +3,7 @@
  * @param {string} text - Cadena de texto a formatear.
  * @returns {string} Texto formateado.
  */
-export const capitalize = (text: string): string => {
+export const capitalize = (text) => {
     if (!text || typeof text !== 'string') return text;
     return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
 };
@@ -14,7 +14,7 @@ export const capitalize = (text: string): string => {
  * @param {any} data - Objeto de entrada (ej. req.body).
  * @returns {any} Objeto con sus valores de texto formateados.
  */
-export const formatInputData = (data: any): any => {
+export const formatInputData = (data) => {
     const formattedData = { ...data };
 
     // Definir una lista de claves que NO deben ser modificadas bajo ningún concepto
@@ -36,7 +36,7 @@ export const formatInputData = (data: any): any => {
  * @param {string} text - Cadena de texto a procesar.
  * @returns {string} Texto normalizado en formato slug.
  */
-export const slugify = (text: string): string => {
+export const slugify = (text) => {
     if (!text || typeof text !== 'string') return text;
 
     return text
@@ -53,7 +53,7 @@ export const slugify = (text: string): string => {
  * @param {any} data - Objeto con los datos de entrada.
  * @returns {any} Objeto con el ID formateado.
  */
-export const formatIdData = (data: any): any => {
+export const formatIdData = (data) => {
     const formattedData = { ...data };
 
     // Validar si existe la clave 'id' y si su valor es una cadena de texto

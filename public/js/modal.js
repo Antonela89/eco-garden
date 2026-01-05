@@ -7,9 +7,26 @@ let isOpen = false;
 /**
  * Abrir el modal e inyectar contenido HTML.
  * @param {string} contentHTML - El HTML que se mostrará dentro del modal.
+ * * @param {string} [size='lg'] - El tamaño del modal: 'sm', 'md', 'lg', 'xl', '2xl', etc.
  */
-export const openModal = (contentHTML) => {
+export const openModal = (contentHTML, size = 'lg') => {
 	if (!modalContainer || !modalContent) return;
+
+    // Definir las clases de tamaño de Tailwind
+    const sizeClasses = {
+        sm: 'max-w-sm',
+        md: 'max-w-md',
+        lg: 'max-w-lg',
+        xl: 'max-w-xl',
+        '2xl': 'max-w-2xl',
+        '4xl': 'max-w-4xl' // Para formularios grandes como el de Admin
+    };
+
+    // Limpiar cualquier clase de tamaño anterior
+    modalContent.classList.remove(...Object.values(sizeClasses));
+
+    // Añadimos la nueva clase de tamaño
+    modalContent.classList.add(sizeClasses[size] || sizeClasses['lg']);
 
 	modalContent.innerHTML = contentHTML;
 	modalContainer.classList.remove('hidden');

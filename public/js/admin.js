@@ -79,7 +79,7 @@ export const initAdmin = async () => {
 
     // Evento para abrir el modal de CREAR planta
     addPlantButton.addEventListener('click', () => {
-        openModal(createAdminPlantForm());
+        openModal(createAdminPlantForm(), '4xl');
         
         // Añadir listener para el submit del formulario recién creado
         const form = document.getElementById('admin-plant-form');

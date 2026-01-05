@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		const loginButton = document.getElementById('login-button');
 		if (loginButton) {
 			loginButton.addEventListener('click', () => {
-				openModal(createLoginModalContent());
+				openModal(createLoginModalContent(), 'sm');
 				handleLogin();
 			});
 		}
@@ -107,13 +107,13 @@ const initializeIndexPageListeners = (user) => {
 			if (!card) return;
 
 			// Ajustar el tamaño del modal para los detalles
-			modalContentArea.className = modalContentArea.className.replace(
-				/max-w-\w+/g,
-				'max-w-2xl'
-			);
+			// modalContentArea.className = modalContentArea.className.replace(
+			// 	/max-w-\w+/g,
+			// 	'max-w-2xl'
+			// );
 
 			// Mostrar el loader y abrir modal
-			openModal(getLoaderHTML('Germinando detalles de la planta...'));
+			openModal(getLoaderHTML('Germinando detalles de la planta...'),'4xl');
 
 			try {
 				const plantId = card.dataset.plantId;

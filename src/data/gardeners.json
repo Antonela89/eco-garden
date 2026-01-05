@@ -6,5 +6,13 @@
     "role": "gardener",
     "username": "Antonela",
     "id": "c711be2e-9777-4b3b-aa82-e804ad994516"
+  },
+  {
+    "email": "inta@admin.com",
+    "password": "$2b$10$RNgq.KzPegIVAvJnLiv5v.saLbf/Hv3xxdGQf/doHlRqlVO8zd2Pe",
+    "myPlants": [],
+    "role": "admin",
+    "username": "Intaadmin",
+    "id": "6b324771-7dd9-492f-8b08-62d59ffa4b28"
   }
 ]

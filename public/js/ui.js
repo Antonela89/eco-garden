@@ -1,6 +1,6 @@
-// ==========================================
-//    FUNCIONES AUXILIARES (HELPERS)
-// ==========================================
+// -----------------------------------
+// FUNCIONES AUXILIARES (HELPERS)
+// -----------------------------------
 
 /**
  * Formatear el rango de días de cosecha para mostrarlo al usuario.
@@ -67,9 +67,9 @@ const createSowingCalendar = (siembraMonths) => {
 	return calendarHTML;
 };
 
-// ==========================================
-//    FUNCIONES DE RENDERIZADO (EXPORTADAS)
-// ==========================================
+// -----------------------------------
+// FUNCIONES DE RENDERIZADO (EXPORTADAS)
+// -----------------------------------
 
 /**
  * Crear el HTML para una tarjeta de planta individual.
@@ -283,7 +283,7 @@ export const createAdminPlantForm = (plant = null) => {
     return `
         <header class="p-6 border-b dark:border-gray-700 flex justify-between items-center">
             <h2 class="text-2xl font-bold text-gray-800 dark:text-white">${title}</h2>
-            <button onclick="window.closeModal()" class="text-3xl text-gray-400 hover:text-red-500 transition">&times;</button>
+            <button id="close-modal-button" class="text-3xl text-gray-400 hover:text-red-500 transition">&times;</button>
         </header>
         
         <form id="admin-plant-form" class="p-6 max-h-[70vh] overflow-y-auto">
@@ -379,7 +379,7 @@ export const createAdminPlantForm = (plant = null) => {
             </div>
 
             <footer class="mt-8 pt-4 border-t dark:border-gray-700 flex justify-end gap-4">
-                <button type="button" onclick="window.closeModal()" class="px-6 py-2 rounded-md bg-gray-200 dark:bg-gray-600 hover:bg-gray-300">Cancelar</button>
+                <button type="button" id="close-modal-button" class="px-6 py-2 rounded-md bg-gray-200 dark:bg-gray-600 hover:bg-gray-300">Cancelar</button>
                 <button type="submit" class="bg-eco-green-dark text-white font-bold px-6 py-2 rounded-md hover:bg-opacity-80 transition active:scale-95">
                     ${isEditing ? 'Guardar Cambios' : 'Crear Planta'}
                 </button>
@@ -396,7 +396,7 @@ export const createLoginModalContent = () => {
     return `
         <header class="p-6 flex justify-between items-center border-b dark:border-gray-700">
             <h2 class="text-2xl font-bold text-eco-green-dark">Iniciar Sesión</h2>
-            <button onclick="window.closeModal()" class="text-3xl text-gray-400 hover:text-red-500">&times;</button>
+            <button id="close-modal-button" class="text-3xl text-gray-400 hover:text-red-500">&times;</button>
         </header>
         <div class="p-6">
             <form id="login-form" class="flex flex-col gap-4">
@@ -451,13 +451,32 @@ export const createConfirmModalContent = (message, confirmText = 'Confirmar') =>
             <i class="fas fa-exclamation-triangle text-4xl text-yellow-400"></i>
             <h3 class="text-xl font-bold text-gray-800 dark:text-white">${message}</h3>
             <div class="flex justify-center gap-4 mt-4">
-                <button onclick="window.closeModal()" class="px-6 py-2 rounded-md bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 font-semibold">
+                <button id="close-modal-button" class="px-6 py-2 rounded-md bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 font-semibold">
                     Cancelar
                 </button>
                 <button id="confirm-action-button" class="bg-red-500 text-white font-bold px-6 py-2 rounded-md hover:bg-red-600">
                     ${confirmText}
                 </button>
             </div>
+        </div>
+    `;
+};
+
+/**
+ * Crear el contenido HTML para el modal de perfil del usuario.
+ * @param {object} user - El objeto de usuario.
+ * @returns {string}
+ */
+export const createProfileModalContent = (user) => {
+    return `
+        <header class="p-6 flex justify-between items-center border-b dark:border-gray-700">
+            <h2 class="text-2xl font-bold">Mi Perfil</h2>
+            <button id="close-modal-button" class="text-3xl">&times;</button>
+        </header>
+        <div class="p-8">
+            <p><strong>Nombre:</strong> ${user.username}</p>
+            <p><strong>Email:</strong> ${user.email}</p>
+            <p><strong>Rol:</strong> ${user.role}</p>
         </div>
     `;
 };

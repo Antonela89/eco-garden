@@ -22,7 +22,7 @@ export const openModal = (contentHTML) => {
 export const closeModal = () => {
 	if (!modalContainer) return;
 
-	console.log('Cerrando el modal...');
+	// console.log('Cerrando el modal...'); // Testeo
 
 	modalContainer.classList.add('hidden');
 	modalContent.innerHTML = ''; // Limpiar contenido al cerrar

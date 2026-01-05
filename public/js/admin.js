@@ -1,7 +1,7 @@
 import { getPlants, createPlant, updatePlant, deletePlant } from './api.js';
 import { openModal, closeModal } from './modal.js';
 import { createAdminPlantForm, createConfirmModalContent } from './ui.js';
-import { formatIdData, formatInputData } from './formatters.js';
+import { formatIdData, formatInputData } from '../../shared/formatters.js';
 
 /**
  * Procesar los datos de un formulario de planta y convertirlos a un objeto JSON válido.

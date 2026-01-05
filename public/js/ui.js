@@ -198,9 +198,25 @@ export const createMyGardenCard = (myPlant) => {
 /**
  * Crear el contenido HTML para el modal de detalles de una planta.
  * @param {object} plant - El objeto completo de la planta.
+ * @param {object|null} user - El objeto de usuario decodificado del token (o null si no está logueado).
  * @returns {string} - El string HTML para el interior del modal.
  */
-export const createPlantDetailsContent = (plant) => {
+export const createPlantDetailsContent = (plant, user) => {
+	// Definir el contenido del footer dinámicamente según usuario 
+	const footerContent = user
+		? `<!-- Usuario Logueado: Botón funcional -->
+            <button id="add-to-garden-btn" data-plant-id="${plant.id}" 
+                class="bg-eco-green-dark text-white font-bold px-6 py-2 rounded-md hover:bg-opacity-80 transition active:scale-95">
+                <i class="fas fa-plus-circle mr-2"></i>Añadir a mi Huerta
+            </button>`
+		: `<!-- Visitante: Mensaje y botón para iniciar sesión -->
+            <div class="text-center">
+                <p class="mb-2">Inicia sesión para empezar a cultivar.</p>
+                <button id="login-prompt-btn" class="bg-gray-500 text-white font-bold px-6 py-2 rounded-md">
+                    Ingresar
+                </button>
+            </div>`;
+
 	return `
         <header class="p-6 border-b dark:border-gray-700 flex justify-between items-start">
             <div>
@@ -268,9 +284,7 @@ export const createPlantDetailsContent = (plant) => {
         </div>
 
         <footer class="p-6 bg-gray-50 dark:bg-gray-800 border-t dark:border-gray-700 text-right">
-            <button class="bg-eco-green-dark text-white font-bold px-6 py-2 rounded-md hover:bg-opacity-80 transition active:scale-95">
-                <i class="fas fa-plus-circle mr-2"></i>Añadir a mi Huerta
-            </button>
+            ${footerContent}
         </footer>
     `;
 };

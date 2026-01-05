@@ -8,7 +8,7 @@ import { PlantModel } from '../models/plant-model';
 // Importación de Role
 import { Role } from '../types/gardener';
 // Importación de función auxiliar
-import { formatInputData, slugify } from '../utils/formatters';
+import { formatInputData, slugify } from '../../shared/formatters';
 
 /**
  * Clave secreta para la firma de los tokens JWT.

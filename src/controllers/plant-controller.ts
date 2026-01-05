@@ -9,8 +9,8 @@ import {
 	formatInputData,
 	capitalize,
 	formatIdData,
-	slugify,
-} from '../utils/formatters';
+	slugify
+} from '../../shared/formatters';
 
 /**
  * Clase PlantController

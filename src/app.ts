@@ -1,9 +1,9 @@
 // Importación de modulos
 import express from 'express';
+import path from 'path';
 import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
-import path from 'path';
 import helmet from 'helmet';
 // Importación de Rutas
 import router from './routes/index';
@@ -20,36 +20,44 @@ dotenv.config();
  */
 const app = express();
 
-/** Habilitar la busqueda de recursos en la carpeta public (Frontend). */
-const publicPath = path.join(__dirname, '../public');
-console.log(`Sirviendo archivos estáticos desde: ${publicPath}`);
-app.use(express.static(publicPath));
+// --- CONFIGURACIÓN DE SEGURIDAD (HELMET Y CSP) ---
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            // Permitir que, por defecto, todo se cargue desde dominio propio ('self')
+            defaultSrc: ["'self'"],
+            
+            // Definir de dónde se pueden cargar los scripts
+            scriptSrc: [
+                "'self'",                           // Scripts de dominio propio (ej: /js/main.js)
+                "'unsafe-inline'",                  // Permitir scripts inline (necesario para la configuración de Tailwind en el HTML)
+                "https://cdn.tailwindcss.com"     // Permitir el script de la CDN de Tailwind
+            ],
 
-// --- CONFIGURACIÓN DE SEGURIDAD (CSP) ---
-// Para los errores 'Content-Security-Policy'.
-// Permite scripts inline (el de Tailwind CDN) y scripts de self y la CDN de Tailwind.
-app.use(
-	helmet({
-		contentSecurityPolicy: {
-			directives: {
-				// Permitir scripts de nuestro propio dominio, de Tailwind CDN y los scripts 'inline'
-				scriptSrc: [
-					"'self'",
-					'https://cdn.tailwindcss.com',
-					"'unsafe-inline'",
-				],
-				// Permitir estilos de nuestro propio dominio y los estilos 'inline'
-				styleSrc: [
-					"'self'",
-					'https://cdn.tailwindcss.com',
-					"'unsafe-inline'",
-				],
-				imgSrc: ["'self'", 'data:', 'https://res.cloudinary.com'], // Permite Cloudinary y base64
-				defaultSrc: ["'self'"], // Por defecto, todo lo demás es de nuestro propio dominio
-			},
-		},
-	})
-);
+            // Definir de dónde se pueden cargar los estilos
+            styleSrc: [
+                "'self'",                           // Estilos dede dominio propio
+                "'unsafe-inline'",                  // Permitir estilos inline (necesario para la animación del loader)
+                "https://cdnjs.cloudflare.com",   // Permitir los CSS de Font Awesome
+                "https://fonts.googleapis.com"    // Permitir los CSS de Google Fonts
+            ],
+
+            // Definir de dónde se pueden cargar las fuentes (tipografías)
+            fontSrc: [
+                "'self'",                           // Fuentes de de dominio propio
+                "https://cdnjs.cloudflare.com",   // Permitir las fuentes de Font Awesome
+                "https://fonts.gstatic.com"       // Permitir las fuentes de Google Fonts
+            ],
+
+            // Definir de dónde se pueden cargar las imágenes
+            imgSrc: [
+                "'self'",                           // Imágenes de de dominio propio
+                "data:",                            // Permitir imágenes en base64 (a veces usadas por librerías)
+                "https://res.cloudinary.com"      // Permitir imágenes desde de Cloudinary
+            ]
+        },
+    },
+}));
 
 // --------------------------------------------
 // MIDDLEWARES GLOBALES
@@ -69,6 +77,15 @@ app.use(express.json());
  * La opción 'extended: true' permite manejar objetos complejos y arrays.
  */
 app.use(express.urlencoded({ extended: true }));
+
+// --- SERVIR ARCHIVOS ESTÁTICOS ---
+// Servir la carpeta 'public' como la raíz principal del frontend
+const publicPath = path.join(__dirname, '../public');
+app.use(express.static(publicPath));
+
+// Servir la carpeta 'shared' para que los archivos JS sean accesibles
+const sharedPath = path.join(__dirname, '../shared');
+app.use('/shared', express.static(sharedPath)); 
 
 // --------------------------------------------
 // RUTAS

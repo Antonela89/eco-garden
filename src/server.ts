@@ -20,6 +20,7 @@ const startServer = () => {
 			console.log(`Puerto: ${PORT}`);
 			console.log(`Fecha: ${new Date().toLocaleDateString()}`);
 			console.log(`Localhost: http://localhost:${PORT}/api`);
+			console.log(`FrontEnd: http://localhost:${PORT}`);
 			console.log('==============================================');
 		});
 	} catch (error) {

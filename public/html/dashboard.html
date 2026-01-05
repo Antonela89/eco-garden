@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es" class="light"> <!-- El tema se carga desde localStorage -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Huerta - Eco-Garden</title>
+    
+    <!-- Tailwind CSS (CDN) y Configuración -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Habilitar modo oscuro basado en una clase en <html>
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'nunito': ['Nunito', 'sans-serif'],
+                    },
+                    colors: {
+                        'eco-green-light': '#4ADE80',
+                        'eco-green-dark': '#22C55E',
+                        'eco-brown': '#5D4037',
+                        // Colores para modo oscuro
+                        'dark-bg': '#111827',
+                        'dark-surface': '#1F2937',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts: Nunito -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-gray-200 transition-colors duration-300">
+
+    <!-- =========== HEADER DEL USUARIO LOGUEADO =========== -->
+    <header class="bg-white dark:bg-dark-surface shadow-md sticky top-0 z-10">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="/" class="flex items-center gap-2 text-2xl font-extrabold text-eco-green-dark">
+                    <i class="fas fa-seedling"></i>
+                    <span>Eco-Garden</span>
+                </a>
+                <div class="flex items-center gap-4">
+                    <span class="font-bold text-gray-700 dark:text-gray-300">¡Hola, <span id="username-display"></span>!</span>
+                    <button id="theme-toggle" class="text-xl text-gray-600 dark:text-gray-300 hover:text-eco-green-dark transition"><i class="fas fa-moon"></i></button>
+                    <button id="logout-button" class="bg-red-500 text-white px-4 py-2 rounded-md font-bold hover:bg-red-600 transition active:scale-95">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- =========== CONTENIDO DEL DASHBOARD =========== -->
+    <main class="max-w-7xl mx-auto py-8 sm:px-6 lg:px-8">
+        
+        <section id="mi-huerta">
+            <div class="flex justify-between items-center mb-6 px-4">
+                <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white">Mi Huerta</h1>
+                <a href="/index.html" class="bg-eco-green-dark text-white px-6 py-2 rounded-md font-bold hover:bg-opacity-80 transition active:scale-95 flex items-center gap-2">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Añadir Cultivo</span>
+                </a>
+            </div>
+            
+            <!-- Contenedor para la parcela de cultivos -->
+            <div id="garden-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
+                <!-- Aquí JS inyectará las tarjetas de la huerta o el mensaje de huerta vacía -->
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

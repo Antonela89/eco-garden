@@ -6,7 +6,7 @@ import { loginUser, registerUser } from './api.js';
  */
 export const handleRegister = () => {
     const form = document.getElementById('register-form');
-    const messageP = document.getElementById('message');
+    const messageP = document.getElementById('register-message');
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -39,7 +39,7 @@ export const handleRegister = () => {
 
 export const handleLogin = () => {
     const form = document.getElementById('login-form');
-    const errorP = document.getElementById('error-message');
+    const errorP = document.getElementById('login-error-message');
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault(); // Evitar que la página se recargue

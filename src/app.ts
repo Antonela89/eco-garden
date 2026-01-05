@@ -4,6 +4,7 @@ import path from 'path';
 import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import helmet from 'helmet';
 // Importación de Rutas
 import router from './routes/index';
 // Importación de middleware de error
@@ -18,6 +19,45 @@ dotenv.config();
  * Inicializar la instancia de la aplicación Express.
  */
 const app = express();
+
+// --- CONFIGURACIÓN DE SEGURIDAD (HELMET Y CSP) ---
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            // Permitir que, por defecto, todo se cargue desde dominio propio ('self')
+            defaultSrc: ["'self'"],
+            
+            // Definir de dónde se pueden cargar los scripts
+            scriptSrc: [
+                "'self'",                           // Scripts de dominio propio (ej: /js/main.js)
+                "'unsafe-inline'",                  // Permitir scripts inline (necesario para la configuración de Tailwind en el HTML)
+                "https://cdn.tailwindcss.com"     // Permitir el script de la CDN de Tailwind
+            ],
+
+            // Definir de dónde se pueden cargar los estilos
+            styleSrc: [
+                "'self'",                           // Estilos dede dominio propio
+                "'unsafe-inline'",                  // Permitir estilos inline (necesario para la animación del loader)
+                "https://cdnjs.cloudflare.com",   // Permitir los CSS de Font Awesome
+                "https://fonts.googleapis.com"    // Permitir los CSS de Google Fonts
+            ],
+
+            // Definir de dónde se pueden cargar las fuentes (tipografías)
+            fontSrc: [
+                "'self'",                           // Fuentes de de dominio propio
+                "https://cdnjs.cloudflare.com",   // Permitir las fuentes de Font Awesome
+                "https://fonts.gstatic.com"       // Permitir las fuentes de Google Fonts
+            ],
+
+            // Definir de dónde se pueden cargar las imágenes
+            imgSrc: [
+                "'self'",                           // Imágenes de de dominio propio
+                "data:",                            // Permitir imágenes en base64 (a veces usadas por librerías)
+                "https://res.cloudinary.com"      // Permitir imágenes desde de Cloudinary
+            ]
+        },
+    },
+}));
 
 // --------------------------------------------
 // MIDDLEWARES GLOBALES

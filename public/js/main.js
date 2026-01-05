@@ -4,7 +4,7 @@ import {
 	updateNavOnLogin,
 	updateNavOnLogout,
 } from './auth.js';
-import { getPlants, getPlantById } from './api.js';
+import { getPlants, getPlantById, addPlantToGarden } from './api.js';
 import {
 	renderCatalog,
 	createPlantDetailsContent,
@@ -106,14 +106,11 @@ const initializeIndexPageListeners = (user) => {
 			const card = e.target.closest('[data-plant-id]');
 			if (!card) return;
 
-			// Ajustar el tamaño del modal para los detalles
-			// modalContentArea.className = modalContentArea.className.replace(
-			// 	/max-w-\w+/g,
-			// 	'max-w-2xl'
-			// );
-
 			// Mostrar el loader y abrir modal
-			openModal(getLoaderHTML('Germinando detalles de la planta...'),'4xl');
+			openModal(
+				getLoaderHTML('Germinando detalles de la planta...'),
+				'4xl'
+			);
 
 			try {
 				const plantId = card.dataset.plantId;
@@ -129,6 +126,47 @@ const initializeIndexPageListeners = (user) => {
 			}
 		});
 	}
+
+	if (modalContainer) {
+		modalContainer.addEventListener('click', async (e) => {
+			const addToGardenBtn = e.target.closest('#add-to-garden-btn');
+			const loginPromptBtn = e.target.closest('#login-prompt-btn');
+
+			// Si se hizo clic en "Añadir a mi Huerta"
+			if (addToGardenBtn) {
+				const plantId = addToGardenBtn.dataset.plantId;
+
+				// Feedback visual para el usuario
+				addToGardenBtn.disabled = true;
+				addToGardenBtn.innerHTML =
+					'<i class="fas fa-spinner fa-spin mr-2"></i>Añadiendo...';
+
+				try {
+					await addPlantToGarden(plantId);
+					addToGardenBtn.innerHTML =
+						'<i class="fas fa-check mr-2"></i>¡Añadido!';
+					addToGardenBtn.classList.remove('bg-eco-green-dark');
+					addToGardenBtn.classList.add('bg-green-500');
+
+					// Cerrar el modal después de un éxito
+					setTimeout(() => closeModal(), 1500);
+				} catch (error) {
+					alert(error.message); // Mostrar error
+					addToGardenBtn.disabled = false; // Reactivar el botón
+					addToGardenBtn.innerHTML =
+						'<i class="fas fa-plus-circle mr-2"></i>Añadir a mi Huerta';
+				}
+			}
+
+			// Si se hizo clic en el botón "Ingresar" del prompt
+			if (loginPromptBtn) {
+				closeModal(); // Cierra el modal de detalles
+				// Abre el modal de login 
+				openModal(createLoginModalContent(), 'sm');
+				handleLogin();
+			}
+		});
+	}
 };
 
 const loadCatalog = async () => {
@@ -138,11 +176,11 @@ const loadCatalog = async () => {
 	// Mostrar el loader con un mensaje personalizado
 	const loaderWrapper = `
         <div id="loader-wrapper" class="col-span-full py-16 flex justify-center">
-            ${getLoaderHTML("Cargando catálogo de cultivos...")}
+            ${getLoaderHTML('Cargando catálogo de cultivos...')}
         </div>
     `;
 
-    catalogContainer.innerHTML = loaderWrapper;
+	catalogContainer.innerHTML = loaderWrapper;
 
 	try {
 		const plants = await getPlants();

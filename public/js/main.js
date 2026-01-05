@@ -1,5 +1,5 @@
 // ---------------------------------
-//              IMPORTS
+// IMPORTS
 // ---------------------------------
 import {
 	handleRegister,
@@ -22,12 +22,12 @@ import { initThemeSwitcher } from './theme.js';
 import { getLoaderHTML } from './loader.js';
 
 // ---------------------------------
-//              SETUP GLOBAL
+// SETUP GLOBAL
 // ---------------------------------
 window.closeModal = closeModal;
 
 // ---------------------------------
-//          PUNTO DE ENTRADA (MAIN)
+// PUNTO DE ENTRADA (MAIN)
 // ---------------------------------
 document.addEventListener('DOMContentLoaded', () => {
 	// Inicializaciones globales que ocurren en todas las páginas
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ---------------------------------
-//     LÓGICA ESPECÍFICA DE CADA PÁGINA
+// LÓGICA ESPECÍFICA DE CADA PÁGINA
 // ---------------------------------
 
 /**

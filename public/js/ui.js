@@ -166,6 +166,14 @@ export const createMyGardenCard = (myPlant) => {
 	};
 	const currentStatus = statusInfo[myPlant.status] || statusInfo.creciendo;
 
+	const plantedDate = new Date(myPlant.plantedAt);
+	const harvestDate = new Date(plantedDate);
+	harvestDate.setDate(plantedDate.getDate() + myPlant.diasRestantes);
+	const today = new Date();
+	const totalDays = (harvestDate - plantedDate) / (1000 * 60 * 60 * 24);
+	const daysPassed = (today - plantedDate) / (1000 * 60 * 60 * 24);
+	const progressPercentage = Math.min(100, (daysPassed / totalDays) * 100);
+
 	return `
         <article class="bg-white dark:bg-dark-surface rounded-lg shadow-lg overflow-hidden flex flex-col">
             <img src="${myPlant.imagen}" alt="${
@@ -175,16 +183,35 @@ export const createMyGardenCard = (myPlant) => {
                 <h3 class="text-lg font-bold text-gray-800 dark:text-white">${
 					myPlant.nombre
 				}</h3>
-                <span class="font-semibold px-2 py-1 rounded-full text-xs self-start my-2 ${
-					currentStatus.color
-				}">
-                    <i class="fas ${currentStatus.icon} mr-1"></i>
-                    ${currentStatus.text}
-                </span>
-                <p class="text-sm text-gray-600 dark:text-gray-400">Siembra: ${new Date(
-					myPlant.plantedAt
-				).toLocaleDateString()}</p>
-                <!-- Aquí podría ir el loader de crecimiento -->
+
+                <!-- DROPDOWN DE ESTADO -->
+                <div class="relative inline-block text-left my-2">
+                    <button data-action="toggle-status-menu" class="font-semibold px-2 py-1 rounded-full text-xs self-start ${
+						currentStatus.color
+					}">
+                        <i class="fas ${currentStatus.icon} mr-1"></i>
+                        ${currentStatus.text}
+                        <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                    </button>
+                    <!-- Menú oculto -->
+                    <div class="status-menu hidden absolute z-10 mt-1 w-48 bg-white dark:bg-dark-surface rounded-md shadow-lg">
+                        <a href="#" data-status="creciendo" class="block px-4 py-2 text-sm">Creciendo</a>
+                        <a href="#" data-status="listo" class="block px-4 py-2 text-sm">Listo para Cosechar</a>
+                        <a href="#" data-status="cosechado" class="block px-4 py-2 text-sm">Cosechado</a>
+                    </div>
+                </div>
+
+                <div class="text-sm text-gray-600 dark:text-gray-400">
+                    <p>Siembra: ${plantedDate.toLocaleDateString()}</p>
+                    <p class="font-bold">Cosecha aprox: ${harvestDate.toLocaleDateString()}</p>
+                </div>
+        
+                <!-- BARRA DE PROGRESO -->
+                <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2 dark:bg-gray-700">
+                    <div class="bg-eco-green-dark h-2.5 rounded-full" style="width: ${progressPercentage}%"></div>
+                </div>
+
+                
                 <div class="mt-auto pt-4 flex justify-end gap-2">
                     <button class="text-gray-500 hover:text-red-500 transition" aria-label="Eliminar planta">
                         <i class="fas fa-trash"></i>
@@ -202,7 +229,7 @@ export const createMyGardenCard = (myPlant) => {
  * @returns {string} - El string HTML para el interior del modal.
  */
 export const createPlantDetailsContent = (plant, user) => {
-	// Definir el contenido del footer dinámicamente según usuario 
+	// Definir el contenido del footer dinámicamente según usuario
 	const footerContent = user
 		? `<!-- Usuario Logueado: Botón funcional -->
             <button id="add-to-garden-btn" data-plant-id="${plant.id}" 

@@ -1,7 +1,5 @@
 // Importación de fetch
 import { loginUser, registerUser } from './api.js';
-import { openModal } from './modal.js';
-import { createProfileModalContent, createLoginModalContent } from './ui.js';
 
 /**
  * Manejar la lógica del formulario de registro.
@@ -74,68 +72,47 @@ export const handleLogin = () => {
  * @param {object} user - El objeto de usuario decodificado del token.
  */
 export const updateNavOnLogin = (user) => {
-	const navContainer = document.querySelector(
-		'header nav .flex.items-center.gap-4'
-	);
-	if (!navContainer) return;
+    const navMenu = document.getElementById('nav-menu');
+    if (!navMenu) {
+		console.log(navMenu);
+		
+		return};
 
-	// HTML para el menú de usuario logueado
-	navContainer.innerHTML = `
-        <span class="font-bold text-gray-700 dark:text-gray-300">¡Hola, ${
-			user.username
-		}!</span>
-        <button id="profile-button" class="text-gray-600 dark:text-gray-300 hover:text-eco-green-dark">Mi Perfil</button>
-        ${
-			user.role === 'admin'
-				? '<a href="/html/admin.html" class="text-yellow-500 font-bold hover:underline">Panel Admin</a>'
-				: ''
-		}
+    const themeButtonHTML = document.getElementById('theme-toggle')?.outerHTML || '<button id="theme-toggle" class="text-xl text-gray-600 hover:text-eco-green-dark transition dark:text-gray-300 dark:hover:text-green-300"><i class="fas fa-moon"></i></button>';
+
+    navMenu.innerHTML = `
+        <span class="font-bold text-gray-700 dark:text-gray-300 hidden sm:block">¡Hola, ${user.username}!</span>
+        <a href="/html/profile.html" class="text-gray-600 dark:text-gray-300 hover:text-eco-green-dark">Mi Perfil</a>
+        ${user.role === 'admin' ? '<a href="/html/admin.html" class="font-bold text-yellow-400 hover:text-yellow-300">Admin</a>' : ''}
+        ${themeButtonHTML}
         <button id="logout-button" class="bg-red-500 text-white px-4 py-2 rounded-md font-bold">Cerrar Sesión</button>
     `;
 
-	// Añadir listeners a los nuevos botones
-	document.getElementById('logout-button').addEventListener('click', () => {
-		localStorage.removeItem('token');
-		localStorage.removeItem('user');
-		window.location.reload(); // Recargar la página para actualizar el estado
-	});
+    document.getElementById('logout-button').addEventListener('click', () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/index.html';
+    });
 
-	document.getElementById('profile-button').addEventListener('click', () => {
-		// Abrir un modal con la info del perfil
-		openModal(createProfileModalContent(user));
-	});
+    if (window.reInitThemeButton) window.reInitThemeButton();
 };
 
 /**
- * Restaurar la barra de navegación al estado de "Visitante".
+ * Restaurar la barra de navegación al estado "Visitante".
  */
 export const updateNavOnLogout = () => {
-	const navContainer = document.querySelector(
-		'header nav .flex.items-center.gap-4'
-	);
-	if (!navContainer) return;
+    const navMenu = document.getElementById('nav-menu');
+    if (!navMenu) return;
 
-	// HTML para el menú de visitante
-	navContainer.innerHTML = `
-        <button id="theme-toggle" class="text-xl text-gray-600 hover:text-eco-green-dark transition dark:text-gray-300 dark:hover:text-eco-green-dark transition">
+    navMenu.innerHTML = `
+        <button id="theme-toggle" class="text-xl text-gray-600 hover:text-eco-green-dark transition dark:text-gray-300 dark:hover:text-green-300">
             <i class="fas fa-moon"></i>
         </button>
         <button id="login-button" class="bg-eco-green-dark text-white px-4 py-2 rounded-md font-bold hover:bg-opacity-80 transition active:scale-95">
             Ingresar
         </button>
     `;
-
-	// Reactivar funcionalidad del boton de tema
-	if (window.reInitThemeButton) {
-		window.reInitThemeButton();
-	}
-
-	// Re-añadir el listener para el botón de login
-	const loginButton = document.getElementById('login-button');
-	if (loginButton) {
-		loginButton.addEventListener('click', () => {
-			openModal(createLoginModalContent());
-			handleLogin();
-		});
-	}
+    
+    // La lógica de abrir el modal de login ahora vivirá en main.js
+    if (window.reInitThemeButton) window.reInitThemeButton();
 };

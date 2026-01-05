@@ -1,3 +1,6 @@
+// ---------------------------------
+//              IMPORTS
+// ---------------------------------
 import {
 	handleRegister,
 	handleLogin,
@@ -18,103 +21,99 @@ import { initModal, openModal, closeModal } from './modal.js';
 import { initThemeSwitcher } from './theme.js';
 import { getLoaderHTML } from './loader.js';
 
-// -----------------------------------
-// SETUP GLOBAL
-// -----------------------------------
-
-// Exponer closeModal para que los botones dentro del HTML puedan usarla
+// ---------------------------------
+//              SETUP GLOBAL
+// ---------------------------------
 window.closeModal = closeModal;
 
-// -----------------------------------
-// PUNTO DE ENTRADA (MAIN)
-// -----------------------------------
-
+// ---------------------------------
+//          PUNTO DE ENTRADA (MAIN)
+// ---------------------------------
 document.addEventListener('DOMContentLoaded', () => {
-	// --- INICIALIZACIONES GLOBALES ---
-	initModal(); // Prepara el sistema de modales
-	initThemeSwitcher(); // Activa el cambio de tema claro/oscuro
+	// Inicializaciones globales que ocurren en todas las páginas
+	initModal();
+	initThemeSwitcher();
 
-	const path = window.location.pathname;
+	// Lógica de autenticación y actualización de UI
 	const token = localStorage.getItem('token');
-	const user = JSON.parse(localStorage.getItem('user'));
+	const user = token ? JSON.parse(localStorage.getItem('user')) : null;
 
-	// --- LÓGICA DE INTERFAZ DINÁMICA ---
-	// Actualizar la barra de navegación según si el usuario está logueado o no
+	// Se actualiza la Navbar UNA SOLA VEZ, al principio de la carga.
 	if (user) {
-		console.log(user);
-		
 		updateNavOnLogin(user);
 	} else {
 		updateNavOnLogout();
-		// Solo si no está logueado, el botón de login necesita su listener
-		const loginButton = document.getElementById('login-button');
-		if (loginButton) {
-			loginButton.addEventListener('click', () => {
-				openModal(createLoginModalContent(), 'sm');
-				handleLogin();
-			});
-		}
 	}
 
-	// --- ENRUTAMIENTO Y EJECUCIÓN POR PÁGINA ---
+	// 3. Enrutamiento: ejecutar la lógica específica de la página actual
+	const path = window.location.pathname;
+
 	if (path.includes('dashboard.html')) {
 		if (!user) {
 			window.location.href = '/index.html';
 			return;
 		}
-		initDashboard();
+		initDashboard(user);
 	} else if (path.includes('profile.html')) {
 		if (!user) {
 			window.location.href = '/index.html';
 			return;
 		}
-		initProfile();
+		initProfile(user);
 	} else if (path.includes('admin.html')) {
 		if (!user || user.role !== 'admin') {
 			window.location.href = '/html/dashboard.html';
 			return;
 		}
-		initAdmin();
+		initAdmin(user);
 	} else if (path.includes('register.html')) {
 		handleRegister();
 		initPasswordStrengthMeter();
 	} else {
-		// Lógica de la página principal (index.html)
-		initializeIndexPageListeners(user);
-		loadCatalog();
+		// index.html
+		initializeIndexPage(user);
 	}
 });
 
-// -----------------------------------
-// INICIALIZACIÓN DE PÁGINA PRINCIPAL
-// -----------------------------------
+// ---------------------------------
+//     LÓGICA ESPECÍFICA DE CADA PÁGINA
+// ---------------------------------
 
-const initializeIndexPageListeners = (user) => {
+/**
+ * Inicializar todos los listeners y la carga de datos para la página principal (index.html).
+ */
+const initializeIndexPage = (user) => {
+	// Este listener solo se añade en la página principal
+	const loginButton = document.getElementById('login-button');
+	if (loginButton) {
+		loginButton.addEventListener('click', () => {
+			openModal(createLoginModalContent(), 'sm');
+			// handleLogin se encargará del 'submit' del formulario
+			handleLogin();
+		});
+	}
+
 	const plantCatalog = document.getElementById('plant-catalog');
 	const modalContainer = document.getElementById('modal-container');
-	const modalContentArea = document.getElementById('modal-content-area');
 
-	// Listener para abrir el modal de DETALLES DE PLANTA
+	// Listener para abrir el modal de detalles
 	if (plantCatalog) {
 		plantCatalog.addEventListener('click', async (e) => {
 			const card = e.target.closest('[data-plant-id]');
 			if (!card) return;
 
-			// Mostrar el loader y abrir modal
-			openModal(
-				getLoaderHTML('Germinando detalles de la planta...'),
-				'4xl'
-			);
+			const modalContentArea =
+				document.getElementById('modal-content-area');
+			openModal(getLoaderHTML('Germinando detalles...'), '4xl');
 
 			try {
-				const plantId = card.dataset.plantId;
-				const plant = await getPlantById(plantId);
+				const plant = await getPlantById(card.dataset.plantId);
 				setTimeout(() => {
 					modalContentArea.innerHTML = createPlantDetailsContent(
 						plant,
 						user
-					); // Pasamos el 'user' para saber si está logueado
-				}, 3000); // Simular carga
+					);
+				}, 3000);
 			} catch (error) {
 				modalContentArea.innerHTML = `<p class="p-8 text-red-500">Error al cargar detalles.</p>`;
 			}
@@ -161,6 +160,8 @@ const initializeIndexPageListeners = (user) => {
 			}
 		});
 	}
+
+	loadCatalog();
 };
 
 const loadCatalog = async () => {

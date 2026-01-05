@@ -41,14 +41,17 @@
 </head>
 <body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-gray-200 transition-colors duration-300">
 
-    <!-- =========== HEADER DEL USUARIO LOGUEADO =========== -->
-    <header class="bg-white dark:bg-dark-surface shadow-md">
+    <!-- =========== HEADER Y NAVEGACIÓN =========== -->
+    <header class="bg-white dark:bg-dark-surface shadow-md sticky top-0 z-10">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <a href="/html/dashboard.html" class="text-eco-green-dark font-bold hover:underline"><i class="fas fa-arrow-left mr-2"></i>Volver al Dashboard</a>
-                <div class="flex items-center gap-4">
-                    <button id="theme-toggle" class="text-xl text-gray-600 dark:text-gray-300 hover:text-eco-green-dark transition"><i class="fas fa-moon"></i></button>
-                    <button id="logout-button" class="bg-red-500 text-white px-4 py-2 rounded-md font-bold hover:bg-red-600 transition active:scale-95">Cerrar Sesión</button>
+                <a href="/" class="flex items-center gap-2 text-2xl font-extrabold text-eco-green-dark">
+                    <i class="fas fa-seedling"></i>
+                    <span>Eco-Garden</span>
+                </a>
+                <!-- Contenedor para el menú dinámico -->
+                <div id="nav-menu" class="flex items-center gap-4">
+                    <!-- JavaScript inyectará aquí los botones de 'Ingresar' o 'Mi Perfil', 'Logout', etc. -->
                 </div>
             </div>
         </nav>

@@ -1,24 +1,18 @@
-import { getMyGarden, getProfile } from './api.js';
+import { getMyGarden } from './api.js';
 import { createMyGardenCard } from './ui.js';
+import { getLoaderHTML } from './loader.js';
 
-export const initDashboard = async () => {
-    const usernameDisplay = document.getElementById('username-display');
+/**
+ * Inicializar la lógica específica del Dashboard: cargar y renderizar la huerta del usuario.
+ * @param {object} user - El objeto de usuario (actualmente no se usa, pero es bueno tenerlo para el futuro).
+ */
+export const initDashboard = async (user) => {
     const gardenContainer = document.getElementById('garden-container');
-    const logoutButton = document.getElementById('logout-button');
-
-    // Manejar el cierre de sesión
-    logoutButton.addEventListener('click', () => {
-        localStorage.removeItem('token');
-        window.location.href = '/index.html';
-    });
+    if (!gardenContainer) return;
     
     try {
-        // Cargar y mostrar el nombre de usuario
-        const profile = await getProfile();
-        usernameDisplay.textContent = profile.username;
-
         // Cargar y mostrar la huerta
-        gardenContainer.innerHTML = `<p>Cargando tu huerta...</p>`;
+        gardenContainer.innerHTML = getLoaderHTML('Cargando tu huerta...'); 
         const myGarden = await getMyGarden();
 
         if (myGarden.length === 0) {
@@ -37,9 +31,8 @@ export const initDashboard = async () => {
         }
 
     } catch (error) {
-        // Si el token es inválido o hay otro error, redirigir al login
-        console.error("Error al cargar el dashboard:", error);
-        localStorage.removeItem('token');
-        window.location.href = '/index.html';
+        // Si el token es inválido o hay otro error, el guardia de ruta en main.js ya lo manejó.
+        gardenContainer.innerHTML = `<p class="col-span-full text-red-500">Error al cargar tu huerta.</p>`;
+        console.error("Error al cargar la huerta:", error);
     }
 };

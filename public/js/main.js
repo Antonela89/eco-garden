@@ -94,28 +94,36 @@ document.addEventListener('DOMContentLoaded', async () => {
 			// Loader
 			modalContent.innerHTML = `
 			<div class="p-8 text-center flex flex-col items-center justify-center gap-4">
-        		<div class="seed-loader">
-            		<div class="sprout"></div>
-            		<div class="seed"></div>
-            		<div class="ground"></div>
+    			<div class="seed-loader">
+					<div class="ground"></div>
+            		<div class="sprout">
+						<div class="seed-casing"></div>
+            			<div class="leaves"></div> 
+        			</div>
+            		<div class="roots"></div>
         		</div>
-        		<p class="text-gray-500 dark:text-gray-400 font-semibold">Cargando detalles...</p>
+        		<p class="text-gray-500 dark:text-gray-400 font-semibold animate-pulse">Germinando información...</p>
     		</div>
 				`;
 
 			try {
-				// Obtenemos los detalles de ESA planta
+				// Obtener los detalles de ESA planta
 				const plant = await getPlantById(plantId);
-				// Renderizamos los detalles en el modal
-				modalContent.innerHTML = createPlantDetailsContent(plant);
 
-				// Añadimos el listener para el botón de cierre DENTRO del modal
-				document
-					.getElementById('close-details-modal')
-					.addEventListener('click', closeModal);
+				// Renderizar los detalles en el modal
+				// Simular una espera de 500ms para mostrar loader
+				setTimeout(() => {
+					modalContent.innerHTML = createPlantDetailsContent(plant);
+					// Añadir el listener para el botón de cierre DENTRO del modal
+					document
+						.getElementById('close-details-modal')
+						.addEventListener('click', closeModal);
+				}, 3000);
 			} catch (error) {
-				modalContent.innerHTML =
-					'<p class="p-8 text-red-500">Error al cargar los detalles.</p>';
+				setTimeout(() => {
+					modalContent.innerHTML =
+						'<p class="p-8 text-red-500">Error al cargar los detalles.</p>';
+				}, 500);
 			}
 		});
 	}

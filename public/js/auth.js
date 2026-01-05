@@ -113,13 +113,18 @@ export const updateNavOnLogout = () => {
 
 	// HTML para el menú de visitante
 	navContainer.innerHTML = `
-        <button id="theme-toggle" class="text-xl text-gray-600 dark:text-gray-300 hover:text-eco-green-dark transition">
+        <button id="theme-toggle" class="text-xl text-gray-600 hover:text-eco-green-dark transition dark:text-gray-300 dark:hover:text-eco-green-dark transition">
             <i class="fas fa-moon"></i>
         </button>
         <button id="login-button" class="bg-eco-green-dark text-white px-4 py-2 rounded-md font-bold hover:bg-opacity-80 transition active:scale-95">
             Ingresar
         </button>
     `;
+
+	// Reactivar funcionalidad del boton de tema
+    if (window.reInitThemeButton) {
+        window.reInitThemeButton();
+    }
 
 	// Re-añadir el listener para el botón de login
 	const loginButton = document.getElementById('login-button');

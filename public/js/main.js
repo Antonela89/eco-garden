@@ -16,6 +16,7 @@ import { initAdmin } from './admin.js';
 import { initPasswordStrengthMeter } from './password-strength.js';
 import { initModal, openModal, closeModal } from './modal.js';
 import { initThemeSwitcher } from './theme.js';
+import { getLoaderHTML } from './loader.js';
 
 // -----------------------------------
 // SETUP GLOBAL
@@ -111,9 +112,8 @@ const initializeIndexPageListeners = (user) => {
 				'max-w-2xl'
 			);
 
-			// Mostrar loader y abrir modal
-			const loaderHTML = `<div class="p-8 text-center"><div class="seed-loader">...</div><p>Germinando...</p></div>`;
-			openModal(loaderHTML);
+			// Mostrar el loader y abrir modal
+			openModal(getLoaderHTML('Germinando detalles de la planta...'));
 
 			try {
 				const plantId = card.dataset.plantId;
@@ -123,7 +123,7 @@ const initializeIndexPageListeners = (user) => {
 						plant,
 						user
 					); // Pasamos el 'user' para saber si está logueado
-				}, 1500); // Simular carga
+				}, 3000); // Simular carga
 			} catch (error) {
 				modalContentArea.innerHTML = `<p class="p-8 text-red-500">Error al cargar detalles.</p>`;
 			}
@@ -135,11 +135,20 @@ const loadCatalog = async () => {
 	const catalogContainer = document.getElementById('plant-catalog');
 	if (!catalogContainer) return;
 
+	// Mostrar el loader con un mensaje personalizado
+	const loaderWrapper = `
+        <div id="loader-wrapper" class="col-span-full py-16 flex justify-center">
+            ${getLoaderHTML("Cargando catálogo de cultivos...")}
+        </div>
+    `;
+
+    catalogContainer.innerHTML = loaderWrapper;
+
 	try {
 		const plants = await getPlants();
 		setTimeout(() => {
 			renderCatalog(plants);
-		}, 1000); // Simular carga
+		}, 3000); // Simular carga
 	} catch (error) {
 		catalogContainer.innerHTML = `<p class="text-center text-red-500 col-span-full">Error al cargar el catálogo.</p>`;
 	}

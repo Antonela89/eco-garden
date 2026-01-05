@@ -98,6 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const initializeIndexPageListeners = (user) => {
 	const plantCatalog = document.getElementById('plant-catalog');
+	const modalContainer = document.getElementById('modal-container');
 	const modalContentArea = document.getElementById('modal-content-area');
 
 	// Listener para abrir el modal de DETALLES DE PLANTA

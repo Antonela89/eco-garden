@@ -92,3 +92,75 @@ export const getPlantById = async (id) => {
     if (!response.ok) throw new Error('Planta no encontrada');
     return response.json();
 };
+
+// ==========================================
+//    FUNCIONES DE ADMINISTRADOR (PROTEGIDAS)
+// ==========================================
+
+/**
+ * Crear una nueva especie en el catálogo maestro.
+ * @param {object} plantData - Objeto con todos los datos de la nueva planta.
+ * @returns {Promise<any>}
+ */
+export const createPlant = async (plantData) => {
+    const token = localStorage.getItem('token'); // Asumimos que el admin está logueado
+    const response = await fetch(`${API_URL}/plants`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(plantData)
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error al crear la planta');
+    }
+    return response.json();
+};
+
+/**
+ * Actualizar los datos de una especie existente en el catálogo.
+ * @param {string} id - El ID de la planta a modificar.
+ * @param {object} plantData - Objeto con los campos a actualizar.
+ * @returns {Promise<any>}
+ */
+export const updatePlant = async (id, plantData) => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/plants/${id}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(plantData)
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error al actualizar la planta');
+    }
+    return response.json();
+};
+
+/**
+ * Eliminar una especie del catálogo maestro.
+ * @param {string} id - El ID de la planta a eliminar.
+ * @returns {Promise<any>}
+ */
+export const deletePlant = async (id) => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/plants/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error al eliminar la planta');
+    }
+    return response.json();
+};

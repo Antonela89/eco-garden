@@ -1,6 +1,6 @@
 import { getPlants, createPlant, updatePlant, deletePlant } from './api.js';
 import { openModal, closeModal } from './modal.js';
-import { createAdminPlantForm, createConfirmModalContent } from './ui.js';
+import { createAdminPlantForm, createConfirmModalContent, } from './ui.js';
 import { formatIdData, formatInputData } from '../../shared/formatters.js';
 
 /**

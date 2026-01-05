@@ -175,7 +175,7 @@ export const createMyGardenCard = (myPlant) => {
 	const progressPercentage = Math.min(100, (daysPassed / totalDays) * 100);
 
 	return `
-        <article class="bg-white dark:bg-dark-surface rounded-lg shadow-lg overflow-hidden flex flex-col">
+        <article data-plant-id="${myPlant.plantId}" class="bg-white dark:bg-dark-surface rounded-lg shadow-lg overflow-hidden flex flex-col">
             <img src="${myPlant.imagen}" alt="${
 		myPlant.nombre
 	}" class="w-full h-40 object-cover">
@@ -213,7 +213,7 @@ export const createMyGardenCard = (myPlant) => {
 
                 
                 <div class="mt-auto pt-4 flex justify-end gap-2">
-                    <button class="text-gray-500 hover:text-red-500 transition" aria-label="Eliminar planta">
+                    <button data-action="delete" class="text-gray-500 hover:text-red-500 transition" aria-label="Eliminar planta">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
@@ -534,7 +534,8 @@ export const createLoginModalContent = () => {
  */
 export const createConfirmModalContent = (
 	message,
-	confirmText = 'Confirmar'
+	confirmText = 'Confirmar',
+    entityId = null
 ) => {
 	return `
         <div class="p-8 text-center flex flex-col items-center gap-6">
@@ -544,7 +545,7 @@ export const createConfirmModalContent = (
                 <button class="js-close-modal px-6 py-2 rounded-md bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 font-semibold">
                     Cancelar
                 </button>
-                <button id="confirm-action-button" class="bg-red-500 text-white font-bold px-6 py-2 rounded-md hover:bg-red-600">
+                <button id="confirm-action-button" data-plant-id="${entityId}" class="bg-red-500 text-white font-bold px-6 py-2 rounded-md hover:bg-red-600">
                     ${confirmText}
                 </button>
             </div>

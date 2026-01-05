@@ -105,10 +105,21 @@
         <p id="register-message" class="text-sm mt-4 text-center h-5"></p>
 
         <footer class="text-center mt-6 text-sm">
-            <p class="dark:text-white">¿Ya tienes una cuenta? <a href="/index.html" class="text-eco-green-dark font-bold hover:underline">Inicia
+            <p class="dark:text-white">¿Ya tienes una cuenta? <a href="/index.html"
+                    class="text-eco-green-dark font-bold hover:underline">Inicia
                     sesión aquí</a></p>
         </footer>
     </main>
+
+    <!-- =========== CONTENEDOR DE MODAL ÚNICO Y GENÉRICO =========== -->
+    <div id="modal-container"
+        class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50 p-4">
+        <!-- El contenido se inyectará aquí con JavaScript -->
+        <!-- La clase 'max-w-lg', 'max-w-2xl', etc., se añadirá dinámicamente -->
+        <div id="modal-content-area"
+            class="bg-white dark:bg-dark-surface rounded-lg shadow-2xl w-full transform transition-all animate-fade-in-down overflow-y-auto max-h-[90vh]">
+        </div>
+    </div>
 
     <script type="module" src="/js/main.js"></script>
 </body>

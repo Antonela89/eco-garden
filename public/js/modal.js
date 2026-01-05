@@ -9,21 +9,24 @@ let isOpen = false;
  * @param {string} contentHTML - El HTML que se mostrará dentro del modal.
  */
 export const openModal = (contentHTML) => {
-    if (!modalContainer || !modalContent) return;
+	if (!modalContainer || !modalContent) return;
 
-    modalContent.innerHTML = contentHTML;
-    modalContainer.classList.remove('hidden');
-    isOpen = true;
+	modalContent.innerHTML = contentHTML;
+	modalContainer.classList.remove('hidden');
+	isOpen = true;
 };
 
 /**
  * Cerrar el modal.
  */
 export const closeModal = () => {
-    if (!modalContainer) return;
-    modalContainer.classList.add('hidden');
-    modalContent.innerHTML = ''; // Limpiar contenido al cerrar
-    isOpen = false;
+	if (!modalContainer) return;
+
+	console.log('Cerrando el modal...');
+
+	modalContainer.classList.add('hidden');
+	modalContent.innerHTML = ''; // Limpiar contenido al cerrar
+	isOpen = false;
 };
 
 /**
@@ -31,19 +34,26 @@ export const closeModal = () => {
  * Se encarga de cerrar el modal al hacer clic fuera o presionar 'Escape'.
  */
 export const initModal = () => {
-    if (!modalContainer) return;
+	if (!modalContainer) return;
 
-    // Cerrar al hacer clic en el fondo oscuro
-    modalContainer.addEventListener('click', (e) => {
-        if (e.target === modalContainer) {
-            closeModal();
-        }
-    });
+	modalContainer.addEventListener('click', (e) => {
+		// Cerrar al hacer clic en el fondo oscuro
+		if (e.target === modalContainer) {
+			closeModal();
+			return;
+		}
 
-    // Cerrar al presionar la tecla 'Escape'
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && isOpen) {
-            closeModal();
-        }
-    });
+		// El clic fue en un botón de cierre (o su ícono)
+		// .closest('.js-close-modal') busca si el elemento clickeado o uno de sus padres tiene esa clase
+		if (e.target.closest('.js-close-modal')) {
+			closeModal();
+		}
+	});
+
+	// Cerrar al presionar la tecla 'Escape'
+	window.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape' && isOpen) {
+			closeModal();
+		}
+	});
 };

@@ -437,3 +437,27 @@ export const createLoginModalContent = () => {
         </div>
     `;
 };
+
+/**
+ * Crear el HTML para un modal de confirmación genérico.
+ * Útil para acciones destructivas como eliminar.
+ * @param {string} message - El mensaje o pregunta a mostrar.
+ * @param {string} [confirmText='Confirmar'] - El texto del botón de confirmación.
+ * @returns {string} El string HTML del modal.
+ */
+export const createConfirmModalContent = (message, confirmText = 'Confirmar') => {
+    return `
+        <div class="p-8 text-center flex flex-col items-center gap-6">
+            <i class="fas fa-exclamation-triangle text-4xl text-yellow-400"></i>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white">${message}</h3>
+            <div class="flex justify-center gap-4 mt-4">
+                <button onclick="window.closeModal()" class="px-6 py-2 rounded-md bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 font-semibold">
+                    Cancelar
+                </button>
+                <button id="confirm-action-button" class="bg-red-500 text-white font-bold px-6 py-2 rounded-md hover:bg-red-600">
+                    ${confirmText}
+                </button>
+            </div>
+        </div>
+    `;
+};

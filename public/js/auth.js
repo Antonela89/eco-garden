@@ -58,6 +58,9 @@ export const handleLogin = () => {
 			// Guardar el token para futuras peticiones
 			localStorage.setItem('token', data.token);
 
+			// Guardar usuario
+			localStorage.setItem('user', JSON.stringify(data.user)); // Convertir el objeto a string
+
 			// Redirigir al dashboard
 			window.location.href = '/html/dashboard.html';
 		} catch (error) {
@@ -93,6 +96,7 @@ export const updateNavOnLogin = (user) => {
 	// Añadir listeners a los nuevos botones
 	document.getElementById('logout-button').addEventListener('click', () => {
 		localStorage.removeItem('token');
+		localStorage.removeItem('user');
 		window.location.reload(); // Recargar la página para actualizar el estado
 	});
 
@@ -122,9 +126,9 @@ export const updateNavOnLogout = () => {
     `;
 
 	// Reactivar funcionalidad del boton de tema
-    if (window.reInitThemeButton) {
-        window.reInitThemeButton();
-    }
+	if (window.reInitThemeButton) {
+		window.reInitThemeButton();
+	}
 
 	// Re-añadir el listener para el botón de login
 	const loginButton = document.getElementById('login-button');

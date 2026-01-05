@@ -25,15 +25,6 @@ import { getLoaderHTML } from './loader.js';
 // Exponer closeModal para que los botones dentro del HTML puedan usarla
 window.closeModal = closeModal;
 
-// Función para decodificar JWT
-const decodeToken = (token) => {
-	try {
-		return JSON.parse(atob(token.split('.')[1]));
-	} catch (e) {
-		return null;
-	}
-};
-
 // -----------------------------------
 // PUNTO DE ENTRADA (MAIN)
 // -----------------------------------
@@ -45,11 +36,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	const path = window.location.pathname;
 	const token = localStorage.getItem('token');
-	const user = token ? decodeToken(token) : null;
+	const user = JSON.parse(localStorage.getItem('user'));
 
 	// --- LÓGICA DE INTERFAZ DINÁMICA ---
 	// Actualizar la barra de navegación según si el usuario está logueado o no
 	if (user) {
+		console.log(user);
+		
 		updateNavOnLogin(user);
 	} else {
 		updateNavOnLogout();
@@ -162,7 +155,7 @@ const initializeIndexPageListeners = (user) => {
 			// Si se hizo clic en el botón "Ingresar" del prompt
 			if (loginPromptBtn) {
 				closeModal(); // Cierra el modal de detalles
-				// Abre el modal de login 
+				// Abre el modal de login
 				openModal(createLoginModalContent(), 'sm');
 				handleLogin();
 			}

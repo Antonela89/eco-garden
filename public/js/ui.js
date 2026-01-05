@@ -7,13 +7,13 @@
  * @param {object} plant - La planta con el objeto diasCosecha.
  * @returns {string} - "90" o "90 - 120".
  */
-	const formatHarvestDays  = (plant) => {
-		if (plant.diasCosecha.min === plant.diasCosecha.max) {
-			return `${plant.diasCosecha.max}`;
-		} else {
-			return `${plant.diasCosecha.min} - ${plant.diasCosecha.max}`;
-		}
-	};
+const formatHarvestDays = (plant) => {
+	if (plant.diasCosecha.min === plant.diasCosecha.max) {
+		return `${plant.diasCosecha.max}`;
+	} else {
+		return `${plant.diasCosecha.min} - ${plant.diasCosecha.max}`;
+	}
+};
 
 /**
  * Crear un calendario visual de siembra para una planta.
@@ -114,7 +114,9 @@ export const createPlantCard = (plant) => {
                 
                 <!-- Tiempos de Cosecha -->
                 <div class="text-sm text-gray-700">
-                    <p><strong>Cosecha en:</strong> ${formatHarvestDays(plant)} días</p>
+                    <p><strong>Cosecha en:</strong> ${formatHarvestDays(
+						plant
+					)} días</p>
                 </div>
             </div>
         </div>
@@ -207,7 +209,7 @@ export const createPlantDetailsContent = (plant) => {
 				}</h2>
                 <p class="text-md text-gray-500">${plant.familia}</p>
             </div>
-            <button id="close-details-modal" class="text-3xl text-gray-400 hover:text-red-500 transition transform hover:rotate-90">
+            <button class="js-close-modal text-3xl text-gray-400 hover:text-red-500 transition transform hover:rotate-90">
                 <i class="fas fa-times"></i>
             </button>
         </header>
@@ -244,7 +246,9 @@ export const createPlantDetailsContent = (plant) => {
                 </div>
                 <div class="mb-4">
                     <h4 class="font-bold text-lg mb-2 border-b dark:border-gray-600 pb-1">Cosecha y Espacio</h4>
-                    <p><strong>Tiempo de Cosecha:</strong> ${formatHarvestDays(plant)} días</p>
+                    <p><strong>Tiempo de Cosecha:</strong> ${formatHarvestDays(
+						plant
+					)} días</p>
                     <p><strong>Distancia:</strong> ${
 						plant.distancia.entrePlantas
 					} cm entre plantas, ${
@@ -277,13 +281,15 @@ export const createPlantDetailsContent = (plant) => {
  * @returns {string} El string HTML del formulario.
  */
 export const createAdminPlantForm = (plant = null) => {
-    const isEditing = plant !== null;
-    const title = isEditing ? 'Editar Especie' : 'Añadir Nueva Especie';
+	const isEditing = plant !== null;
+	const title = isEditing ? 'Editar Especie' : 'Añadir Nueva Especie';
 
-    return `
+	return `
         <header class="p-6 border-b dark:border-gray-700 flex justify-between items-center">
             <h2 class="text-2xl font-bold text-gray-800 dark:text-white">${title}</h2>
-            <button id="close-modal-button" class="text-3xl text-gray-400 hover:text-red-500 transition">&times;</button>
+            <button class="js-close-modal text-3xl text-gray-400 hover:text-red-500 transition transform hover:rotate-90">
+                <i class="fas fa-times"></i>
+            </button>
         </header>
         
         <form id="admin-plant-form" class="p-6 max-h-[70vh] overflow-y-auto">
@@ -293,28 +299,42 @@ export const createAdminPlantForm = (plant = null) => {
                 <div class="flex flex-col gap-4">
                     <div>
                         <label for="id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">ID (slug)</label>
-                        <input type="text" id="id" name="id" value="${plant?.id || ''}" 
+                        <input type="text" id="id" name="id" value="${
+							plant?.id || ''
+						}" 
                             ${isEditing ? 'readonly' : 'required'} 
-                            class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 ${isEditing ? 'bg-gray-100 cursor-not-allowed' : ''}">
+                            class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 ${
+								isEditing
+									? 'bg-gray-100 cursor-not-allowed'
+									: ''
+							}">
                     </div>
                     <div>
                         <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre</label>
-                        <input type="text" id="nombre" name="nombre" value="${plant?.nombre || ''}" required 
+                        <input type="text" id="nombre" name="nombre" value="${
+							plant?.nombre || ''
+						}" required 
                             class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
                     </div>
                     <div>
                         <label for="familia" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Familia</label>
-                        <input type="text" id="familia" name="familia" value="${plant?.familia || ''}" required 
+                        <input type="text" id="familia" name="familia" value="${
+							plant?.familia || ''
+						}" required 
                             class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
                     </div>
                     <div>
                         <label for="clima" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Clima</label>
-                        <input type="text" id="clima" name="clima" value="${plant?.clima || ''}" required 
+                        <input type="text" id="clima" name="clima" value="${
+							plant?.clima || ''
+						}" required 
                             class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
                     </div>
                     <div>
                         <label for="imagen" class="block text-sm font-medium text-gray-700 dark:text-gray-300">URL de Imagen</label>
-                        <input type="url" id="imagen" name="imagen" value="${plant?.imagen || ''}" required 
+                        <input type="url" id="imagen" name="imagen" value="${
+							plant?.imagen || ''
+						}" required 
                             class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
                     </div>
                 </div>
@@ -324,42 +344,62 @@ export const createAdminPlantForm = (plant = null) => {
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label for="diasCosechaMin" class="block text-sm font-medium">Cosecha (Mín)</label>
-                            <input type="number" id="diasCosechaMin" name="diasCosechaMin" value="${plant?.diasCosecha.min || ''}" required 
+                            <input type="number" id="diasCosechaMin" name="diasCosechaMin" value="${
+								plant?.diasCosecha.min || ''
+							}" required 
                                 class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
                         </div>
                         <div>
                             <label for="diasCosechaMax" class="block text-sm font-medium">Cosecha (Máx)</label>
-                            <input type="number" id="diasCosechaMax" name="diasCosechaMax" value="${plant?.diasCosecha.max || ''}" required 
+                            <input type="number" id="diasCosechaMax" name="diasCosechaMax" value="${
+								plant?.diasCosecha.max || ''
+							}" required 
                                 class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label for="distanciaEntre" class="block text-sm font-medium">Dist. Plantas (cm)</label>
-                            <input type="number" id="distanciaEntre" name="distanciaEntre" value="${plant?.distancia.entrePlantas || ''}" required 
+                            <input type="number" id="distanciaEntre" name="distanciaEntre" value="${
+								plant?.distancia.entrePlantas || ''
+							}" required 
                                 class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
                         </div>
                         <div>
                             <label for="distanciaLineas" class="block text-sm font-medium">Dist. Líneas (cm)</label>
-                            <input type="number" id="distanciaLineas" name="distanciaLineas" value="${plant?.distancia.entreLineas || ''}" required 
+                            <input type="number" id="distanciaLineas" name="distanciaLineas" value="${
+								plant?.distancia.entreLineas || ''
+							}" required 
                                 class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
                         </div>
                     </div>
                     <div>
                         <label for="dificultad" class="block text-sm font-medium">Dificultad</label>
                         <select id="dificultad" name="dificultad" required class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
-                            <option value="Fácil" ${plant?.dificultad === 'Fácil' ? 'selected' : ''}>Fácil</option>
-                            <option value="Media" ${plant?.dificultad === 'Media' ? 'selected' : ''}>Media</option>
-                            <option value="Difícil" ${plant?.dificultad === 'Difícil' ? 'selected' : ''}>Difícil</option>
+                            <option value="Fácil" ${
+								plant?.dificultad === 'Fácil' ? 'selected' : ''
+							}>Fácil</option>
+                            <option value="Media" ${
+								plant?.dificultad === 'Media' ? 'selected' : ''
+							}>Media</option>
+                            <option value="Difícil" ${
+								plant?.dificultad === 'Difícil'
+									? 'selected'
+									: ''
+							}>Difícil</option>
                         </select>
                     </div>
                     <div class="flex items-center space-x-8 mt-2">
                         <label class="flex items-center gap-2">
-                            <input type="checkbox" id="aptoMaceta" name="aptoMaceta" ${plant?.aptoMaceta ? 'checked' : ''} class="rounded">
+                            <input type="checkbox" id="aptoMaceta" name="aptoMaceta" ${
+								plant?.aptoMaceta ? 'checked' : ''
+							} class="rounded">
                             <span>Apto Maceta</span>
                         </label>
                         <label class="flex items-center gap-2">
-                            <input type="checkbox" id="toleranciaSombra" name="toleranciaSombra" ${plant?.toleranciaSombra ? 'checked' : ''} class="rounded">
+                            <input type="checkbox" id="toleranciaSombra" name="toleranciaSombra" ${
+								plant?.toleranciaSombra ? 'checked' : ''
+							} class="rounded">
                             <span>Tolera Sombra</span>
                         </label>
                     </div>
@@ -369,17 +409,21 @@ export const createAdminPlantForm = (plant = null) => {
             <!-- Campos de texto largos (Arrays) -->
             <div class="mt-4">
                 <label for="siembra" class="block text-sm font-medium">Meses de Siembra (separados por coma)</label>
-                <input type="text" id="siembra" name="siembra" value="${plant ? plant.siembra.flat().join(', ') : ''}" required 
+                <input type="text" id="siembra" name="siembra" value="${
+					plant ? plant.siembra.flat().join(', ') : ''
+				}" required 
                     class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
             </div>
             <div class="mt-4">
                 <label for="asociacion" class="block text-sm font-medium">Asociaciones (separadas por coma)</label>
-                <input type="text" id="asociacion" name="asociacion" value="${plant?.asociacion.join(', ') || ''}" 
+                <input type="text" id="asociacion" name="asociacion" value="${
+					plant?.asociacion.join(', ') || ''
+				}" 
                 	class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
             </div>
 
             <footer class="mt-8 pt-4 border-t dark:border-gray-700 flex justify-end gap-4">
-                <button type="button" id="close-modal-button" class="px-6 py-2 rounded-md bg-gray-200 dark:bg-gray-600 hover:bg-gray-300">Cancelar</button>
+                <button type="button" class="js-close-modal" class="px-6 py-2 rounded-md bg-gray-200 dark:bg-gray-600 hover:bg-gray-300">Cancelar</button>
                 <button type="submit" class="bg-eco-green-dark text-white font-bold px-6 py-2 rounded-md hover:bg-opacity-80 transition active:scale-95">
                     ${isEditing ? 'Guardar Cambios' : 'Crear Planta'}
                 </button>
@@ -393,10 +437,12 @@ export const createAdminPlantForm = (plant = null) => {
  * @returns {string}
  */
 export const createLoginModalContent = () => {
-    return `
+	return `
         <header class="p-6 flex justify-between items-center border-b dark:border-gray-700">
             <h2 class="text-2xl font-bold text-eco-green-dark">Iniciar Sesión</h2>
-            <button id="close-modal-button" class="text-3xl text-gray-400 hover:text-red-500">&times;</button>
+            <button class="js-close-modal text-3xl text-gray-400 hover:text-red-500 transition transform hover:rotate-90">
+                <i class="fas fa-times"></i>
+            </button>
         </header>
         <div class="p-6">
             <form id="login-form" class="flex flex-col gap-4">
@@ -445,13 +491,16 @@ export const createLoginModalContent = () => {
  * @param {string} [confirmText='Confirmar'] - El texto del botón de confirmación.
  * @returns {string} El string HTML del modal.
  */
-export const createConfirmModalContent = (message, confirmText = 'Confirmar') => {
-    return `
+export const createConfirmModalContent = (
+	message,
+	confirmText = 'Confirmar'
+) => {
+	return `
         <div class="p-8 text-center flex flex-col items-center gap-6">
             <i class="fas fa-exclamation-triangle text-4xl text-yellow-400"></i>
             <h3 class="text-xl font-bold text-gray-800 dark:text-white">${message}</h3>
             <div class="flex justify-center gap-4 mt-4">
-                <button id="close-modal-button" class="px-6 py-2 rounded-md bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 font-semibold">
+                <button class="js-close-modal px-6 py-2 rounded-md bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 font-semibold">
                     Cancelar
                 </button>
                 <button id="confirm-action-button" class="bg-red-500 text-white font-bold px-6 py-2 rounded-md hover:bg-red-600">
@@ -468,10 +517,12 @@ export const createConfirmModalContent = (message, confirmText = 'Confirmar') =>
  * @returns {string}
  */
 export const createProfileModalContent = (user) => {
-    return `
+	return `
         <header class="p-6 flex justify-between items-center border-b dark:border-gray-700">
             <h2 class="text-2xl font-bold">Mi Perfil</h2>
-            <button id="close-modal-button" class="text-3xl">&times;</button>
+            <button class="js-close-modal text-3xl text-gray-400 hover:text-red-500 transition transform hover:rotate-90">
+                <i class="fas fa-times"></i>
+            </button>
         </header>
         <div class="p-8">
             <p><strong>Nombre:</strong> ${user.username}</p>

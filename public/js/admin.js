@@ -1,6 +1,6 @@
 import { getPlants, createPlant, updatePlant, deletePlant } from './api.js';
 import { openModal, closeModal } from './modal.js';
-import { createAdminPlantForm, createConfirmModalContent } from './ui.js';
+import { createAdminPlantForm, createConfirmModalContent, } from './ui.js';
 import { formatIdData, formatInputData } from '../../shared/formatters.js';
 
 /**
@@ -79,7 +79,7 @@ export const initAdmin = async () => {
 
     // Evento para abrir el modal de CREAR planta
     addPlantButton.addEventListener('click', () => {
-        openModal(createAdminPlantForm());
+        openModal(createAdminPlantForm(), '4xl');
         
         // Añadir listener para el submit del formulario recién creado
         const form = document.getElementById('admin-plant-form');

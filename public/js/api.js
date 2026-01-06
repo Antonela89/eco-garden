@@ -52,6 +52,38 @@ export const loginUser = async (email, password) => {
     return response.json();
 };
 
+// ------------------------------------
+// FUNCIONES DE JARDINERO (PROTEGIDAS)
+// ------------------------------------
+
+/**
+ * Añadir una planta a la huerta personal del usuario.
+ * @param {string} plantId - El ID de la planta a añadir.
+ * @returns {Promise<any>}
+ */
+export const addPlantToGarden = async (plantId) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        throw new Error('No estás autenticado. Inicia sesión para añadir plantas.');
+    }
+
+    const response = await fetch(`${API_URL}/gardener/garden`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ plantId })
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'No se pudo añadir la planta.');
+    }
+
+    return response.json();
+};
+
 /**
  * Obtener la huerta personal del usuario. Requiere token.
  * @returns {Promise<any>}
@@ -62,6 +94,55 @@ export const getMyGarden = async () => {
         headers: { 'Authorization': `Bearer ${token}` }
     });
     if (!response.ok) throw new Error('No se pudo cargar la huerta.');
+    return response.json();
+};
+
+/**
+ * Actualizar el estado de un cultivo en la huerta personal.
+ * @param {string} plantId - El ID de la planta a actualizar.
+ * @param {'creciendo' | 'listo' | 'cosechado'} status - El nuevo estado.
+ * @returns {Promise<any>}
+ */
+export const updatePlantStatusInGarden = async (plantId, status) => {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('No estás autenticado.');
+
+    const response = await fetch(`${API_URL}/gardener/garden/status`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ plantId, status })
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'No se pudo actualizar el estado.');
+    }
+    return response.json();
+};
+
+/**
+ * Eliminar una planta de la huerta personal.
+ * @param {string} plantId - El ID de la planta a eliminar.
+ * @returns {Promise<any>}
+ */
+export const deletePlantFromGarden = async (plantId) => {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('No estás autenticado.');
+
+    const response = await fetch(`${API_URL}/gardener/garden/${plantId}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'No se pudo eliminar la planta.');
+    }
     return response.json();
 };
 
@@ -93,9 +174,9 @@ export const getPlantById = async (id) => {
     return response.json();
 };
 
-// ==========================================
-//    FUNCIONES DE ADMINISTRADOR (PROTEGIDAS)
-// ==========================================
+// ------------------------------------
+//  FUNCIONES DE ADMINISTRADOR (PROTEGIDAS)
+// ------------------------------------
 
 /**
  * Crear una nueva especie en el catálogo maestro.

@@ -25,15 +25,16 @@
 <body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-gray-200">
 
     <!-- HEADER DEL ADMINISTRADOR -->
-    <header class="bg-white dark:bg-dark-surface shadow-md">
+    <header class="bg-white dark:bg-dark-surface shadow-md sticky top-0 z-10">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <span class="text-2xl font-extrabold text-eco-green-dark">Panel de Administrador 🛡️</span>
-                <div class="flex items-center gap-4">
-                    <a href="/html/dashboard.html" class="text-gray-600 dark:text-gray-300 hover:text-eco-green-dark">Ir
-                        al Dashboard</a>
-                    <button id="logout-button" class="bg-red-500 text-white px-4 py-2 rounded-md font-bold">Cerrar
-                        Sesión</button>
+                <a href="/" class="flex items-center gap-2 text-2xl font-extrabold text-eco-green-dark">
+                    <i class="fas fa-seedling"></i>
+                    <span>Eco-Garden</span>
+                </a>
+                <!-- Contenedor para el menú dinámico -->
+                <div id="nav-menu" class="flex items-center gap-4">
+                    <!-- JavaScript inyectará aquí los botones de 'Ingresar' o 'Mi Perfil', 'Logout', etc. -->
                 </div>
             </div>
         </nav>
@@ -66,6 +67,16 @@
             </table>
         </div>
     </main>
+
+    <!-- =========== CONTENEDOR DE MODAL ÚNICO Y GENÉRICO =========== -->
+    <div id="modal-container"
+        class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50 p-4">
+        <!-- El contenido se inyectará aquí con JavaScript -->
+        <!-- La clase 'max-w-lg', 'max-w-2xl', etc., se añadirá dinámicamente -->
+        <div id="modal-content-area"
+            class="bg-white dark:bg-dark-surface rounded-lg shadow-2xl w-full transform transition-all animate-fade-in-down overflow-y-auto max-h-[90vh]">
+        </div>
+    </div>
 
     <script type="module" src="/js/main.js"></script>
 </body>

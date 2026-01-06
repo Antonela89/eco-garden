@@ -1,20 +1,18 @@
-import { getProfile } from './api.js';
+// import { getProfile } from './api.js';
 
 export const initProfile = async () => {
-    const logoutButton = document.getElementById('logout-button');
-    logoutButton.addEventListener('click', () => {
-        localStorage.removeItem('token');
-        window.location.href = '/index.html';
-    });
+	const logoutButton = document.getElementById('logout-button');
+	logoutButton.addEventListener('click', () => {
+		localStorage.removeItem('token');
+		window.location.href = '/index.html';
+	});
 
-    try {
-        const profile = await getProfile();
-        document.getElementById('profile-username').textContent = profile.username;
-        document.getElementById('profile-email').textContent = profile.email;
-        document.getElementById('profile-role').textContent = profile.role;
-    } catch (error) {
-        // Si falla, es probable que el token sea inválido
-        localStorage.removeItem('token');
-        window.location.href = '/index.html';
-    }
+	// Leer los datos del usuario guardados en el login
+	const user = JSON.parse(localStorage.getItem('user'));
+
+	if (user) {
+		document.getElementById('profile-username').textContent = user.username;
+		document.getElementById('profile-email').textContent = user.email; 
+		document.getElementById('profile-role').textContent = user.role;
+	}
 };

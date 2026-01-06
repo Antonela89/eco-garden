@@ -3,7 +3,6 @@
  * Lee la preferencia del usuario desde localStorage y añade los listeners a los botones.
  */
 export const initThemeSwitcher = () => {
-	const themeToggleButtons = document.querySelectorAll('#theme-toggle'); // Seleccionar todos los botones de tema
 	const htmlElement = document.documentElement; // La etiqueta <html> es la que guarda el tema
 
 	/**
@@ -11,19 +10,33 @@ export const initThemeSwitcher = () => {
 	 * @param {string} theme - 'dark' o 'light'.
 	 */
 	const applyTheme = (theme) => {
+		// Limpiar clases
+		htmlElement.classList.remove('dark', 'light');
+
+		// Añadir clase según preferencia de usuario
 		if (theme === 'dark') {
 			htmlElement.classList.add('dark');
-			themeToggleButtons.forEach((button) => {
-				button.innerHTML = '<i class="fas fa-sun"></i>'; // Mostrar ícono de sol
-			});
 			localStorage.setItem('theme', 'dark');
 		} else {
-			htmlElement.classList.remove('dark');
-			themeToggleButtons.forEach((button) => {
-				button.innerHTML = '<i class="fas fa-moon"></i>'; // Mostrar ícono de luna
-			});
+			htmlElement.classList.add('light');
 			localStorage.setItem('theme', 'light');
 		}
+
+		// actualizar iconos
+		updateThemeIcons(theme);
+	};
+
+	/**
+	 * Función para actualizar los íconos de sol/luna en todos los botones de tema.
+	 */
+	const updateThemeIcons = (theme) => {
+		const icon =
+			theme === 'dark'
+				? '<i class="fas fa-sun"></i>'
+				: '<i class="fas fa-moon"></i>';
+		document.querySelectorAll('#theme-toggle').forEach((button) => {
+			button.innerHTML = icon;
+		});
 	};
 
 	/**
@@ -34,17 +47,27 @@ export const initThemeSwitcher = () => {
 		applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
 	};
 
-	// Añadir el listener de clic a cada botón de cambio de tema
-	themeToggleButtons.forEach((button) => {
-		button.addEventListener('click', toggleTheme);
-	});
+	/**
+	 * Re-asigna el listener de clic y ACTUALIZA el ícono del botón.
+	 */
+	const reInitThemeButton = () => {
+		document.querySelectorAll('#theme-toggle').forEach((button) => {
+			button.removeEventListener('click', toggleTheme);
+			button.addEventListener('click', toggleTheme);
+		});
+		// Sincronizar el ícono inmediatamente
+		updateThemeIcons(localStorage.getItem('theme') || 'light');
+	};
 
-	// Cargar el tema guardado al iniciar la página
+	// --- LÓGICA DE INICIALIZACIÓN ---
+	window.reInitThemeButton = reInitThemeButton;
+
 	const savedTheme =
 		localStorage.getItem('theme') ||
 		(window.matchMedia('(prefers-color-scheme: dark)').matches
 			? 'dark'
 			: 'light');
 
-	applyTheme(savedTheme);
+	applyTheme(savedTheme); // Aplica el tema guardado
+	reInitThemeButton(); // Asigna los listeners a los botones iniciales
 };

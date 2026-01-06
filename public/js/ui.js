@@ -67,6 +67,17 @@ const createSowingCalendar = (siembraMonths) => {
 	return calendarHTML;
 };
 
+/**
+ * Verificar si una planta se puede sembrar en el mes actual.
+ * @param {object} plant - El objeto de la planta.
+ * @returns {boolean} - true si es temporada, false si no.
+ */
+const isSowableNow = (plant) => {
+    const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    const mesActual = meses[new Date().getMonth()];
+    return plant.siembra.flat().includes(mesActual);
+};
+
 // -----------------------------------
 // FUNCIONES DE RENDERIZADO (EXPORTADAS)
 // -----------------------------------
@@ -84,14 +95,24 @@ export const createPlantCard = (plant) => {
 		Difícil: 'bg-red-100 text-red-800',
 	};
 
+     // Determinar si la planta es apta para la siembra actual
+    const isReadyToSow = isSowableNow(plant);
+    
+    // Definir clases dinámicas para el borde
+    const cardBorder = isReadyToSow 
+        ? 'border-4 border-eco-green-light' // Borde verde si es apta
+        : 'border border-transparent';      // Borde transparente si no
+
 	return `
-        <div data-plant-id="${
-			plant.id
-		}" class="cursor-pointer bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+        <div data-plant-id="${plant.id}" class="cursor-pointer bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300 ${cardBorder}"">
             <!-- Imagen de la planta -->
-            <img src="${plant.imagen}" alt="${
-		plant.nombre
-	}" class="w-full h-48 object-cover">
+            <img src="${plant.imagen}" alt="${plant.nombre}" class="w-full h-48 object-cover">
+
+            <!-- Badge de "¡Siembra Ahora!" -->
+                ${isReadyToSow ? `
+                <span class="absolute top-2 right-2 bg-eco-green-dark text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                    <i class="fas fa-star mr-1"></i>¡Siembra Ahora!
+                </span>` : ''}
             
             <div class="p-4">
                 <!-- Nombre y Familia -->
@@ -573,3 +594,27 @@ export const createProfileModalContent = (user) => {
         </div>
     `;
 };
+
+/**
+ * Crear el HTML para un modal de Alerta (éxito o error).
+ * @param {string} title - El título del mensaje.
+ * @param {string} message - El cuerpo del mensaje.
+ * @param {'success' | 'error'} type - El tipo de alerta.
+ */
+export const createAlertModalContent = (title, message, type = 'success') => {
+    const icon = type === 'success' 
+        ? '<i class="fas fa-check-circle text-5xl text-green-500"></i>'
+        : '<i class="fas fa-times-circle text-5xl text-red-500"></i>';
+
+    return `
+        <div class="p-8 text-center flex flex-col items-center gap-4">
+            ${icon}
+            <h3 class="text-2xl font-bold">${title}</h3>
+            <p>${message}</p>
+            <button class="js-close-moda mt-4 bg-eco-green-dark text-white font-bold px-8 py-2 rounded-md">
+                Entendido
+            </button>
+        </div>
+    `;
+};
+

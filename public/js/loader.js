@@ -1,6 +1,7 @@
 /**
- * Módulo para generar el HTML del loader de germinación.
- * Los estilos CSS asociados se encuentran en /css/styles.css
+ * @file Módulo para la gestión del componente visual de carga (loader).
+ * @description Centraliza la generación del HTML para la animación de germinación.
+ *              Los estilos CSS asociados se definen globalmente en /css/styles.css.
  */
 
 /**

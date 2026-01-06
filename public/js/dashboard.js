@@ -3,7 +3,11 @@ import {
 	deletePlantFromGarden,
 	updatePlantStatusInGarden,
 } from './api.js';
-import { createMyGardenCard, createConfirmModalContent } from './ui.js';
+import {
+	createMyGardenCard,
+	createConfirmModalContent,
+	createAlertModalContent,
+} from './ui.js';
 import { openModal, closeModal } from './modal.js';
 import { getLoaderHTML } from './loader.js';
 
@@ -50,7 +54,14 @@ export const initDashboard = async (user) => {
 				});
 			}
 		} catch (error) {
-			gardenContainer.innerHTML = `<p class="col-span-full text-red-500">Error al cargar tu huerta. Intenta recargar la página.</p>`;
+			openModal(
+				createAlertModalContent(
+					'Error de Carga',
+					'No se pudo conectar con el servidor para cargar tu huerta. Por favor, intenta recargar la página.',
+					'error'
+				),
+				'md'
+			);
 		}
 	};
 
@@ -95,11 +106,31 @@ export const initDashboard = async (user) => {
 			const card = e.target.closest('article');
 			const plantId = card.dataset.plantId;
 
+			// --- AÑADIR FEEDBACK DE CARGA ---
+			const statusMenu = statusLink.closest('.status-menu');
+			if (statusMenu) statusMenu.classList.add('hidden'); // Ocultar el menú
+
+			const statusDisplay = card.querySelector(
+				'[data-action="toggle-status-menu"]'
+			);
+			if (statusDisplay) {
+				statusDisplay.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Actualizando...`;
+				statusDisplay.disabled = true;
+			}
+
 			try {
 				await updatePlantStatusInGarden(plantId, newStatus);
 				loadGarden(); // Recargar la huerta para ver el cambio
 			} catch (err) {
-				alert('No se pudo actualizar el estado.');
+				openModal(
+					createAlertModalContent(
+						'Error',
+						'No se pudo actualizar el estado.',
+						'error'
+					),
+					'sm'
+				);
+				loadGarden(); // Recargar para restaurar el estado visual
 			}
 		}
 	});
@@ -109,17 +140,38 @@ export const initDashboard = async (user) => {
 			const confirmButton = e.target.closest('#confirm-action-button');
 
 			if (confirmButton) {
-				// Obtenemos el ID de la planta que guardamos en algún lugar
+				// Obtener el ID de la planta que guardamos en algún lugar
 				const plantIdToDelete = confirmButton.dataset.plantId;
 
 				if (!plantIdToDelete) return;
+
+				confirmButton.disabled = true;
+				confirmButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
 
 				try {
 					await deletePlantFromGarden(plantIdToDelete);
 					closeModal();
 					loadGarden();
+					openModal(
+						createAlertModalContent(
+							'¡Eliminado!',
+							'La planta ha sido quitada de tu huerta.'
+						),
+						'sm'
+					);
 				} catch (error) {
-					alert('No se pudo eliminar la planta.');
+					openModal(
+						createAlertModalContent(
+							'Error',
+							'No se pudo eliminar la planta.',
+							'error'
+						),
+						'sm'
+					);
+				} finally {
+					// Restaurar el botón en caso de error para que el modal no se quede bloqueado
+					confirmButton.disabled = false;
+					confirmButton.textContent = 'Sí, Quitar';
 				}
 			}
 		});

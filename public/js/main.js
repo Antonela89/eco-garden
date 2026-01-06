@@ -1,3 +1,9 @@
+/**
+ * @file Punto de entrada principal para toda la lógica del Frontend.
+ * @description Orquesta la inicialización de módulos, gestiona el estado de autenticación
+ *              y enruta la ejecución de scripts según la página actual.
+ */
+
 // ---------------------------------
 // IMPORTS
 // ---------------------------------
@@ -12,6 +18,7 @@ import {
 	renderCatalog,
 	createPlantDetailsContent,
 	createLoginModalContent,
+	createAlertModalContent,
 } from './ui.js';
 import { initDashboard } from './dashboard.js';
 import { initProfile } from './profile.js';
@@ -24,31 +31,44 @@ import { getLoaderHTML } from './loader.js';
 // ---------------------------------
 // SETUP GLOBAL
 // ---------------------------------
+/**
+ * Exponer la función `closeModal` al objeto `window` para permitir su
+ * llamado desde el HTML inyectado dinámicamente (ej. botones 'onclick').
+ */
 window.closeModal = closeModal;
 
 // ---------------------------------
 // PUNTO DE ENTRADA (MAIN)
 // ---------------------------------
+/**
+ * Escuchar el evento 'DOMContentLoaded' para asegurar que el script se ejecute
+ * solo después de que toda la estructura HTML haya sido cargada.
+ */
 document.addEventListener('DOMContentLoaded', () => {
 	// Inicializaciones globales que ocurren en todas las páginas
+	// Activar el sistema de modales y el de cambio de tema en todas las páginas.
 	initModal();
 	initThemeSwitcher();
 
 	// Lógica de autenticación y actualización de UI
+
+	// Leer el token y los datos de usuario desde el almacenamiento local.
 	const token = localStorage.getItem('token');
 	const user = token ? JSON.parse(localStorage.getItem('user')) : null;
 
-	// Se actualiza la Navbar UNA SOLA VEZ, al principio de la carga.
+	// Actualizar la barra de navegación para reflejar el estado (logueado o visitante).
 	if (user) {
 		updateNavOnLogin(user);
 	} else {
 		updateNavOnLogout();
 	}
 
-	// 3. Enrutamiento: ejecutar la lógica específica de la página actual
+	// Enrutamiento:
+	// Determinar la página actual y ejecutar su lógica de inicialización específica.
 	const path = window.location.pathname;
 
 	if (path.includes('dashboard.html')) {
+		// Proteger la ruta y luego inicializar el dashboard.
 		if (!user) {
 			window.location.href = '/index.html';
 			return;
@@ -61,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 		initProfile(user);
 	} else if (path.includes('admin.html')) {
+		// Proteger la ruta con doble validación (token y rol).
 		if (!user || user.role !== 'admin') {
 			window.location.href = '/html/dashboard.html';
 			return;
@@ -70,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		handleRegister();
 		initPasswordStrengthMeter();
 	} else {
-		// index.html
+		// Asumir que es la página de inicio (index.html).
 		initializeIndexPage(user);
 	}
 });
@@ -83,12 +104,12 @@ document.addEventListener('DOMContentLoaded', () => {
  * Inicializar todos los listeners y la carga de datos para la página principal (index.html).
  */
 const initializeIndexPage = (user) => {
-	// Este listener solo se añade en la página principal
+	// Asignar el evento para abrir el modal de login si el botón existe.
 	const loginButton = document.getElementById('login-button');
 	if (loginButton) {
 		loginButton.addEventListener('click', () => {
 			openModal(createLoginModalContent(), 'sm');
-			// handleLogin se encargará del 'submit' del formulario
+			// Preparar el formulario del modal para el evento 'submit'.
 			handleLogin();
 		});
 	}
@@ -115,11 +136,21 @@ const initializeIndexPage = (user) => {
 					);
 				}, 3000);
 			} catch (error) {
-				modalContentArea.innerHTML = `<p class="p-8 text-red-500">Error al cargar detalles.</p>`;
+				setTimeout(() => {
+					openModal(
+						createAlertModalContent(
+							'Error al Cargar',
+							'No se pudieron obtener los detalles de la planta. Por favor, intenta de nuevo.',
+							'error'
+						),
+						'sm'
+					);
+				}, 500);
 			}
 		});
 	}
 
+	// Usar delegación de eventos para las acciones dentro del modal.
 	if (modalContainer) {
 		modalContainer.addEventListener('click', async (e) => {
 			const addToGardenBtn = e.target.closest('#add-to-garden-btn');
@@ -136,16 +167,27 @@ const initializeIndexPage = (user) => {
 
 				try {
 					await addPlantToGarden(plantId);
-					addToGardenBtn.innerHTML =
-						'<i class="fas fa-check mr-2"></i>¡Añadido!';
-					addToGardenBtn.classList.remove('bg-eco-green-dark');
-					addToGardenBtn.classList.add('bg-green-500');
-
+					closeModal();
+					// Abrir un modal de confirmación rápido
+					openModal(
+						createAlertModalContent(
+							'¡Añadido!',
+							'La planta ha sido agregada a tu huerta.'
+						),
+						'sm'
+					);
 					// Cerrar el modal después de un éxito
 					setTimeout(() => closeModal(), 1500);
 				} catch (error) {
-					alert(error.message); // Mostrar error
-					addToGardenBtn.disabled = false; // Reactivar el botón
+					openModal(
+						createAlertModalContent(
+							'Error',
+							error.message,
+							'error'
+						),
+						'sm'
+					);
+					addToGardenBtn.disabled = false;
 					addToGardenBtn.innerHTML =
 						'<i class="fas fa-plus-circle mr-2"></i>Añadir a mi Huerta';
 				}
@@ -161,9 +203,13 @@ const initializeIndexPage = (user) => {
 		});
 	}
 
+	// Iniciar la carga de datos del catálogo.
 	loadCatalog();
 };
 
+/**
+ * Cargar los datos del catálogo desde la API y renderizarlos en el DOM.
+ */
 const loadCatalog = async () => {
 	const catalogContainer = document.getElementById('plant-catalog');
 	if (!catalogContainer) return;
@@ -183,6 +229,12 @@ const loadCatalog = async () => {
 			renderCatalog(plants);
 		}, 3000); // Simular carga
 	} catch (error) {
-		catalogContainer.innerHTML = `<p class="text-center text-red-500 col-span-full">Error al cargar el catálogo.</p>`;
+		catalogContainer.innerHTML = `
+            <div class="col-span-full text-center p-8 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+                <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4"></i>
+                <h3 class="text-xl font-bold text-red-700 dark:text-red-300">¡Ups! Algo salió mal</h3>
+                <p class="text-red-600 dark:text-red-400">No se pudo cargar el catálogo de cultivos. Por favor, intenta recargar la página.</p>
+            </div>
+        `;
 	}
 };

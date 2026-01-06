@@ -4,7 +4,7 @@ import {
 	updatePlantStatusInGarden,
 } from './api.js';
 import { createMyGardenCard, createConfirmModalContent } from './ui.js';
-import { openModal, closeModal, initModal } from './modal.js';
+import { openModal, closeModal } from './modal.js';
 import { getLoaderHTML } from './loader.js';
 
 /**
@@ -15,15 +15,21 @@ export const initDashboard = async (user) => {
 	const gardenContainer = document.getElementById('garden-container');
 	if (!gardenContainer) return;
 
-    const modalContainer = document.getElementById('modal-container');
-    
+	const modalContainer = document.getElementById('modal-container');
+
 	/**
 	 * Cargar los datos de la huerta desde la API y renderizarlos en el DOM.
 	 * Esta función se puede llamar para la carga inicial o para recargar la vista.
 	 */
 	const loadGarden = async () => {
 		// Mostrar el loader mientras se cargan los datos
-		gardenContainer.innerHTML = getLoaderHTML('Cargando tu huerta...');
+		const loaderWrapper = `
+        	<div id="loader-wrapper" class="col-span-full py-16 flex justify-center">
+        	    ${getLoaderHTML('Cargando tu huerta...')}
+        	</div>
+    	`;
+
+		gardenContainer.innerHTML = loaderWrapper;
 
 		try {
 			const myGarden = await getMyGarden();
@@ -96,17 +102,17 @@ export const initDashboard = async (user) => {
 				alert('No se pudo actualizar el estado.');
 			}
 		}
-	});    
+	});
 
 	if (modalContainer) {
 		modalContainer.addEventListener('click', async (e) => {
 			const confirmButton = e.target.closest('#confirm-action-button');
-            
+
 			if (confirmButton) {
 				// Obtenemos el ID de la planta que guardamos en algún lugar
 				const plantIdToDelete = confirmButton.dataset.plantId;
 
-                if (!plantIdToDelete) return;
+				if (!plantIdToDelete) return;
 
 				try {
 					await deletePlantFromGarden(plantIdToDelete);

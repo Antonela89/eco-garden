@@ -1,13 +1,21 @@
 /**
- * Inicializar la lógica para el cambio de tema (claro/oscuro).
- * Lee la preferencia del usuario desde localStorage y añade los listeners a los botones.
+ * @file Módulo para la gestión del tema visual de la aplicación (Modo Claro / Modo Oscuro).
+ * @description Se encarga de leer, aplicar y persistir la preferencia de tema del usuario.
+ */
+
+/**
+ * Inicializar el sistema de cambio de tema.
+ * Configura los listeners y aplica el tema guardado o el preferido por el sistema.
  */
 export const initThemeSwitcher = () => {
-	const htmlElement = document.documentElement; // La etiqueta <html> es la que guarda el tema
+	// Obtener la etiqueta <html> para manipular sus clases.
+	const htmlElement = document.documentElement;
 
 	/**
-	 * Función para aplicar el tema.
+	 * Aplicar un tema específico a la aplicación.
+	 * Modifica la clase del elemento <html>, guarda la preferencia en localStorage y actualiza los íconos.
 	 * @param {string} theme - 'dark' o 'light'.
+	 * @private
 	 */
 	const applyTheme = (theme) => {
 		// Limpiar clases
@@ -27,7 +35,9 @@ export const initThemeSwitcher = () => {
 	};
 
 	/**
-	 * Función para actualizar los íconos de sol/luna en todos los botones de tema.
+	 * Actualizar el ícono (sol/luna) en todos los botones de cambio de tema.
+	 * @param {string} theme - 'dark' o 'light'.
+	 * @private
 	 */
 	const updateThemeIcons = (theme) => {
 		const icon =
@@ -40,7 +50,9 @@ export const initThemeSwitcher = () => {
 	};
 
 	/**
-	 * Función para alternar el tema actual.
+	 * Alternar entre el modo claro y oscuro.
+	 * Lee el tema actual y llama a `applyTheme` con la opción contraria.
+	 * @private
 	 */
 	const toggleTheme = () => {
 		const currentTheme = localStorage.getItem('theme') || 'light';
@@ -48,11 +60,15 @@ export const initThemeSwitcher = () => {
 	};
 
 	/**
-	 * Re-asigna el listener de clic y ACTUALIZA el ícono del botón.
+	 * Re-inicializar los listeners para todos los botones de cambio de tema.
+	 * Útil para elementos que se añaden dinámicamente al DOM (como la navbar de logout).
+	 * También sincroniza el ícono del botón con el tema actual.
 	 */
 	const reInitThemeButton = () => {
 		document.querySelectorAll('#theme-toggle').forEach((button) => {
+			// Limpiar listeners antiguos para evitar duplicados.
 			button.removeEventListener('click', toggleTheme);
+			// Asignar el nuevo listener.
 			button.addEventListener('click', toggleTheme);
 		});
 		// Sincronizar el ícono inmediatamente
@@ -60,10 +76,14 @@ export const initThemeSwitcher = () => {
 	};
 
 	// --- LÓGICA DE INICIALIZACIÓN ---
+	// Exponer la función de re-inicialización globalmente para que otros módulos puedan llamarla.
 	window.reInitThemeButton = reInitThemeButton;
 
+	// Determinar el tema inicial a aplicar.
 	const savedTheme =
+		// Buscar la preferencia del usuario
 		localStorage.getItem('theme') ||
+		// Si no hay, respetar al sistema operativo
 		(window.matchMedia('(prefers-color-scheme: dark)').matches
 			? 'dark'
 			: 'light');

@@ -1,5 +1,31 @@
 const API_URL = 'http://localhost:3000/api'; // URL del backend
 
+// -----------------------------------
+// FUNCIONES AUXILIARES (HELPERS)
+// -----------------------------------
+
+/**
+ * Crear las cabeceras (headers) para una petición a la API.
+ * Incluye el token de autorización si está disponible.
+ * @param {boolean} [isProtected=false] - Indicar si la ruta requiere autenticación.
+ * @returns {HeadersInit}
+ */
+const createHeaders = (isProtected = false) => {
+    const headers = {
+        'Content-Type': 'application/json',
+    };
+    if (isProtected) {
+        const token = localStorage.getItem('token');
+        if (!token) throw new Error('Acción no autorizada. Se requiere iniciar sesión.');
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+    return headers;
+};
+
+// -----------------------------------
+// FUNCIONES DE AUTENTICACIÓN
+// -----------------------------------
+
 /**
  * Función para registrar un nuevo usuario.
  * @param {string} username
@@ -10,7 +36,7 @@ const API_URL = 'http://localhost:3000/api'; // URL del backend
 export const registerUser = async (username, email, password) => {
     const response = await fetch(`${API_URL}/auth/register`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers:  createHeaders(),
         body: JSON.stringify({ 
             username, 
             email, 
@@ -41,7 +67,7 @@ export const registerUser = async (username, email, password) => {
 export const loginUser = async (email, password) => {
     const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: createHeaders(),
         body: JSON.stringify({ email, password })
     });
 
@@ -62,17 +88,9 @@ export const loginUser = async (email, password) => {
  * @returns {Promise<any>}
  */
 export const addPlantToGarden = async (plantId) => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-        throw new Error('No estás autenticado. Inicia sesión para añadir plantas.');
-    }
-
     const response = await fetch(`${API_URL}/gardener/garden`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
+        headers: createHeaders(true), // Ruta protegida
         body: JSON.stringify({ plantId })
     });
 
@@ -89,9 +107,8 @@ export const addPlantToGarden = async (plantId) => {
  * @returns {Promise<any>}
  */
 export const getMyGarden = async () => {
-    const token = localStorage.getItem('token');
     const response = await fetch(`${API_URL}/gardener/garden`, {
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: createHeaders(true) // Ruta protegida
     });
     if (!response.ok) throw new Error('No se pudo cargar la huerta.');
     return response.json();
@@ -104,15 +121,9 @@ export const getMyGarden = async () => {
  * @returns {Promise<any>}
  */
 export const updatePlantStatusInGarden = async (plantId, status) => {
-    const token = localStorage.getItem('token');
-    if (!token) throw new Error('No estás autenticado.');
-
     const response = await fetch(`${API_URL}/gardener/garden/status`, {
         method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
+        headers: createHeaders(true), // Ruta protegida
         body: JSON.stringify({ plantId, status })
     });
 
@@ -129,14 +140,9 @@ export const updatePlantStatusInGarden = async (plantId, status) => {
  * @returns {Promise<any>}
  */
 export const deletePlantFromGarden = async (plantId) => {
-    const token = localStorage.getItem('token');
-    if (!token) throw new Error('No estás autenticado.');
-
     const response = await fetch(`${API_URL}/gardener/garden/${plantId}`, {
         method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
+        headers: createHeaders(true) // Ruta protegida
     });
 
     if (!response.ok) {
@@ -151,13 +157,17 @@ export const deletePlantFromGarden = async (plantId) => {
  * @returns {Promise<any>}
  */
 export const getProfile = async () => {
-    const token = localStorage.getItem('token');
     const response = await fetch(`${API_URL}/gardener/profile`, {
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: createHeaders(true) // Ruta protegida
     });
     if (!response.ok) throw new Error('No se pudo cargar el perfil.');
     return response.json();
 };
+
+
+// ------------------------------------
+//  FUNCIONES DEL CATÁLOGO (PÚBLICAS)
+// ------------------------------------
 
 /**
  * Función para obtener el catálogo de plantas.
@@ -184,13 +194,9 @@ export const getPlantById = async (id) => {
  * @returns {Promise<any>}
  */
 export const createPlant = async (plantData) => {
-    const token = localStorage.getItem('token'); // Asumimos que el admin está logueado
     const response = await fetch(`${API_URL}/plants`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
+        headers: createHeaders(true),
         body: JSON.stringify(plantData)
     });
 
@@ -208,13 +214,9 @@ export const createPlant = async (plantData) => {
  * @returns {Promise<any>}
  */
 export const updatePlant = async (id, plantData) => {
-    const token = localStorage.getItem('token');
     const response = await fetch(`${API_URL}/plants/${id}`, {
         method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
+        headers: createHeaders(true),
         body: JSON.stringify(plantData)
     });
 
@@ -231,12 +233,9 @@ export const updatePlant = async (id, plantData) => {
  * @returns {Promise<any>}
  */
 export const deletePlant = async (id) => {
-    const token = localStorage.getItem('token');
     const response = await fetch(`${API_URL}/plants/${id}`, {
         method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
+        headers: createHeaders(true)
     });
 
     if (!response.ok) {

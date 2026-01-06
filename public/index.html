@@ -43,23 +43,24 @@
 
 <body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-gray-200 transition-colors duration-300">
 
-    <!-- =========== HEADER Y NAVEGACIÓN =========== -->
+    <!-- ------------------- HEADER Y NAVEGACIÓN ------------------- -->
     <header class="bg-white dark:bg-dark-surface shadow-md sticky top-0 z-10">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
+                <!-- Definir el logo y enlace principal a la página de inicio -->
                 <a href="/" class="flex items-center gap-2 text-2xl font-extrabold text-eco-green-dark">
                     <i class="fas fa-seedling"></i>
                     <span>Eco-Garden</span>
                 </a>
                 <!-- Contenedor para el menú dinámico -->
                 <div id="nav-menu" class="flex items-center gap-4">
-                    <!-- JavaScript inyectará aquí los botones de 'Ingresar' o 'Mi Perfil', 'Logout', etc. -->
+                    <!-- JavaScript inyectará aquí el estado de autenticación -->
                 </div>
             </div>
         </nav>
     </header>
 
-    <!-- =========== CONTENIDO PRINCIPAL =========== -->
+    <!-- ------------------- CONTENIDO PRINCIPAL ------------------- -->
     <main class="max-w-7xl mx-auto py-8 sm:px-6 lg:px-8">
 
         <!-- Sección de Bienvenida -->
@@ -74,18 +75,17 @@
             <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 px-4">Catálogo de Cultivos</h2>
             <!-- El contenedor donde JS inyectará las tarjetas -->
             <div id="plant-catalog" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
-                <!-- Loader de Carga -->
+                <!--Aquí se muestra el loader o las tarjetas del catálogo general-->
             </div>
         </section>
     </main>
 
-    <!-- =========== CONTENEDOR DE MODAL ÚNICO Y GENÉRICO =========== -->
+    <!-- ------------------- CONTENEDOR GENÉRICO PARA MODALES ------------------- -->
     <div id="modal-container"
         class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50 p-4">
-        <!-- El contenido se inyectará aquí con JavaScript -->
-        <!-- La clase 'max-w-lg', 'max-w-2xl', etc., se añadirá dinámicamente -->
         <div id="modal-content-area"
             class="bg-white dark:bg-dark-surface rounded-lg shadow-2xl w-full transform transition-all animate-fade-in-down overflow-y-auto max-h-[90vh]">
+            <!-- El contenido se inyectará aquí con JavaScript -->
         </div>
     </div>
 

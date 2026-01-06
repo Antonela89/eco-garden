@@ -43,7 +43,7 @@
 
 <body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-gray-200 transition-colors duration-300">
 
-    <!-- =========== HEADER Y NAVEGACIÓN =========== -->
+    <!-- ------------------- HEADER Y NAVEGACIÓN ------------------- -->
     <header class="bg-white dark:bg-dark-surface shadow-md sticky top-0 z-10">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
@@ -60,9 +60,10 @@
         </nav>
     </header>
 
-    <!-- =========== CONTENIDO DEL DASHBOARD =========== -->
+    <!-- ------------------- CONTENIDO PRINCIPAL ------------------- -->
     <main class="max-w-7xl mx-auto py-8 sm:px-6 lg:px-8">
 
+        <!-- Contenido del dashboard -->
         <section id="mi-huerta">
             <div class="flex justify-between items-center mb-6 px-4">
                 <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white">Mi Huerta</h1>
@@ -80,16 +81,16 @@
         </section>
     </main>
 
-    <!-- =========== CONTENEDOR DE MODAL ÚNICO Y GENÉRICO =========== -->
+    <!-- ------------------- CONTENEDOR GENÉRICO PARA MODALES ------------------- -->
     <div id="modal-container"
         class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50 p-4">
-        <!-- El contenido se inyectará aquí con JavaScript -->
-        <!-- La clase 'max-w-lg', 'max-w-2xl', etc., se añadirá dinámicamente -->
         <div id="modal-content-area"
             class="bg-white dark:bg-dark-surface rounded-lg shadow-2xl w-full transform transition-all animate-fade-in-down overflow-y-auto max-h-[90vh]">
+            <!-- El contenido se inyectará aquí con JavaScript -->
         </div>
     </div>
 
+    <!-- Scripts de JS -->
     <script type="module" src="/js/main.js"></script>
 </body>
 

@@ -43,15 +43,27 @@
 
 <body class="bg-gray-100 dark:bg-dark-bg min-h-screen flex items-center justify-center p-4">
 
-    <main class="bg-white dark:bg-dark-surface p-8 rounded-lg shadow-2xl w-full max-w-md">
-        <header class="text-center mb-8">
-            <a href="/" class="flex items-center justify-center gap-2 text-2xl font-extrabold text-eco-green-dark">
-                <i class="fas fa-seedling"></i>
-                <span>Eco-Garden</span>
-            </a>
-            <h1 class="text-3xl font-bold text-gray-800 dark:text-white mt-4">Crea tu Cuenta</h1>
-        </header>
+    <!-- ------------------- HEADER Y NAVEGACIÓN ------------------- -->
+    <header class="bg-white dark:bg-dark-surface shadow-md sticky top-0 z-10">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="/" class="flex items-center gap-2 text-2xl font-extrabold text-eco-green-dark">
+                    <i class="fas fa-seedling"></i>
+                    <span>Eco-Garden</span>
+                </a>
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-white mt-4">Crea tu Cuenta</h1>
+                <!-- Contenedor para el menú dinámico -->
+                <div id="nav-menu" class="flex items-center gap-4">
+                    <!-- JavaScript inyectará aquí los botones de 'Ingresar' o 'Mi Perfil', 'Logout', etc. -->
+                </div>
+            </div>
+        </nav>
+    </header>
 
+    <!-- ------------------- CONTENIDO PRINCIPAL ------------------- -->
+    <main class="bg-white dark:bg-dark-surface p-8 rounded-lg shadow-2xl w-full max-w-md">
+
+        <!-- Contenido de Formulario de Registro -->
         <form id="register-form" class="flex flex-col gap-4">
             <div class="relative group">
                 <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre de
@@ -111,16 +123,16 @@
         </footer>
     </main>
 
-    <!-- =========== CONTENEDOR DE MODAL ÚNICO Y GENÉRICO =========== -->
+    <!-- ------------------- CONTENEDOR GENÉRICO PARA MODALES ------------------- -->
     <div id="modal-container"
         class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50 p-4">
-        <!-- El contenido se inyectará aquí con JavaScript -->
-        <!-- La clase 'max-w-lg', 'max-w-2xl', etc., se añadirá dinámicamente -->
         <div id="modal-content-area"
             class="bg-white dark:bg-dark-surface rounded-lg shadow-2xl w-full transform transition-all animate-fade-in-down overflow-y-auto max-h-[90vh]">
+            <!-- El contenido se inyectará aquí con JavaScript -->
         </div>
     </div>
 
+    <!-- Scripts de JS -->
     <script type="module" src="/js/main.js"></script>
 </body>
 

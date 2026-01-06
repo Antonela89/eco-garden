@@ -1,7 +1,14 @@
+/**
+ * @file Módulo para la gestión centralizada de modales en la aplicación.
+ * @description Proporciona funciones para abrir, cerrar e inyectar contenido HTML
+ *              dinámico en un único contenedor de modal genérico.
+ */
+
 // Referencias a los elementos del DOM
 const modalContainer = document.getElementById('modal-container'); // Un contenedor genérico
 const modalContent = document.getElementById('modal-content-area'); // El área donde irá el contenido
 
+ // Variable para controlar el estado actual del modal (abierto/cerrado)
 let isOpen = false;
 
 /**
@@ -10,6 +17,7 @@ let isOpen = false;
  * * @param {string} [size='lg'] - El tamaño del modal: 'sm', 'md', 'lg', 'xl', '2xl', etc.
  */
 export const openModal = (contentHTML, size = 'lg') => {
+	// Prevenir la ejecución si los elementos del DOM no existen (ej. la página no ha cargado)
 	if (!modalContainer || !modalContent) return;
 
     // Definir las clases de tamaño de Tailwind
@@ -28,21 +36,26 @@ export const openModal = (contentHTML, size = 'lg') => {
     // Añadimos la nueva clase de tamaño
     modalContent.classList.add(sizeClasses[size] || sizeClasses['lg']);
 
+	// Inyectar el HTML del contenido específico del modal.
 	modalContent.innerHTML = contentHTML;
+	// Mostrar el contenedor principal del modal (eliminar la clase 'hidden').
 	modalContainer.classList.remove('hidden');
+	// Actualizar el estado para indicar que el modal está abierto.
 	isOpen = true;
 };
 
 /**
- * Cerrar el modal.
+ * Cerrar el modal, ocultándolo y limpiando su contenido.
  */
 export const closeModal = () => {
+	// Prevenir la ejecución si el contenedor del modal no existe.
 	if (!modalContainer) return;
 
-	// console.log('Cerrando el modal...'); // Testeo
-
+	// Ocultar el contenedor principal del modal (añadir la clase 'hidden').
 	modalContainer.classList.add('hidden');
-	modalContent.innerHTML = ''; // Limpiar contenido al cerrar
+	// Limpiar el contenido del área del modal para asegurar que el próximo modal cargue limpio
+	modalContent.innerHTML = ''; 
+	// Actualizar el estado para indicar que el modal está cerrado.
 	isOpen = false;
 };
 
@@ -51,8 +64,14 @@ export const closeModal = () => {
  * Se encarga de cerrar el modal al hacer clic fuera o presionar 'Escape'.
  */
 export const initModal = () => {
+	// Prevenir la ejecución si el contenedor del modal no existe.
 	if (!modalContainer) return;
 
+	/**
+	 * Delegación de eventos para el cierre del modal al hacer clic.
+	 * Un único listener en el contenedor principal gestiona clics en el fondo
+	 * y en cualquier botón con la clase 'js-close-modal' dentro del contenido dinámico.
+	 */
 	modalContainer.addEventListener('click', (e) => {
 		// Cerrar al hacer clic en el fondo oscuro
 		if (e.target === modalContainer) {

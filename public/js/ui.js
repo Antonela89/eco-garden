@@ -594,3 +594,27 @@ export const createProfileModalContent = (user) => {
         </div>
     `;
 };
+
+/**
+ * Crear el HTML para un modal de Alerta (éxito o error).
+ * @param {string} title - El título del mensaje.
+ * @param {string} message - El cuerpo del mensaje.
+ * @param {'success' | 'error'} type - El tipo de alerta.
+ */
+export const createAlertModalContent = (title, message, type = 'success') => {
+    const icon = type === 'success' 
+        ? '<i class="fas fa-check-circle text-5xl text-green-500"></i>'
+        : '<i class="fas fa-times-circle text-5xl text-red-500"></i>';
+
+    return `
+        <div class="p-8 text-center flex flex-col items-center gap-4">
+            ${icon}
+            <h3 class="text-2xl font-bold">${title}</h3>
+            <p>${message}</p>
+            <button onclick="window.closeModal()" class="mt-4 bg-eco-green-dark text-white font-bold px-8 py-2 rounded-md">
+                Entendido
+            </button>
+        </div>
+    `;
+};
+

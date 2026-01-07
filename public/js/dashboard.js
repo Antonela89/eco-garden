@@ -44,7 +44,6 @@ export const initDashboard = async (user) => {
                         <i class="fas fa-leaf text-4xl text-gray-400 mb-4"></i>
                         <h3 class="text-xl font-bold">Tu huerta está vacía</h3>
                         <p class="text-gray-500">¡Es un gran día para empezar a plantar!</p>
-                        <a href="/index.html" class="mt-4 inline-block bg-eco-green-dark text-white px-6 py-2 rounded-md font-bold">Ir al Catálogo</a>
                     </div>
                 `;
 			} else {

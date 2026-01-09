@@ -18,7 +18,7 @@ export const formatInputData = (data) => {
     const formattedData = { ...data };
 
     // Definir una lista de claves que NO deben ser modificadas bajo ningún concepto
-    const protectedFields = ['password', 'email', 'id', 'token', 'imagen', 'role'];
+    const protectedFields = ['password', 'email', 'id', 'token', 'imagen', 'role', 'username'];
 
     for (const key in formattedData) {
         // Validar que sea un string y que la clave no esté en la lista protegida

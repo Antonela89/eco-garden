@@ -44,28 +44,19 @@ export const loginSchema = z.object({
 	password: z.string().min(1, 'La contraseña es requerida'),
 });
 
+// El schema base con todas las reglas
+const gardenerBaseSchema = z.object({
+    username: z.string().min(3).max(20).optional(),
+    email: z.string().email().optional(),
+    password: z.string().min(8).regex(/[A-Z]/).regex(/[0-9]/).optional(),
+});
+
 /**
  * updateProfileSchema
  * Esquema simplificado para la edición del perfil de usuario.
  * Solo requiere las credenciales básicas de acceso.
  */
-export const updateProfileSchema = z.object({
-	// Validación de nombre: longitud mínima y máxima para evitar nombres vacíos o excesivos
-	username: z
-		.string()
-		.min(3, 'El nombre de usuario debe tener al menos 3 caracteres')
-		.max(20, 'El nombre de usuario no puede superar los 20 caracteres'),
-	// Validación de email: comprueba que tenga un formato de correo real (ej@ej.com)
-	email: z.email('Formato de email inválido'),
-	// Validación de contraseña: exige longitud y complejidad mediante Expresiones Regulares (Regex)
-	password: z
-		.string()
-		.min(8, 'La contraseña debe tener al menos 8 caracteres')
-        // Expresión regular para obligar al menos una letra mayúscula
-		.regex(/[A-Z]/, 'Debe contener al menos una mayúscula')
-        // Expresión regular para obligar al menos un número
-		.regex(/[0-9]/, 'Debe contener al menos un número')
-})
+export const updateProfileSchema = gardenerBaseSchema;
 
 /**
  * addPlantToHuertaSchema

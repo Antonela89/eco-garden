@@ -125,23 +125,32 @@ export class GardenerController {
 	};
 
 	static updateProfile = (req: Request, res: Response) => {
-		// Obtener id del token
-		const userId = req.user!.id;
-		const newData = req.body;
+    const userId = req.user!.id;
+    const partialData = req.body;
 
-		// Llamar al modelo
-		const updatedUser = GardenerModel.updateByID(userId, newData);
+    // Buscar al usuario actual en la base de datos
+    const currentUser = GardenerModel.getById(userId);
+    if (!currentUser) {
+        return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
 
-		// Validación
-		if (!updatedUser) {
-			return res.status(404).json({ message: 'Usuario no encontrado' });
-		}
+    // Si se envió una nueva contraseña, encriptarla
+    if (partialData.password) {
+        partialData.password = bcrypt.hashSync(partialData.password, 10);
+    }
+    
+    // Crear el objeto COMPLETO fusionando los datos viejos con los nuevos
+    const fullNewData = {
+        ...currentUser,
+        ...partialData
+    };
 
-		// Desestructurar para evitar pasar el password
-		const { password, ...userResponse } = updatedUser;
-
-		res.json({ message: 'Perfil actualizado', user: userResponse });
-	};
+    // Llamar al modelo con el objeto completo para el "reemplazo"
+    const updatedUser = GardenerModel.updateByID(userId, fullNewData);
+        
+    const { password, ...userResponse } = updatedUser!;
+    res.json({ message: 'Perfil actualizado', user: userResponse });
+};
 
 	// ---------------------------------------------
 	//   GESTIÓN DE LA HUERTA (LÓGICA RELACIONAL)

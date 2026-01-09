@@ -40,7 +40,9 @@ export class GardenerController {
 		// Verificar si el email ya existe ANTES de crear
 		const existingUser = GardenerModel.getByEmail(email as string); // El schema de Zod garantiza que email es string
 		if (existingUser) {
-			return res.status(400).json({ message: "El email ya está registrado" });
+			return res
+				.status(400)
+				.json({ message: 'El email ya está registrado' });
 		}
 
 		// Encriptar
@@ -52,13 +54,16 @@ export class GardenerController {
 			password: hashedPassword,
 			myPlants: [], // Asegurar que siempre se inicialice como un array vacío
 			role: (rest.role as Role) || Role.GARDENER, // Asegurar el rol, con un default si no viene
-			...rest // el resto de los datos (como username)
+			...rest, // el resto de los datos (como username)
 		});
 
 		// SEGURIDAD: Quitar la contraseña del objeto antes de responder
 		const { password: _, ...userResponse } = newUser;
 
-		res.status(201).json({ message: 'Usuario registrado con éxito', user: userResponse });
+		res.status(201).json({
+			message: 'Usuario registrado con éxito',
+			user: userResponse,
+		});
 	};
 
 	/**
@@ -94,7 +99,7 @@ export class GardenerController {
 				id: user.id,
 				username: user.username,
 				role: user.role,
-				email: user.email
+				email: user.email,
 			},
 		});
 	};
@@ -117,6 +122,25 @@ export class GardenerController {
 		// Limpiar la contraseña antes de enviar la info del perfil
 		const { password, ...userData } = user;
 		res.json(userData);
+	};
+
+	static updateProfile = (req: Request, res: Response) => {
+		// Obtener id del token
+		const userId = req.user!.id;
+		const newData = req.body;
+
+		// Llamar al modelo
+		const updatedUser = GardenerModel.updateByID(userId, newData);
+
+		// Validación
+		if (!updatedUser) {
+			return res.status(404).json({ message: 'Usuario no encontrado' });
+		}
+
+		// Desestructurar para evitar pasar el password
+		const { password, ...userResponse } = updatedUser;
+
+		res.json({ message: 'Perfil actualizado', user: userResponse });
 	};
 
 	// ---------------------------------------------
@@ -160,9 +184,12 @@ export class GardenerController {
 
 		// Validación
 		success
-			? res.status(200).json({ message: 'Planta agregada con éxito a tu huerta' })
+			? res
+					.status(200)
+					.json({ message: 'Planta agregada con éxito a tu huerta' })
 			: res.status(400).json({
-					message: 'No se pudo agregar la planta (posible duplicado)'});
+					message: 'No se pudo agregar la planta (posible duplicado)',
+			  });
 	};
 
 	/**

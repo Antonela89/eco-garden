@@ -94,12 +94,12 @@ export class GardenerModel {
 	/**
 	 * Actualiza la información de un jardinero existente.
 	 * @param {string} id - ID del usuario a editar.
-	 * @param {Partial<Gardener>} newData - Objeto con los campos a modificar.
+	 * @param {Gardener} newData - Objeto con los campos a modificar.
 	 * @returns {Gardener | null} El objeto actualizado o null si no se encontró.
 	 */
 	static updateByID = (
 		id: string,
-		newData: Partial<Gardener>
+		newData: Gardener
 	): Gardener | null => {
 		// Obtener todos los jardineros
 		const gardeners = this.getAll();
@@ -110,12 +110,12 @@ export class GardenerModel {
 		if (index === -1) return null; // No encontrado
 
 		// Combinar los datos viejos con los nuevos
-		gardeners[index] = { ...gardeners[index]!, ...newData };
+		gardeners[index] = {...gardeners[index]!, ...newData}
 
 		// Guardar lista editada
 		this.save(gardeners);
 		// Devolver jardinero editado
-		return gardeners[index];
+		return gardeners[index]!;
 	};
 
 	/**
@@ -146,7 +146,7 @@ export class GardenerModel {
 	// ---------------------------
 	//  MÉTODOS PRIVADOS (DRY)
 	// ---------------------------
-	
+
 	/**
 	 * Método privado para obtener la lista de jardineros y el índice del usuario específico.
 	 * Centraliza la búsqueda inicial que se repite en todos los métodos de huerta.
@@ -284,7 +284,7 @@ export class GardenerModel {
 		gardeners[index]!.myPlants = gardeners[index]!.myPlants.filter(
 			(p) => p.plantId !== plantId
 		);
-		
+
 		// Guardar cambios
 		this.save(gardeners);
 		// Devolver verdadero

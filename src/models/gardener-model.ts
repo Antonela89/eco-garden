@@ -92,31 +92,30 @@ export class GardenerModel {
 	};
 
 	/**
-	 * Actualiza la información de un jardinero existente.
-	 * @param {string} id - ID del usuario a editar.
-	 * @param {Gardener} newData - Objeto con los campos a modificar.
-	 * @returns {Gardener | null} El objeto actualizado o null si no se encontró.
-	 */
-	static updateByID = (
-		id: string,
-		newData: Gardener
-	): Gardener | null => {
-		// Obtener todos los jardineros
-		const gardeners = this.getAll();
-		// Obtener el index del jaridnero por el id ingresado
-		const index = gardeners.findIndex((g) => g.id === id);
+ * Reemplazar los datos de un jardinero con un nuevo objeto completo.
+ * Mantiene campos inmutables como 'id' y 'role'.
+ * @param {string} id - ID del usuario a editar.
+ * @param {Gardener} fullNewData - El objeto completo con los nuevos datos.
+ * @returns {Gardener | null}
+ */
+static updateByID = (id: string, fullNewData: Gardener): Gardener | null => {
+    const gardeners = this.getAll();
+    const index = gardeners.findIndex((g) => g.id === id);
+    if (index === -1) return null;
 
-		// Validación
-		if (index === -1) return null; // No encontrado
+    const originalUser = gardeners[index]!;
 
-		// Combinar los datos viejos con los nuevos
-		gardeners[index] = {...gardeners[index]!, ...newData}
+    // Reemplazar el objeto, pero preservar campos que no deben cambiar
+    gardeners[index] = {
+        ...fullNewData,
+        id: originalUser.id,           // El ID nunca cambia
+        role: originalUser.role,       // El rol no se edita aquí
+        myPlants: originalUser.myPlants, // La huerta se gestiona por separado
+    };
 
-		// Guardar lista editada
-		this.save(gardeners);
-		// Devolver jardinero editado
-		return gardeners[index]!;
-	};
+    this.save(gardeners);
+    return gardeners[index]!;
+};
 
 	/**
 	 * Elimina un jardinero de la base de datos.

@@ -164,10 +164,11 @@ export const updateNavOnLogin = (user) => {
 	// --- RENDERIZAR MENÚ MOBILE ---
 	// Clases comunes para los enlaces del menú móvil para mantener consistencia
 	const mobileLinkClasses =
-		'block p-4 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors';
+		'block p-4 text-base font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors';
 
 	navMenuMobile.innerHTML = `
         <a href="/html/dashboard.html" class="${mobileLinkClasses}">Mi Huerta</a>
+		<div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
         <a href="/html/profile.html" class="${mobileLinkClasses}">Mi Perfil</a>
         ${
 			user.role === 'admin'
@@ -176,12 +177,12 @@ export const updateNavOnLogin = (user) => {
 		}
 		
 		<div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
-		<div class="px-3 py-2 flex justify-between items-center">
+		<div class="${mobileLinkClasses} flex justify-between items-center cursor-pointer">
             <span>Cambiar Tema</span>
             ${getThemeButtonHTML()}
         </div>
         <div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
-        <button id="logout-button-mobile" class="${mobileLinkClasses} text-red-500">Cerrar Sesión</button>
+        <button id="logout-button-mobile" class="${mobileLinkClasses} w-full text-left text-red-500">Cerrar Sesión</button>
     `;
 
 	// --- ASIGNAR LISTENERS A LOS NUEVOS ELEMENTOS ---
@@ -238,7 +239,7 @@ export const updateNavOnLogout = () => {
 
 	// Clases comunes para los enlaces del menú móvil para mantener consistencia
 	const mobileLinkClasses =
-		'block w-full text-base p-4 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex';
+		'block w-full text-base p-4 font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex';
 	navMenuMobile.innerHTML = `
         <button id="login-button-mobile" class="${mobileLinkClasses}">Ingresar</button>
 		<div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>

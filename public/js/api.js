@@ -83,22 +83,21 @@ export const loginUser = async (email, password) => {
 // ------------------------------------
 
 /**
- * Añadir una planta a la huerta personal del usuario.
- * @param {string} plantId - El ID de la planta a añadir.
+ * Añadir un nuevo lote de cultivo a la huerta personal.
+ * @param {object} batchData - Datos del lote (plantId, quantity, notes).
  * @returns {Promise<any>}
  */
-export const addPlantToGarden = async (plantId) => {
-    const response = await fetch(`${API_URL}/gardener/garden`, {
+export const addCropBatch = async (batchData) => {
+    const response = await fetch(`${API_URL}/gardener/garden/batch`, { 
         method: 'POST',
-        headers: createHeaders(true), // Ruta protegida
-        body: JSON.stringify({ plantId })
+        headers: createHeaders(true),
+        body: JSON.stringify(batchData)
     });
 
     if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'No se pudo añadir la planta.');
+        throw new Error(errorData.message || 'No se pudo añadir el lote.');
     }
-
     return response.json();
 };
 
@@ -108,7 +107,8 @@ export const addPlantToGarden = async (plantId) => {
  */
 export const getMyGarden = async () => {
     const response = await fetch(`${API_URL}/gardener/garden`, {
-        headers: createHeaders(true) // Ruta protegida
+        headers: createHeaders(true), // Ruta protegida
+        cache: 'no-cache'
     });
     if (!response.ok) throw new Error('No se pudo cargar la huerta.');
     return response.json();
@@ -136,11 +136,11 @@ export const updatePlantStatusInGarden = async (plantId, status) => {
 
 /**
  * Eliminar una planta de la huerta personal.
- * @param {string} plantId - El ID de la planta a eliminar.
+ * @param {string} batchId - El ID del cultivo a eliminar.
  * @returns {Promise<any>}
  */
-export const deletePlantFromGarden = async (plantId) => {
-    const response = await fetch(`${API_URL}/gardener/garden/${plantId}`, {
+export const deleteBatchFromGarden  = async (batchId) => {
+    const response = await fetch(`${API_URL}/gardener/garden/batch/${batchId}`, {
         method: 'DELETE',
         headers: createHeaders(true) // Ruta protegida
     });
@@ -158,7 +158,8 @@ export const deletePlantFromGarden = async (plantId) => {
  */
 export const getProfile = async () => {
     const response = await fetch(`${API_URL}/gardener/profile`, {
-        headers: createHeaders(true) // Ruta protegida
+        headers: createHeaders(true), // Ruta protegida
+        cache: 'no-cache'
     });
     if (!response.ok) throw new Error('No se pudo cargar el perfil.');
     return response.json();
@@ -188,12 +189,16 @@ export const updateProfile = async (dataToUpdate) => {
  * @returns {Promise<any>}
  */
 export const getPlants = async () => {
-    const response = await fetch(`${API_URL}/plants`);
+    const response = await fetch(`${API_URL}/plants`, {
+        cache: 'no-cache'
+    });
     return response.json();
 };
 
 export const getPlantById = async (id) => {
-    const response = await fetch(`${API_URL}/plants/${id}`);
+    const response = await fetch(`${API_URL}/plants/${id}`, {
+        cache: 'no-cache'
+    });
     if (!response.ok) throw new Error('Planta no encontrada');
     return response.json();
 };

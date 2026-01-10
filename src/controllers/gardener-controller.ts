@@ -40,7 +40,9 @@ export class GardenerController {
 		// Verificar si el email ya existe ANTES de crear
 		const existingUser = GardenerModel.getByEmail(email as string); // El schema de Zod garantiza que email es string
 		if (existingUser) {
-			return res.status(400).json({ message: "El email ya está registrado" });
+			return res
+				.status(400)
+				.json({ message: 'El email ya está registrado' });
 		}
 
 		// Encriptar
@@ -52,13 +54,16 @@ export class GardenerController {
 			password: hashedPassword,
 			myPlants: [], // Asegurar que siempre se inicialice como un array vacío
 			role: (rest.role as Role) || Role.GARDENER, // Asegurar el rol, con un default si no viene
-			...rest // el resto de los datos (como username)
+			...rest, // el resto de los datos (como username)
 		});
 
 		// SEGURIDAD: Quitar la contraseña del objeto antes de responder
 		const { password: _, ...userResponse } = newUser;
 
-		res.status(201).json({ message: 'Usuario registrado con éxito', user: userResponse });
+		res.status(201).json({
+			message: 'Usuario registrado con éxito',
+			user: userResponse,
+		});
 	};
 
 	/**
@@ -94,7 +99,7 @@ export class GardenerController {
 				id: user.id,
 				username: user.username,
 				role: user.role,
-				email: user.email
+				email: user.email,
 			},
 		});
 	};
@@ -118,6 +123,34 @@ export class GardenerController {
 		const { password, ...userData } = user;
 		res.json(userData);
 	};
+
+	static updateProfile = (req: Request, res: Response) => {
+    const userId = req.user!.id;
+    const partialData = req.body;
+
+    // Buscar al usuario actual en la base de datos
+    const currentUser = GardenerModel.getById(userId);
+    if (!currentUser) {
+        return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    // Si se envió una nueva contraseña, encriptarla
+    if (partialData.password) {
+        partialData.password = bcrypt.hashSync(partialData.password, 10);
+    }
+    
+    // Crear el objeto COMPLETO fusionando los datos viejos con los nuevos
+    const fullNewData = {
+        ...currentUser,
+        ...partialData
+    };
+
+    // Llamar al modelo con el objeto completo para el "reemplazo"
+    const updatedUser = GardenerModel.updateByID(userId, fullNewData);
+        
+    const { password, ...userResponse } = updatedUser!;
+    res.json({ message: 'Perfil actualizado', user: userResponse });
+};
 
 	// ---------------------------------------------
 	//   GESTIÓN DE LA HUERTA (LÓGICA RELACIONAL)
@@ -160,9 +193,12 @@ export class GardenerController {
 
 		// Validación
 		success
-			? res.status(200).json({ message: 'Planta agregada con éxito a tu huerta' })
+			? res
+					.status(200)
+					.json({ message: 'Planta agregada con éxito a tu huerta' })
 			: res.status(400).json({
-					message: 'No se pudo agregar la planta (posible duplicado)'});
+					message: 'No se pudo agregar la planta (posible duplicado)',
+			  });
 	};
 
 	/**

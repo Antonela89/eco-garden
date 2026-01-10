@@ -164,6 +164,20 @@ export const getProfile = async () => {
     return response.json();
 };
 
+/**
+ * Editarr el perfil del usuario. Requiere token.
+ * @returns {Promise<any>}
+ */
+export const updateProfile = async (dataToUpdate) => {
+    const response = await fetch(`${API_URL}/gardener/profile`, {
+        method: 'PUT', 
+        headers: createHeaders(true),
+        body: JSON.stringify(dataToUpdate)
+    });
+    if (!response.ok) throw new Error('No se pudo editar el perfil.');
+    return response.json();
+};
+
 
 // ------------------------------------
 //  FUNCIONES DEL CATÁLOGO (PÚBLICAS)

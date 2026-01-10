@@ -71,16 +71,35 @@ export const initDashboard = async (user) => {
 				});
 			}
 		} catch (error) {
-			openModal(
-				createAlertModalContent(
-					'Error de Carga',
-					'No se pudo conectar con el servidor para cargar tu huerta. Por favor, intenta recargar la página.',
-					'error'
-				),
-				'md'
-			);
-		}
-	};
+			// Verificar si el error es de autenticación
+            if (error.name === 'AuthError') {
+                // El handleResponse ya limpió el localStorage.
+                // Mostrar el modal y redirigimos.
+                openModal(
+                    createAlertModalContent(
+                        'Sesión Expirada',
+                        'Tu sesión ha terminado. Por favor, inicia sesión de nuevo.',
+                        'error'
+                    ),
+                    'sm'
+                );
+                // Esperar un poco antes de redirigir para que el usuario vea el mensaje
+                setTimeout(() => {
+                    window.location.href = '/index.html';
+                }, 3000);
+            } else {
+                // Si es otro tipo de error (ej. de conexión), mostrar el error de carga normal
+                openModal(
+                    createAlertModalContent(
+                        'Error de Carga',
+                        'No se pudo conectar con el servidor para cargar tu huerta.  Por favor, intenta recargar la página.',
+                        'error'
+                    ),
+                    'md'
+                );
+            }
+        }
+    };
 
 	// --- MANEJO DE EVENTOS (DELEGACIÓN) ---
 	gardenContainer.addEventListener('click', async (e) => {

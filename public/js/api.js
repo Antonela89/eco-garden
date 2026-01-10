@@ -11,15 +11,54 @@ const API_URL = 'http://localhost:3000/api'; // URL del backend
  * @returns {HeadersInit}
  */
 const createHeaders = (isProtected = false) => {
-    const headers = {
-        'Content-Type': 'application/json',
-    };
-    if (isProtected) {
-        const token = localStorage.getItem('token');
-        if (!token) throw new Error('Acción no autorizada. Se requiere iniciar sesión.');
-        headers['Authorization'] = `Bearer ${token}`;
-    }
-    return headers;
+	const headers = {
+		'Content-Type': 'application/json',
+	};
+	if (isProtected) {
+		const token = localStorage.getItem('token');
+		if (!token)
+			throw new Error(
+				'Acción no autorizada. Se requiere iniciar sesión.'
+			);
+		headers['Authorization'] = `Bearer ${token}`;
+	}
+	return headers;
+};
+
+/**
+ * Clase de error personalizada para problemas de autenticación.
+ */
+class AuthError extends Error {
+	constructor(message) {
+		super(message);
+		this.name = 'AuthError';
+	}
+}
+
+/**
+ * Función centralizada para manejar respuestas de la API.
+ * Si detecta un 401, limpia la sesión y redirige al login.
+ * @param {Response} response - La respuesta del fetch.
+ */
+const handleResponse = async (response) => {
+	// Si el token es inválido o expiró
+	if (response.status === 401) {
+		// Limpiar credenciales
+		localStorage.removeItem('token');
+		localStorage.removeItem('user');
+
+		
+		throw new AuthError('Sesión expirada');
+	}
+
+	if (!response.ok) {
+		const errorData = await response.json();
+		throw new Error(
+			errorData.message || 'Ocurrió un error en la petición.'
+		);
+	}
+
+	return response.json();
 };
 
 // -----------------------------------
@@ -34,48 +73,50 @@ const createHeaders = (isProtected = false) => {
  * @returns {Promise<any>}
  */
 export const registerUser = async (username, email, password) => {
-    const response = await fetch(`${API_URL}/auth/register`, {
-        method: 'POST',
-        headers:  createHeaders(),
-        body: JSON.stringify({ 
-            username, 
-            email, 
-            password,
-            role: 'gardener' 
-        })
-    });
+	const response = await fetch(`${API_URL}/auth/register`, {
+		method: 'POST',
+		headers: createHeaders(),
+		body: JSON.stringify({
+			username,
+			email,
+			password,
+			role: 'gardener',
+		}),
+	});
 
-    // Zod nos devolverá un 400 con los errores
-    if (response.status === 400) {
-        const errorData = await response.json();
-        throw new Error(errorData.errors ? errorData.errors[0].mensaje : errorData.message);
-    }
-    
-    if (!response.ok) {
-        throw new Error('No se pudo completar el registro.');
-    }
+	// Zod nos devolverá un 400 con los errores
+	if (response.status === 400) {
+		const errorData = await response.json();
+		throw new Error(
+			errorData.errors ? errorData.errors[0].mensaje : errorData.message
+		);
+	}
 
-    return response.json();
+	if (!response.ok) {
+		throw new Error('No se pudo completar el registro.');
+	}
+
+	return handleResponse(response);
 };
 
 /**
  * Función para realizar el login de un usuario.
- * @param {string} email 
- * @param {string} password 
+ * @param {string} email
+ * @param {string} password
  * @returns {Promise<any>}
  */
 export const loginUser = async (email, password) => {
-    const response = await fetch(`${API_URL}/auth/login`, {
-        method: 'POST',
-        headers: createHeaders(),
-        body: JSON.stringify({ email, password })
-    });
+	const response = await fetch(`${API_URL}/auth/login`, {
+		method: 'POST',
+		headers: createHeaders(),
+		body: JSON.stringify({ email, password }),
+	});
 
-    if (!response.ok) {
-        throw new Error('Error en las credenciales');
-    }
+	if (!response.ok) {
+		throw new Error('Error en las credenciales');
+	}
 
-    return response.json();
+	return handleResponse(response);
 };
 
 // ------------------------------------
@@ -88,17 +129,17 @@ export const loginUser = async (email, password) => {
  * @returns {Promise<any>}
  */
 export const addCropBatch = async (batchData) => {
-    const response = await fetch(`${API_URL}/gardener/garden/batch`, { 
-        method: 'POST',
-        headers: createHeaders(true),
-        body: JSON.stringify(batchData)
-    });
+	const response = await fetch(`${API_URL}/gardener/garden/batch`, {
+		method: 'POST',
+		headers: createHeaders(true),
+		body: JSON.stringify(batchData),
+	});
 
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'No se pudo añadir el lote.');
-    }
-    return response.json();
+	if (!response.ok) {
+		const errorData = await response.json();
+		throw new Error(errorData.message || 'No se pudo añadir el lote.');
+	}
+	return handleResponse(response);
 };
 
 /**
@@ -106,12 +147,12 @@ export const addCropBatch = async (batchData) => {
  * @returns {Promise<any>}
  */
 export const getMyGarden = async () => {
-    const response = await fetch(`${API_URL}/gardener/garden`, {
-        headers: createHeaders(true), // Ruta protegida
-        cache: 'no-cache'
-    });
-    if (!response.ok) throw new Error('No se pudo cargar la huerta.');
-    return response.json();
+	const response = await fetch(`${API_URL}/gardener/garden`, {
+		headers: createHeaders(true), // Ruta protegida
+		cache: 'no-cache',
+	});
+	if (!response.ok) throw new Error('No se pudo cargar la huerta.');
+	return handleResponse(response);
 };
 
 /**
@@ -122,18 +163,21 @@ export const getMyGarden = async () => {
  * @returns {Promise<any>}
  */
 export const updateInstanceStatus = async (batchId, instanceId, status) => {
-    const response = await fetch(`${API_URL}/gardener/garden/instance`, {
-        method: 'PATCH',
-        headers: createHeaders(true), // Ruta protegida
-        body: JSON.stringify({ batchId, instanceId, status })
-    });
+	const response = await fetch(`${API_URL}/gardener/garden/instance`, {
+		method: 'PATCH',
+		headers: createHeaders(true), // Ruta protegida
+		body: JSON.stringify({ batchId, instanceId, status }),
+	});
 
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'No se pudo actualizar el estado de la instancia.');
-    }
+	if (!response.ok) {
+		const errorData = await response.json();
+		throw new Error(
+			errorData.message ||
+				'No se pudo actualizar el estado de la instancia.'
+		);
+	}
 
-    return response.json();
+	return handleResponse(response);
 };
 
 /**
@@ -141,17 +185,20 @@ export const updateInstanceStatus = async (batchId, instanceId, status) => {
  * @param {string} batchId - El ID del cultivo a eliminar.
  * @returns {Promise<any>}
  */
-export const deleteBatchFromGarden  = async (batchId) => {
-    const response = await fetch(`${API_URL}/gardener/garden/batch/${batchId}`, {
-        method: 'DELETE',
-        headers: createHeaders(true) // Ruta protegida
-    });
+export const deleteBatchFromGarden = async (batchId) => {
+	const response = await fetch(
+		`${API_URL}/gardener/garden/batch/${batchId}`,
+		{
+			method: 'DELETE',
+			headers: createHeaders(true), // Ruta protegida
+		}
+	);
 
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'No se pudo eliminar la planta.');
-    }
-    return response.json();
+	if (!response.ok) {
+		const errorData = await response.json();
+		throw new Error(errorData.message || 'No se pudo eliminar la planta.');
+	}
+	return handleResponse(response);
 };
 
 /**
@@ -159,12 +206,12 @@ export const deleteBatchFromGarden  = async (batchId) => {
  * @returns {Promise<any>}
  */
 export const getProfile = async () => {
-    const response = await fetch(`${API_URL}/gardener/profile`, {
-        headers: createHeaders(true), // Ruta protegida
-        cache: 'no-cache'
-    });
-    if (!response.ok) throw new Error('No se pudo cargar el perfil.');
-    return response.json();
+	const response = await fetch(`${API_URL}/gardener/profile`, {
+		headers: createHeaders(true), // Ruta protegida
+		cache: 'no-cache',
+	});
+	if (!response.ok) throw new Error('No se pudo cargar el perfil.');
+	return handleResponse(response);
 };
 
 /**
@@ -172,15 +219,14 @@ export const getProfile = async () => {
  * @returns {Promise<any>}
  */
 export const updateProfile = async (dataToUpdate) => {
-    const response = await fetch(`${API_URL}/gardener/profile`, {
-        method: 'PUT', 
-        headers: createHeaders(true),
-        body: JSON.stringify(dataToUpdate)
-    });
-    if (!response.ok) throw new Error('No se pudo editar el perfil.');
-    return response.json();
+	const response = await fetch(`${API_URL}/gardener/profile`, {
+		method: 'PUT',
+		headers: createHeaders(true),
+		body: JSON.stringify(dataToUpdate),
+	});
+	if (!response.ok) throw new Error('No se pudo editar el perfil.');
+	return handleResponse(response);
 };
-
 
 // ------------------------------------
 //  FUNCIONES DEL CATÁLOGO (PÚBLICAS)
@@ -191,18 +237,18 @@ export const updateProfile = async (dataToUpdate) => {
  * @returns {Promise<any>}
  */
 export const getPlants = async () => {
-    const response = await fetch(`${API_URL}/plants`, {
-        cache: 'no-cache'
-    });
-    return response.json();
+	const response = await fetch(`${API_URL}/plants`, {
+		cache: 'no-cache',
+	});
+	return handleResponse(response);
 };
 
 export const getPlantById = async (id) => {
-    const response = await fetch(`${API_URL}/plants/${id}`, {
-        cache: 'no-cache'
-    });
-    if (!response.ok) throw new Error('Planta no encontrada');
-    return response.json();
+	const response = await fetch(`${API_URL}/plants/${id}`, {
+		cache: 'no-cache',
+	});
+	if (!response.ok) throw new Error('Planta no encontrada');
+	return handleResponse(response);
 };
 
 // ------------------------------------
@@ -215,17 +261,17 @@ export const getPlantById = async (id) => {
  * @returns {Promise<any>}
  */
 export const createPlant = async (plantData) => {
-    const response = await fetch(`${API_URL}/plants`, {
-        method: 'POST',
-        headers: createHeaders(true),
-        body: JSON.stringify(plantData)
-    });
+	const response = await fetch(`${API_URL}/plants`, {
+		method: 'POST',
+		headers: createHeaders(true),
+		body: JSON.stringify(plantData),
+	});
 
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Error al crear la planta');
-    }
-    return response.json();
+	if (!response.ok) {
+		const errorData = await response.json();
+		throw new Error(errorData.message || 'Error al crear la planta');
+	}
+	return handleResponse(response);
 };
 
 /**
@@ -235,17 +281,17 @@ export const createPlant = async (plantData) => {
  * @returns {Promise<any>}
  */
 export const updatePlant = async (id, plantData) => {
-    const response = await fetch(`${API_URL}/plants/${id}`, {
-        method: 'PATCH',
-        headers: createHeaders(true),
-        body: JSON.stringify(plantData)
-    });
+	const response = await fetch(`${API_URL}/plants/${id}`, {
+		method: 'PATCH',
+		headers: createHeaders(true),
+		body: JSON.stringify(plantData),
+	});
 
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Error al actualizar la planta');
-    }
-    return response.json();
+	if (!response.ok) {
+		const errorData = await response.json();
+		throw new Error(errorData.message || 'Error al actualizar la planta');
+	}
+	return handleResponse(response);
 };
 
 /**
@@ -254,14 +300,14 @@ export const updatePlant = async (id, plantData) => {
  * @returns {Promise<any>}
  */
 export const deletePlant = async (id) => {
-    const response = await fetch(`${API_URL}/plants/${id}`, {
-        method: 'DELETE',
-        headers: createHeaders(true)
-    });
+	const response = await fetch(`${API_URL}/plants/${id}`, {
+		method: 'DELETE',
+		headers: createHeaders(true),
+	});
 
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Error al eliminar la planta');
-    }
-    return response.json();
+	if (!response.ok) {
+		const errorData = await response.json();
+		throw new Error(errorData.message || 'Error al eliminar la planta');
+	}
+	return handleResponse(response);
 };

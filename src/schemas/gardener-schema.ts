@@ -47,7 +47,7 @@ export const loginSchema = z.object({
 // El schema base con todas las reglas
 const gardenerBaseSchema = z.object({
     username: z.string().min(3).max(20).optional(),
-    email: z.string().email().optional(),
+    email: z.email().optional(),
     password: z.string().min(8).regex(/[A-Z]/).regex(/[0-9]/).optional(),
 });
 

@@ -184,81 +184,62 @@ export const renderCatalog = (plants) => {
 };
 
 /**
- * Crear el HTML para una tarjeta de cultivo dentro de "Mi Huerta".
- * @param {object} myPlant - El objeto de la planta del usuario.
- * @returns {string} - El string HTML de la tarjeta.
+ * Generar el HTML para la tarjeta de un Lote de Cultivo en "Mi Huerta".
+ * @param {object} batch - El objeto del lote de cultivo (CropBatch).
+ * @returns {string} El string HTML de la tarjeta del lote.
  */
-export const createMyGardenCard = (myPlant) => {
-	const statusInfo = {
-		creciendo: {
-			text: 'Creciendo',
-			color: 'bg-blue-100 text-blue-800',
-			icon: 'fa-leaf',
-		},
-		listo: {
-			text: 'Listo para Cosechar',
-			color: 'bg-green-100 text-green-800',
-			icon: 'fa-check-circle',
-		},
-		cosechado: {
-			text: 'Cosechado',
-			color: 'bg-yellow-100 text-yellow-800',
-			icon: 'fa-seedling',
-		},
-	};
-	const currentStatus = statusInfo[myPlant.status] || statusInfo.creciendo;
+export const createCropBatchCard = (batch) => {
+	// Obtenemos la información base de la planta desde el catálogo (necesitaremos pasarla)
+	const plantInfo = batch.plantInfo;
 
-	const plantedDate = new Date(myPlant.plantedAt);
-	const harvestDate = new Date(plantedDate);
-	harvestDate.setDate(plantedDate.getDate() + myPlant.diasRestantes);
-	const today = new Date();
-	const totalDays = (harvestDate - plantedDate) / (1000 * 60 * 60 * 24);
-	const daysPassed = (today - plantedDate) / (1000 * 60 * 60 * 24);
-	const progressPercentage = Math.min(100, (daysPassed / totalDays) * 100);
+	// Calcular estadísticas del lote
+	const totalInstances = batch.instances.length;
+	const growingCount = batch.instances.filter(
+		(i) => i.status === 'creciendo' || i.status === 'germinando'
+	).length;
+	const readyCount = batch.instances.filter(
+		(i) => i.status === 'lista'
+	).length;
+	const harvestedCount = batch.instances.filter(
+		(i) => i.status === 'cosechada'
+	).length;
+
+	const plantedDate = new Date(batch.plantedAt).toLocaleDateString();
 
 	return `
-        <article data-plant-id="${
-			myPlant.plantId
+        <article data-batch-id="${
+			batch.batchId
 		}" class="bg-white dark:bg-dark-surface rounded-lg shadow-lg overflow-hidden flex flex-col">
-            <img src="${myPlant.imagen}" alt="${
-		myPlant.nombre
+            <img src="${plantInfo.imagen}" alt="${
+		plantInfo.nombre
 	}" class="w-full h-40 object-cover">
+            
             <div class="p-4 flex flex-col flex-grow">
-                <h3 class="text-lg font-bold text-gray-800 dark:text-white">${
-					myPlant.nombre
+                <h3 class="text-xl font-bold text-gray-800 dark:text-white">${
+					plantInfo.nombre
 				}</h3>
+                <p class="text-sm text-gray-500 mb-2">Sembrado el: ${plantedDate}</p>
+                ${
+					batch.notes
+						? `<p class="text-xs italic text-gray-500 mb-3">Nota: ${batch.notes}</p>`
+						: ''
+				}
 
-                <!-- DROPDOWN DE ESTADO -->
-                <div class="relative inline-block text-left my-2">
-                    <button data-action="toggle-status-menu" class="font-semibold px-2 py-1 rounded-full text-xs self-start ${
-						currentStatus.color
-					}">
-                        <i class="fas ${currentStatus.icon} mr-1"></i>
-                        ${currentStatus.text}
-                        <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                <!-- Sección de Estadísticas -->
+                <div class="text-sm space-y-1 mb-4">
+                    <div class="flex justify-between"><span>Total Plantado:</span> <span class="font-bold">${totalInstances}</span></div>
+                    <div class="flex justify-between"><span>Creciendo:</span> <span class="font-bold text-blue-500">🌱 ${growingCount}</span></div>
+                    <div class="flex justify-between"><span>Listas:</span> <span class="font-bold text-green-500">✅ ${readyCount}</span></div>
+                    <div class="flex justify-between"><span>Cosechadas:</span> <span class="font-bold text-yellow-500">🏆 ${harvestedCount}</span></div>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="mt-auto pt-4 flex justify-between items-center border-t dark:border-gray-700">
+                    <button data-action="manage-batch" class="bg-blue-500 text-white px-3 py-1 text-sm font-bold rounded hover:bg-blue-600">
+                        Gestionar Lote
                     </button>
-                    <!-- Menú oculto -->
-                    <div class="status-menu hidden absolute z-10 mt-1 w-48 bg-white dark:bg-dark-surface rounded-md shadow-lg">
-                        <a href="#" data-status="creciendo" class="block px-4 py-2 text-sm">Creciendo</a>
-                        <a href="#" data-status="listo" class="block px-4 py-2 text-sm">Listo para Cosechar</a>
-                        <a href="#" data-status="cosechado" class="block px-4 py-2 text-sm">Cosechado</a>
-                    </div>
-                </div>
-
-                <div class="text-sm text-gray-600 dark:text-gray-400">
-                    <p>Siembra: ${plantedDate.toLocaleDateString()}</p>
-                    <p class="font-bold">Cosecha aprox: ${harvestDate.toLocaleDateString()}</p>
-                </div>
-        
-                <!-- BARRA DE PROGRESO -->
-                <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2 dark:bg-gray-700">
-                    <div class="bg-eco-green-dark h-2.5 rounded-full" style="width: ${progressPercentage}%"></div>
-                </div>
-
-                
-                <div class="mt-auto pt-4 flex justify-end gap-2">
-                    <button data-action="delete" class="text-gray-500 hover:text-red-500 transition" aria-label="Eliminar planta">
-                        <i class="fas fa-trash"></i>
+                    <button data-action="delete-batch" class="text-gray-500 hover:text-red-500 transition">
+                        <i class="fas fa-trash pointer-events-none"></i>
                     </button>
                 </div>
             </div>
@@ -506,7 +487,14 @@ export const createAdminPlantForm = (plant = null) => {
                 <input type="text" id="asociacion" name="asociacion" value="${
 					plant?.asociacion.join(', ') || ''
 				}" 
-                	class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
+                class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
+            </div>
+            <div class="mt-4">
+                <label for="rotacion" class="block text-sm font-medium">Rotación Recomendada (separada por coma)</label>
+                <input type="text" id="rotacion" name="rotacion" value="${
+					plant?.rotacion.join(', ') || ''
+				}" 
+                    class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
             </div>
 
             <footer class="mt-8 pt-4 border-t dark:border-gray-700 flex justify-end gap-4">
@@ -591,7 +579,7 @@ export const createConfirmModalContent = (
                 <button class="js-close-modal px-6 py-2 rounded-md bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 font-semibold">
                     Cancelar
                 </button>
-                <button id="confirm-action-button" data-plant-id="${entityId}" class="bg-red-500 text-white font-bold px-6 py-2 rounded-md hover:bg-red-600">
+                <button id="confirm-action-button" data-entity-id="${entityId}" class="bg-red-500 text-white font-bold px-6 py-2 rounded-md hover:bg-red-600">
                     ${confirmText}
                 </button>
             </div>
@@ -667,6 +655,36 @@ export const createProfileFormModalContent = (user) => {
             <footer class="mt-8 flex justify-end gap-4">
                 <button type="button" class="js-close-modal px-6 py-2 rounded-md">Cancelar</button>
                 <button type="submit" class="bg-eco-green-dark text-white font-bold px-6 py-2 rounded-md">Guardar Cambios</button>
+            </footer>
+        </form>
+    `;
+};
+
+/**
+ * Crear el HTML para el formulario de "Añadir Lote a la Huerta".
+ * @param {object} plant - La planta que se va a añadir.
+ * @returns {string}
+ */
+export const createAddBatchFormContent = (plant) => {
+	return `
+        <header class="p-6 flex justify-between items-center border-b dark:border-gray-700">
+            <h2 class="text-2xl font-bold">Añadir "${plant.nombre}"</h2>
+            <button class="js-close-modal text-3xl">&times;</button>
+        </header>
+        <form id="add-batch-form" data-plant-id="${plant.id}" class="p-8 flex flex-col gap-4">
+            <div>
+                <label for="quantity" class="block text-sm font-medium">Cantidad de Semillas/Plantines</label>
+                <input type="number" id="quantity" name="quantity" value="1" min="1" required 
+                    class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
+            </div>
+            <div>
+                <label for="notes" class="block text-sm font-medium">Notas (opcional)</label>
+                <textarea id="notes" name="notes" placeholder="Ej: maceta de la esquina, lado sur..." 
+                    class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700"></textarea>
+            </div>
+            <footer class="mt-6 flex justify-end gap-4">
+                <button type="button" class="js-close-modal px-6 py-2 rounded-md">Cancelar</button>
+                <button type="submit" class="bg-eco-green-dark text-white font-bold px-6 py-2 rounded-md">Confirmar Siembra</button>
             </footer>
         </form>
     `;

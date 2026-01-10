@@ -91,3 +91,13 @@ export const initThemeSwitcher = () => {
 	applyTheme(savedTheme); // Aplica el tema guardado
 	reInitThemeButton(); // Asigna los listeners a los botones iniciales
 };
+
+/**
+ * Generar el HTML para el botón de cambio de tema.
+ * @returns {string} El string HTML del botón.
+ */
+export const getThemeButtonHTML = () => {
+	return `
+        <button id="theme-toggle" class="text-xl text-gray-600 hover:text-eco-green-dark transition dark:text-gray-300 dark:hover:text-green-300"><i class="fas fa-moon"></i></button>
+    `;
+};

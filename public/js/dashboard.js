@@ -4,13 +4,13 @@ import {
 	deleteBatchFromGarden,
 	updateInstanceStatus,
 } from './api.js';
+import {createCropBatchCard} from './ui/components.js';
 import {
-	createCropBatchCard,
 	createConfirmModalContent,
 	createAlertModalContent,
 	createManageBatchModalContent,
-} from './ui.js';
-import { openModal, closeModal } from './modal.js';
+} from './ui/modal.js';
+import { openModal, closeModal } from './handle-modal.js';
 import { getLoaderHTML } from './loader.js';
 
 /**

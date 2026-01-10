@@ -1,7 +1,7 @@
 /**
  * @file Módulo para la gestión centralizada de modales en la aplicación.
- * @description Proporciona funciones para abrir, cerrar e inyectar contenido HTML
- *              dinámico en un único contenedor de modal genérico.
+ * @description Proporciona funciones para abrir, cerrar e inyectar contenido HTML 
+ * dinámico en un único contenedor de modal genérico.
  */
 
 // Referencias a los elementos del DOM

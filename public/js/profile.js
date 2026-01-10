@@ -2,11 +2,11 @@
  * @file Módulo para la gestión de la página de perfil del usuario.
  */
 
-import { openModal, closeModal } from './modal.js';
+import { openModal, closeModal } from './handle-modal.js';
 import {
 	createAlertModalContent,
 	createProfileFormModalContent,
-} from './ui.js';
+} from './ui/modal.js';
 import { updateProfile } from './api.js';
 
 /**

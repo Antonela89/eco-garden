@@ -14,18 +14,18 @@ import {
 	updateNavOnLogout,
 } from './auth.js';
 import { getPlants, getPlantById, addCropBatch } from './api.js';
+import { renderCatalog } from './ui/components.js';
 import {
-	renderCatalog,
 	createPlantDetailsContent,
 	createLoginModalContent,
 	createAlertModalContent,
 	createAddBatchFormContent,
-} from './ui.js';
+} from './ui/modal.js';
 import { initDashboard } from './dashboard.js';
 import { initProfile } from './profile.js';
 import { initAdmin } from './admin.js';
 import { initPasswordStrengthMeter } from './password-strength.js';
-import { initModal, openModal, closeModal } from './modal.js';
+import { initModal, openModal, closeModal } from './handle-modal.js';
 import { initThemeSwitcher } from './theme.js';
 import { getLoaderHTML } from './loader.js';
 
@@ -183,30 +183,43 @@ const initializeIndexPage = (user) => {
 				openModal(createAddBatchFormContent(plant), 'md');
 
 				// Añadimos el listener para el submit de este nuevo formulario
-            const addBatchForm = document.getElementById('add-batch-form');
-            if (addBatchForm) {
-                addBatchForm.addEventListener('submit', async (formEvent) => {
-                    formEvent.preventDefault();
-                    const submitButton = addBatchForm.querySelector('button[type="submit"]');
-                    submitButton.disabled = true;
-                    submitButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
+				const addBatchForm = document.getElementById('add-batch-form');
+				if (addBatchForm) {
+					addBatchForm.addEventListener(
+						'submit',
+						async (formEvent) => {
+							formEvent.preventDefault();
+							const submitButton = addBatchForm.querySelector(
+								'button[type="submit"]'
+							);
+							submitButton.disabled = true;
+							submitButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
 
-                    try {
-                        const data = {
-                            plantId: addBatchForm.dataset.plantId,
-                            quantity: parseInt(addBatchForm.quantity.value),
-                            notes: addBatchForm.notes.value
-                        };
-                        
-                        await addCropBatch(data);
-                        closeModal();
-                        openModal(createAlertModalContent('¡Éxito!', 'Tu nuevo lote ha sido añadido a la huerta.'), 'sm');
-                    } catch (error) {
-                        alert(error.message);
-                    }
-                });
-            }
-        }
+							try {
+								const data = {
+									plantId: addBatchForm.dataset.plantId,
+									quantity: parseInt(
+										addBatchForm.quantity.value
+									),
+									notes: addBatchForm.notes.value,
+								};
+
+								await addCropBatch(data);
+								closeModal();
+								openModal(
+									createAlertModalContent(
+										'¡Éxito!',
+										'Tu nuevo lote ha sido añadido a la huerta.'
+									),
+									'sm'
+								);
+							} catch (error) {
+								alert(error.message);
+							}
+						}
+					);
+				}
+			}
 
 			// Si se hizo clic en el botón "Ingresar" del prompt
 			if (loginPromptBtn) {

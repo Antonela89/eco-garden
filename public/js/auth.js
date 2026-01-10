@@ -1,7 +1,7 @@
 import { getThemeButtonHTML } from './theme.js';
 import { loginUser, registerUser } from './api.js';
-import { openModal, closeModal } from './modal.js';
-import { createAlertModalContent, createLoginModalContent } from './ui.js';
+import { openModal, closeModal } from './handle-modal.js';
+import { createAlertModalContent, createLoginModalContent } from './ui/modal.js';
 
 // -----------------------------------
 // MANEJADORES DE FORMULARIOS

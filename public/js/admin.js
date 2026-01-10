@@ -41,7 +41,6 @@ const processPlantForm = (form) => {
  */
 export const initAdmin = async () => {
 	// Referencias a elementos del DOM
-	const logoutButton = document.getElementById('logout-button');
 	const addPlantButton = document.getElementById('add-plant-button');
 	const tableBody = document.getElementById('admin-plant-table');
 
@@ -52,11 +51,11 @@ export const initAdmin = async () => {
 			tableBody.innerHTML += `
                 <tr class="border-b dark:border-gray-700" data-plant-id="${plant.id}">
                     <td class="px-6 py-4 font-bold">${plant.nombre}</td>
-                    <td class="px-6 py-4">${plant.familia}</td>
-                    <td class="px-6 py-4">${plant.dificultad}</td>
+                    <td class="px-6 py-4 hidden sm:table-cell">${plant.familia}</td>
+                    <td class="px-6 py-4 hidden md:table-cell">${plant.dificultad}</td>
                     <td class="px-6 py-4 text-right">
-                        <button data-action="edit" class="text-blue-500 hover:underline mr-4">Editar</button>
-                        <button data-action="delete" class="text-red-500 hover:underline">Eliminar</button>
+                        <button data-action="edit" class="bg-blue-500 text-white w-10 h-10 rounded-full"><i class="fa-solid fa-pen-to-square pointer-events-none"></i></button>
+                        <button data-action="delete" class="bg-red-500 text-white w-10 h-10 rounded-full"><i class="fa-solid fa-delete-left pointer-events-none"></i></button>
                     </td>
                 </tr>
             `;

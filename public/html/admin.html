@@ -58,24 +58,24 @@
     </header>
 
     <!-- ------------------- CONTENIDO PRINCIPAL ------------------- -->
-    <main class="max-w-7xl mx-auto py-8 px-4">
+    <main class="min-w-sx max-w-4xl mx-auto px-4 py-8 flex flex-col justify-center items-center">
         <!-- CONTENIDO DEL PANEL ADMIN -->
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-extrabold">Gestionar Catálogo</h1>
+        <div class="flex justify-between items-center mb-6 w-full">
+            <h1 class="text-lg md:text-3xl font-extrabold">Gestionar Catálogo</h1>
             <button id="add-plant-button"
                 class="bg-blue-500 text-white px-6 py-2 rounded-md font-bold hover:bg-blue-600">
-                <i class="fas fa-plus mr-2"></i>Añadir Nueva Especie
+                <i class="fas fa-plus mr-2"></i>Añadir
             </button>
         </div>
 
         <!-- Tabla de plantas -->
-        <div class="bg-white dark:bg-dark-surface shadow-lg rounded-lg overflow-x-auto">
+        <div class="bg-white dark:bg-dark-surface shadow-lg w-full">
             <table class="w-full text-sm text-left">
-                <thead class="bg-gray-50 dark:bg-gray-700 text-xs uppercase">
+                <thead class="bg-gray-50 dark:bg-gray-700 text-xs uppercase border-b border-gray-400 dark:border-gray-600 my-1">
                     <tr>
                         <th class="px-6 py-3">Nombre</th>
-                        <th class="px-6 py-3">Familia</th>
-                        <th class="px-6 py-3">Dificultad</th>
+                        <th class="px-6 py-3 hidden sm:table-cell">Familia</th>
+                        <th class="px-6 py-3 hidden md:table-cell">Dificultad</th>
                         <th class="px-6 py-3 text-right">Acciones</th>
                     </tr>
                 </thead>

@@ -2,7 +2,7 @@
 import path from 'path';
 import crypto from 'crypto';
 // Importación de Tipos
-import { Gardener, UserPlant } from '../types/gardener';
+import { Gardener, CropBatch, PlantInstance } from '../types/gardener';
 // Importación de funciones auxiliares
 import { readJSON, writeJSON } from '../utils/fileHandle';
 
@@ -92,30 +92,33 @@ export class GardenerModel {
 	};
 
 	/**
- * Reemplazar los datos de un jardinero con un nuevo objeto completo.
- * Mantiene campos inmutables como 'id' y 'role'.
- * @param {string} id - ID del usuario a editar.
- * @param {Gardener} fullNewData - El objeto completo con los nuevos datos.
- * @returns {Gardener | null}
- */
-static updateByID = (id: string, fullNewData: Gardener): Gardener | null => {
-    const gardeners = this.getAll();
-    const index = gardeners.findIndex((g) => g.id === id);
-    if (index === -1) return null;
+	 * Reemplazar los datos de un jardinero con un nuevo objeto completo.
+	 * Mantiene campos inmutables como 'id' y 'role'.
+	 * @param {string} id - ID del usuario a editar.
+	 * @param {Gardener} fullNewData - El objeto completo con los nuevos datos.
+	 * @returns {Gardener | null}
+	 */
+	static updateByID = (
+		id: string,
+		fullNewData: Gardener
+	): Gardener | null => {
+		const gardeners = this.getAll();
+		const index = gardeners.findIndex((g) => g.id === id);
+		if (index === -1) return null;
 
-    const originalUser = gardeners[index]!;
+		const originalUser = gardeners[index]!;
 
-    // Reemplazar el objeto, pero preservar campos que no deben cambiar
-    gardeners[index] = {
-        ...fullNewData,
-        id: originalUser.id,           // El ID nunca cambia
-        role: originalUser.role,       // El rol no se edita aquí
-        myPlants: originalUser.myPlants, // La huerta se gestiona por separado
-    };
+		// Reemplazar el objeto, pero preservar campos que no deben cambiar
+		gardeners[index] = {
+			...fullNewData,
+			id: originalUser.id, // El ID nunca cambia
+			role: originalUser.role, // El rol no se edita aquí
+			myPlants: originalUser.myPlants, // La huerta se gestiona por separado
+		};
 
-    this.save(gardeners);
-    return gardeners[index]!;
-};
+		this.save(gardeners);
+		return gardeners[index]!;
+	};
 
 	/**
 	 * Elimina un jardinero de la base de datos.
@@ -163,130 +166,105 @@ static updateByID = (id: string, fullNewData: Gardener): Gardener | null => {
 	// ------------------------
 
 	/**
-	 * Método auxiliar para encontrar una planta específica dentro de la huerta de un jardinero.
-	 * @param {string} gardenerId
-	 * @param {string} plantId
-	 * @returns {UserPlant | undefined}
+	 * Añadir un nuevo lote de cultivo a la huerta de un jardinero.
+	 * @param {string} gardenerId - ID del jardinero.
+	 * @param {object} batchData - Datos del lote (plantId, quantity, notes).
+	 * @returns {CropBatch | null} El lote creado o null si falla.
 	 */
-	static getPlantInGarden = (
+	static addCropBatch = (
 		gardenerId: string,
-		plantId: string
-	): UserPlant | undefined => {
-		// Obtener jaridnero por id
-		const gardener = this.getById(gardenerId);
-
-		// Si el jardinero no existe o no tiene huerta, devolver undefined
-		if (!gardener || !gardener.myPlants) return undefined;
-
-		// Devolver la planta segun id ingresado
-		return gardener.myPlants.find((p) => p.plantId === plantId);
-	};
-
-	/**
-	 * Agrega una nueva planta a la colección personal de un jardinero.
-	 * @param {string} gardenerId - ID del jardinero dueño de la huerta.
-	 * @param {string} plantId - ID de la planta (referencia al catálogo).
-	 * @returns {boolean}
-	 */
-	static addPlantToGarden = (
-		gardenerId: string,
-		plantId: string
-	): boolean => {
-		// Usar función auxiliar para evitar duplicados
-		if (this.getPlantInGarden(gardenerId, plantId)) return false;
-
-		// Obtener todos los jardineros y el indice
+		batchData: { plantId: string; quantity: number; notes?: string }
+	): CropBatch | null => {
 		const { gardeners, index } = this.getGardenerContext(gardenerId);
+		if (index === -1) return null;
 
-		// Validación si no se encuentra
-		if (index === -1) return false;
+		// Crear las instancias individuales
+		const instances: PlantInstance[] = [];
+		for (let i = 0; i < batchData.quantity; i++) {
+			instances.push({
+				instanceId: crypto.randomUUID(),
+				status: 'germinando',
+			});
+		}
 
-		// Validación para agregar el array de plantas
-		// ! -> al final: Operador de aserción de no nulidad
+		// Crear el nuevo lote
+		const newBatch: CropBatch = {
+			batchId: crypto.randomUUID(),
+			plantId: batchData.plantId,
+			plantedAt: new Date().toISOString(),
+			instances: instances,
+		};
+
+		// Validación: Añadir 'notes' solo si existe y tiene contenido
+		if (batchData.notes) {
+			newBatch.notes = batchData.notes;
+		}
+
+		// Añadir el lote a la huerta del usuario
 		if (!gardeners[index]!.myPlants) {
 			gardeners[index]!.myPlants = [];
 		}
+		gardeners[index]!.myPlants.push(newBatch);
 
-		// Crear entrada de planta
-		const newEntry: UserPlant = {
-			plantId,
-			plantedAt: new Date().toISOString(),
-			status: 'creciendo',
-		};
-
-		// Agregar la entrada al array de plantas
-		gardeners[index]!.myPlants.push(newEntry);
-		// Guardar los cambios
 		this.save(gardeners);
-		// Devolver verdadero
+		return newBatch;
+	};
+
+	/**
+	 * Actualizar el estado de una instancia de planta específica dentro de un lote.
+	 * @param {string} gardenerId
+	 * @param {string} batchId
+	 * @param {string} instanceId
+	 * @param {PlantInstance['status']} newStatus
+	 * @returns {boolean}
+	 */
+	static updateInstanceStatus = (
+		gardenerId: string,
+		batchId: string,
+		instanceId: string,
+		newStatus: PlantInstance['status']
+	): boolean => {
+		const { gardeners, index } = this.getGardenerContext(gardenerId);
+		if (index === -1) return false;
+
+		// Encontrar el lote correcto
+		const batch = gardeners[index]!.myPlants.find(
+			(b) => b.batchId === batchId
+		);
+		if (!batch) return false;
+
+		// Encontrar la instancia correcta dentro del lote
+		const instance = batch.instances.find(
+			(i) => i.instanceId === instanceId
+		);
+		if (!instance) return false;
+
+		// Actualizar el estado
+		instance.status = newStatus;
+		this.save(gardeners);
 		return true;
 	};
 
 	/**
-	 * Cambia el estado de un cultivo (ej: de 'creciendo' a 'listo').
+	 * Eliminar un lote de cultivo completo de la huerta.
 	 * @param {string} gardenerId
-	 * @param {string} plantId
-	 * @param {string} newStatus
+	 * @param {string} batchId
 	 * @returns {boolean}
 	 */
-	static updateGardenStatus = (
-		gardenerId: string,
-		plantId: string,
-		newStatus: 'listo' | 'cosechado'
-	): boolean => {
-		// Validación -> Usar la función auxiliar para ver si la planta existe
-		if (!this.getPlantInGarden(gardenerId, plantId)) return false;
-
-		// Obtener todos los jardineros y el indice
+	static removeCropBatch = (gardenerId: string, batchId: string): boolean => {
 		const { gardeners, index } = this.getGardenerContext(gardenerId);
-		// Validación si no se encuentra
 		if (index === -1) return false;
 
-		// Buscar la planta dentro del array del jardinero
-		const plantReference = gardeners[index]!.myPlants.find(
-			(p) => p.plantId === plantId
-		);
+		const initialLength = gardeners[index]!.myPlants.length;
 
-		// Si se encuentra
-		if (plantReference) {
-			// Editar el status
-			plantReference.status = newStatus;
-			// Guardar los cambios
-			this.save(gardeners);
-			return true;
-		}
-
-		// Si no se encuentra
-		return false;
-	};
-
-	/**
-	 * Remueve una planta de la huerta del jardinero.
-	 * @param {string} gardenerId
-	 * @param {string} plantId
-	 * @returns {boolean}
-	 */
-	static removePlantFromGarden = (
-		gardenerId: string,
-		plantId: string
-	): boolean => {
-		// Validación: Si no existe, cortar proceso
-		if (!this.getPlantInGarden(gardenerId, plantId)) return false;
-
-		// Obtener todos los jardineros y el indice
-		const { gardeners, index } = this.getGardenerContext(gardenerId);
-
-		// Validación si no se encuentra
-		if (index === -1) return false;
-
-		// Filtrar la planta
+		// Filtrar para quitar el lote por su batchId
 		gardeners[index]!.myPlants = gardeners[index]!.myPlants.filter(
-			(p) => p.plantId !== plantId
+			(b) => b.batchId !== batchId
 		);
 
-		// Guardar cambios
+		if (gardeners[index]!.myPlants.length === initialLength) return false;
+
 		this.save(gardeners);
-		// Devolver verdadero
 		return true;
 	};
 }

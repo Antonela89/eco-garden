@@ -115,22 +115,24 @@ export const getMyGarden = async () => {
 };
 
 /**
- * Actualizar el estado de un cultivo en la huerta personal.
- * @param {string} plantId - El ID de la planta a actualizar.
- * @param {'creciendo' | 'listo' | 'cosechado'} status - El nuevo estado.
+ * Actualizar el estado de una instancia de planta específica dentro de un lote.
+ * @param {string} batchId - El ID del lote que contiene la instancia.
+ * @param {string} instanceId - El ID de la instancia a actualizar.
+ * @param {string} status - El nuevo estado ('germinando', 'creciendo', etc.).
  * @returns {Promise<any>}
  */
-export const updatePlantStatusInGarden = async (plantId, status) => {
-    const response = await fetch(`${API_URL}/gardener/garden/status`, {
+export const updateInstanceStatus = async (batchId, instanceId, status) => {
+    const response = await fetch(`${API_URL}/gardener/garden/instance`, {
         method: 'PATCH',
         headers: createHeaders(true), // Ruta protegida
-        body: JSON.stringify({ plantId, status })
+        body: JSON.stringify({ batchId, instanceId, status })
     });
 
     if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'No se pudo actualizar el estado.');
+        throw new Error(errorData.message || 'No se pudo actualizar el estado de la instancia.');
     }
+
     return response.json();
 };
 

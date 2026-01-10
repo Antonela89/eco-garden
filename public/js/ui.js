@@ -189,9 +189,27 @@ export const renderCatalog = (plants) => {
  * @returns {string} El string HTML de la tarjeta del lote.
  */
 export const createCropBatchCard = (batch) => {
-	// Obtenemos la información base de la planta desde el catálogo (necesitaremos pasarla)
 	const plantInfo = batch.plantInfo;
+	if (!plantInfo) return ''; // Seguridad por si no se encuentra la info de la planta
 
+	// --- LÓGICA DE FECHA DE COSECHA ---
+	const plantedDate = new Date(batch.plantedAt);
+
+    // --- LÓGICA DE FECHA DE COSECHA (CORREGIDA) ---
+    // Calcular la fecha mínima de cosecha
+    const minHarvestDate = new Date(plantedDate);
+    minHarvestDate.setDate(plantedDate.getDate() + plantInfo.diasCosecha.min);
+    const minHarvestDateString = minHarvestDate.toLocaleDateString();
+
+    // Calcular la fecha máxima de cosecha
+    const maxHarvestDate = new Date(plantedDate);
+    maxHarvestDate.setDate(plantedDate.getDate() + plantInfo.diasCosecha.max);
+    const maxHarvestDateString = maxHarvestDate.toLocaleDateString();
+
+    // Crear el string final para mostrar
+    const harvestRangeString = (minHarvestDateString === maxHarvestDateString)
+        ? minHarvestDateString // Si son iguales, mostrar solo una
+        : `${minHarvestDateString} - ${maxHarvestDateString}`;
 	// Calcular estadísticas del lote
 	const totalInstances = batch.instances.length;
 	const growingCount = batch.instances.filter(
@@ -203,13 +221,14 @@ export const createCropBatchCard = (batch) => {
 	const harvestedCount = batch.instances.filter(
 		(i) => i.status === 'cosechada'
 	).length;
-
-	const plantedDate = new Date(batch.plantedAt).toLocaleDateString();
+	const failedCount = batch.instances.filter(
+		(i) => i.status === 'fallida'
+	).length;
 
 	return `
         <article data-batch-id="${
 			batch.batchId
-		}" class="bg-white dark:bg-dark-surface rounded-lg shadow-lg overflow-hidden flex flex-col">
+		}" class="bg-white dark:bg-dark-surface rounded-lg shadow-lg overflow-hidden flex flex-col transition-all duration-300 hover:shadow-xl">
             <img src="${plantInfo.imagen}" alt="${
 		plantInfo.nombre
 	}" class="w-full h-40 object-cover">
@@ -218,27 +237,52 @@ export const createCropBatchCard = (batch) => {
                 <h3 class="text-xl font-bold text-gray-800 dark:text-white">${
 					plantInfo.nombre
 				}</h3>
-                <p class="text-sm text-gray-500 mb-2">Sembrado el: ${plantedDate}</p>
+                <p class="text-sm text-gray-500 mb-2">Sembrado el: ${plantedDate.toLocaleDateString()}</p>
+                <p class="text-sm font-bold text-gray-600 mb-2  dark:text-gray-400">Cosecha aprox: ${harvestRangeString}</p>
                 ${
 					batch.notes
-						? `<p class="text-xs italic text-gray-500 mb-3">Nota: ${batch.notes}</p>`
-						: ''
+						? `<p class="text-xs italic text-gray-500 mb-3">Notas: "${batch.notes}"</p>`
+						: `<p class="text-xs italic text-gray-500 mb-3">Notas:</p>`
 				}
 
                 <!-- Sección de Estadísticas -->
-                <div class="text-sm space-y-1 mb-4">
-                    <div class="flex justify-between"><span>Total Plantado:</span> <span class="font-bold">${totalInstances}</span></div>
-                    <div class="flex justify-between"><span>Creciendo:</span> <span class="font-bold text-blue-500">🌱 ${growingCount}</span></div>
-                    <div class="flex justify-between"><span>Listas:</span> <span class="font-bold text-green-500">✅ ${readyCount}</span></div>
-                    <div class="flex justify-between"><span>Cosechadas:</span> <span class="font-bold text-yellow-500">🏆 ${harvestedCount}</span></div>
+                <div class="text-sm space-y-2 mb-4 border-t dark:border-gray-700 pt-3 mt-2">
+                    <div class="flex justify-between items-center">
+                        <span>Total Plantado:</span> 
+                        <span class="font-bold w-12 text-right">${totalInstances}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Creciendo:</span> 
+                        <span class="font-bold text-blue-500 w-12 flex items-center justify-between gap-2">
+                            <i class="fas fa-leaf fa-fw"></i> ${growingCount}
+                        </span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Listas:</span> 
+                        <span class="font-bold text-green-500 w-12 flex items-center justify-between gap-2">
+                            <i class="fas fa-check-circle fa-fw"></i> ${readyCount}
+                        </span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Cosechadas:</span> 
+                        <span class="font-bold text-yellow-500 w-12 flex items-center justify-between gap-2">
+                            <i class="fa-solid fa-truck-ramp-box"></i> ${harvestedCount}
+                        </span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Fallidas:</span> 
+                        <span class="font-bold text-red-500 w-12 flex items-center justify-between gap-2">
+                            <i class="fas fa-times-circle fa-fw"></i> ${failedCount}
+                        </span>
+                    </div>
                 </div>
 
                 <!-- Botones de Acción -->
                 <div class="mt-auto pt-4 flex justify-between items-center border-t dark:border-gray-700">
-                    <button data-action="manage-batch" class="bg-blue-500 text-white px-3 py-1 text-sm font-bold rounded hover:bg-blue-600">
+                    <button data-action="manage-batch" class="bg-blue-500 text-white px-4 py-2 text-sm font-bold rounded hover:bg-blue-600 transition-colors">
                         Gestionar Lote
                     </button>
-                    <button data-action="delete-batch" class="text-gray-500 hover:text-red-500 transition">
+                    <button data-action="delete-batch" class="text-gray-500 hover:text-red-500 transition-colors px-2">
                         <i class="fas fa-trash pointer-events-none"></i>
                     </button>
                 </div>
@@ -687,5 +731,56 @@ export const createAddBatchFormContent = (plant) => {
                 <button type="submit" class="bg-eco-green-dark text-white font-bold px-6 py-2 rounded-md">Confirmar Siembra</button>
             </footer>
         </form>
+    `;
+};
+
+/**
+ * Crear el contenido HTML para el modal de "Gestionar Lote".
+ * @param {object} batch - El lote de cultivo enriquecido (con plantInfo).
+ * @returns {string}
+ */
+export const createManageBatchModalContent = (batch) => {
+    let instancesHTML = '';
+    batch.instances.forEach((instance, index) => {
+        // Objeto para mapear estados a íconos y colores
+        const statusInfo = {
+            germinando: { icon: 'fa-seedling', color: 'text-white' },
+            creciendo: { icon: 'fa-leaf', color: 'text-blue-500' },
+            lista: { icon: 'fa-check-circle', color: 'text-green-500' },
+            cosechada: { icon: 'fa-truck-ramp-box', color: 'text-yellow-600' },
+            fallida: { icon: 'fa-times-circle', color: 'text-red-500' }
+        };
+
+        instancesHTML += `
+            <div class="flex items-center justify-between p-3 border-b dark:border-gray-700">
+                <div class="flex items-center gap-3">
+                    <i class="fas ${statusInfo[instance.status].icon} ${statusInfo[instance.status].color} fa-fw text-lg"></i>
+                    <span class="font-bold">Planta #${index + 1}</span>
+                </div>
+                <!-- Dropdown para cambiar el estado de ESTA instancia -->
+                <select data-instance-id="${instance.instanceId}" class="instance-status-select bg-gray-100 dark:bg-gray-700 rounded p-1 text-sm">
+                    <option value="germinando" ${instance.status === 'germinando' ? 'selected' : ''}>Germinando</option>
+                    <option value="creciendo" ${instance.status === 'creciendo' ? 'selected' : ''}>Creciendo</option>
+                    <option value="lista" ${instance.status === 'lista' ? 'selected' : ''}>Lista</option>
+                    <option value="cosechada" ${instance.status === 'cosechada' ? 'selected' : ''}>Cosechada</option>
+                    <option value="fallida" ${instance.status === 'fallida' ? 'selected' : ''}>Fallida</option>
+                </select>
+            </div>
+        `;
+    });
+
+    return `
+    <div data-batch-id-in-modal="${batch.batchId}">
+        <header class="p-6 flex justify-between items-center border-b dark:border-gray-700">
+            <h2 class="text-2xl font-bold">Gestionar Lote de ${batch.plantInfo.nombre}</h2>
+            <button class="js-close-modal text-3xl">&times;</button>
+        </header>
+        <div class="max-h-[60vh] overflow-y-auto">
+            ${instancesHTML}
+        </div>
+        <footer class="p-4 bg-gray-50 dark:bg-gray-800 border-t dark:border-gray-700 text-right">
+            <button class="js-close-modal bg-eco-green-dark text-white font-bold px-6 py-2 rounded-md">Cerrar</button>
+        </footer>
+    </div>
     `;
 };

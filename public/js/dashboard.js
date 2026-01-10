@@ -2,11 +2,13 @@ import {
 	getMyGarden,
 	getPlants,
 	deleteBatchFromGarden,
+	updateInstanceStatus,
 } from './api.js';
 import {
 	createCropBatchCard,
 	createConfirmModalContent,
 	createAlertModalContent,
+	createManageBatchModalContent,
 } from './ui.js';
 import { openModal, closeModal } from './modal.js';
 import { getLoaderHTML } from './loader.js';
@@ -51,14 +53,20 @@ export const initDashboard = async (user) => {
                     </div>
                 `;
 			} else {
-				// "Enriquecer" los datos de la huerta
-				const enrichedGarden = myGarden.map((batch) => ({
-					...batch,
-					plantInfo: plantCatalog.find((p) => p.id === batch.plantId),
-				}));
+
+				const enrichedGarden = myGarden.map((batch) => {
+					const info = plantCatalog.find(
+						(p) => p.id === batch.plantId
+					);
+					return {
+						...batch,
+						plantInfo: info,
+					};
+				});
 
 				gardenContainer.innerHTML = ''; // Limpiar el loader
 				enrichedGarden.forEach((batch) => {
+					// Otro punto crítico: ¿falla createCropBatchCard?
 					gardenContainer.innerHTML += createCropBatchCard(batch);
 				});
 			}
@@ -75,7 +83,7 @@ export const initDashboard = async (user) => {
 	};
 
 	// --- MANEJO DE EVENTOS (DELEGACIÓN) ---
-	gardenContainer.addEventListener('click', (e) => {
+	gardenContainer.addEventListener('click', async (e) => {
 		e.preventDefault();
 
 		const deleteButton = e.target.closest('[data-action="delete-batch"]');
@@ -96,7 +104,21 @@ export const initDashboard = async (user) => {
 		}
 
 		if (manageButton) {
-			alert('Funcionalidad de gestionar lote en construcción...');
+			e.preventDefault();
+			const card = e.target.closest('article');
+			const batchId = card.dataset.batchId;
+
+			// Necesitamos los datos completos del lote para pasarlos al modal
+			const myGarden = await getMyGarden();
+			const plantCatalog = await getPlants();
+			const batch = myGarden.find((b) => b.batchId === batchId);
+			const enrichedBatch = {
+				...batch,
+				plantInfo: plantCatalog.find((p) => p.id === batch.plantId),
+			};
+
+			// Abrimos el modal con el contenido de gestión
+			openModal(createManageBatchModalContent(enrichedBatch), 'lg');
 		}
 	});
 
@@ -127,6 +149,34 @@ export const initDashboard = async (user) => {
 						'sm'
 					);
 				}
+			}
+		});
+
+		modalContainer.addEventListener('change', async (e) => {
+			const selectElement = e.target.closest('.instance-status-select');
+			if (selectElement) {
+				const instanceId = selectElement.dataset.instanceId;
+				const newStatus = selectElement.value;
+
+				const batchId = document.querySelector(
+					'[data-batch-id-in-modal]'
+				).dataset.batchIdInModal;
+
+				try {
+					await updateInstanceStatus(batchId, instanceId, newStatus);
+				} catch (error) {
+					openModal(
+						createAlertModalContent(
+							'Error',
+							'No se pudo actualizar el estado.',
+							'error'
+						),
+						'sm'
+					);
+				}
+
+				// Recargar la vista del dashboard para ver los cambios en las estadísticas
+				loadGarden();
 			}
 		});
 	}

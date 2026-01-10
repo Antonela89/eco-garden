@@ -15,11 +15,11 @@ import {
 } from './auth.js';
 import { getPlants, getPlantById, addCropBatch } from './api.js';
 import { renderCatalog } from './ui/components.js';
+import { createAddBatchFormContent } from './ui/form.js';
 import {
 	createPlantDetailsContent,
 	createLoginModalContent,
 	createAlertModalContent,
-	createAddBatchFormContent,
 } from './ui/modal.js';
 import { initDashboard } from './dashboard.js';
 import { initProfile } from './profile.js';

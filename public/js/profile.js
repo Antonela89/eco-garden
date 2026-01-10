@@ -3,10 +3,8 @@
  */
 
 import { openModal, closeModal } from './handle-modal.js';
-import {
-	createAlertModalContent,
-	createProfileFormModalContent,
-} from './ui/modal.js';
+import { createProfileFormContent }  from './ui/form.js'
+import { createAlertModalContent } from './ui/modal.js';
 import { updateProfile } from './api.js';
 
 /**
@@ -38,7 +36,7 @@ export const initProfile = () => {
 	if (editProfileButton) {
 		editProfileButton.addEventListener('click', () => {
 			// Abrir un modal con el formulario de edición, pasando el usuario actual
-			openModal(createProfileFormModalContent(user), 'md');
+			openModal(createProfileFormContent(user), 'md');
 
 			// Añadir el listener de submit
 			const form = document.getElementById('profile-form');

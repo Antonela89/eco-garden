@@ -1,4 +1,4 @@
-import { createPlantCard } from './cards'
+import { createPlantCard } from './cards.js'
 /**
  * Renderizar el catálogo completo en el DOM.
  * @param {object[]} plants - El array de plantas obtenido de la API.

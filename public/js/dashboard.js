@@ -4,7 +4,7 @@ import {
 	deleteBatchFromGarden,
 	updateInstanceStatus,
 } from './api.js';
-import {createCropBatchCard} from './ui/components.js';
+import { createCropBatchCard } from './ui/cards.js';
 import {
 	createConfirmModalContent,
 	createAlertModalContent,

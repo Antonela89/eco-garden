@@ -1,4 +1,4 @@
-import { isSowableNow, formatHarvestDays } from "./helpers";
+import { isSowableNow, formatHarvestDays } from "./helpers.js";
 
 /**
  * Crear el HTML para una tarjeta de planta individual.

@@ -10,15 +10,34 @@ export enum Role {
 }
 
 /**
- * Interface: UserPlant
- * Representa la instancia de un cultivo dentro de la huerta personal de un usuario.
- * No contiene toda la info técnica, sino solo la referencia y el estado actual.
+ * Representar una única planta/semilla individual dentro de un lote.
  */
-export interface UserPlant {
-    plantId: string;     // ID que vincula con el catálogo maestro (plants.json)
-    plantedAt: string;    // Fecha en formato ISO string
-    status: 'creciendo' | 'listo' | 'cosechado'; // Estados posibles del ciclo de vida
-} 
+export interface PlantInstance {
+    instanceId: string;
+    status: 'germinando' | 'creciendo' | 'lista' | 'cosechada' | 'fallida';
+}
+
+/**
+ * Representar un Lote de Cultivo que agrupa varias instancias.
+ */
+export interface CropBatch {
+    batchId: string;
+    plantId: string;
+    plantedAt: string;
+    notes?: string;
+    instances: PlantInstance[];
+}
+
+// /**
+//  * Interface: UserPlant
+//  * Representa la instancia de un cultivo dentro de la huerta personal de un usuario.
+//  * No contiene toda la info técnica, sino solo la referencia y el estado actual.
+//  */
+// export interface UserPlant {
+//     plantId: string;     // ID que vincula con el catálogo maestro (plants.json)
+//     plantedAt: string;    // Fecha en formato ISO string
+//     status: 'creciendo' | 'listo' | 'cosechado'; // Estados posibles del ciclo de vida
+// } 
 
 /**
  * Interface: Gardener
@@ -30,6 +49,6 @@ export interface Gardener {
     email: string;        // Correo electrónico (identificador para login)
 	role: Role;           // Rol asignado (Admin o Jardinero)
 	password: string;     // Contraseña almacenada en formato Hash (encriptada)
-	myPlants: UserPlant[]; // Colección de cultivos que posee en su parcela
+	myPlants: CropBatch[]; // Colección de cultivos que posee en su parcela
 }
 

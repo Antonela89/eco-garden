@@ -6,8 +6,8 @@ import { GardenerController } from '../controllers/gardener-controller';
 import { verifyToken } from '../middlewares/authentication-middleware';
 // Importación de middleware de validación
 import { validateSchema } from '../middlewares/validator-middleware';
-// Importación de esquema de edición de usuario
-import { updateProfileSchema } from '../schemas/gardener-schema';
+// Importación de esquemas
+import { updateProfileSchema, addBatchSchema, updateInstanceSchema } from '../schemas/gardener-schema';
 
 // Instancia de Router
 const gardenerRouter = Router();
@@ -25,17 +25,18 @@ gardenerRouter.use(verifyToken);
 gardenerRouter.get('/profile', GardenerController.getProfile);
 /** @route PUT /api/gardener/profile -> Edita datos básicos del usuario */
 gardenerRouter.put('/profile', validateSchema(updateProfileSchema), GardenerController.updateProfile);
-/** @route GET /api/gardener/garden -> Obtiene la huerta con información detallada del catálogo */
-gardenerRouter.get('/garden', GardenerController.getMyGarden);
+/** @route GET /api/gardener/garden -> Obtiene los cultivos de la huerta*/
+gardenerRouter.get('/garden', GardenerController.getMyBatches);
 
 
 // --- GESTIÓN DE CULTIVOS ---
 
-/** @route POST /api/garden/batch -> Agrega una cultivo de la planta del catálogo a la huerta personal */
-gardenerRouter.post('/garden/batch', GardenerController.addBatchToGarden);
-/** @route PATCH /api/garden/instance -> Edita del cultivo (ej: de creciendo a listo) */
-gardenerRouter.patch('/garden/instance', GardenerController.updateInstance);
-/** @route DELETE /api/garden/batch/:batchId -> Quita un cultivo de la huerta personal */
+/** @route POST /api/gardener/garden/batch -> Agrega un lote de cultivo */
+gardenerRouter.post('/garden/batch', validateSchema(addBatchSchema), GardenerController.addBatchToGarden);
+/** @route PATCH /api/gardener/garden/instance -> Edita el estado de una instancia */
+gardenerRouter.patch('/garden/instance', validateSchema(updateInstanceSchema), GardenerController.updateInstance);
+/** @route DELETE /api/gardener/garden/batch/:batchId -> Quita un lote completo */
+// Esta ruta no necesita validación de body, solo el parámetro de la URL
 gardenerRouter.delete('/garden/batch/:batchId', GardenerController.removeBatchFromGarden);
 
 export default gardenerRouter;

@@ -160,7 +160,7 @@ export class GardenerController {
 	 * Obtiene la huerta del usuario enriqueciendo la información.
 	 * Cruza los IDs de las plantas del usuario con los datos completos del catálogo.
 	 */
-	static getMyGarden = (req: Request, res: Response) => {
+	static getMyBatches = (req: Request, res: Response) => {
 		// Obtener jardinero por id
 		const user = GardenerModel.getById(req.user!.id);
 		// Validación

@@ -20,9 +20,9 @@ export const registerGardenerSchema = z.object({
 	password: z
 		.string()
 		.min(8, 'La contraseña debe tener al menos 8 caracteres')
-        // Expresión regular para obligar al menos una letra mayúscula
+		// Expresión regular para obligar al menos una letra mayúscula
 		.regex(/[A-Z]/, 'Debe contener al menos una mayúscula')
-        // Expresión regular para obligar al menos un número
+		// Expresión regular para obligar al menos un número
 		.regex(/[0-9]/, 'Debe contener al menos un número'),
 	// Validación de Rol: asegura que el valor coincida exactamente con el Enum (admin o gardener)
 	role: z.enum(Role, {
@@ -46,9 +46,9 @@ export const loginSchema = z.object({
 
 // El schema base con todas las reglas
 const gardenerBaseSchema = z.object({
-    username: z.string().min(3).max(20).optional(),
-    email: z.email().optional(),
-    password: z.string().min(8).regex(/[A-Z]/).regex(/[0-9]/).optional(),
+	username: z.string().min(3).max(20).optional(),
+	email: z.email().optional(),
+	password: z.string().min(8).regex(/[A-Z]/).regex(/[0-9]/).optional(),
 });
 
 /**
@@ -65,4 +65,34 @@ export const updateProfileSchema = gardenerBaseSchema;
 export const addPlantToGardenSchema = z.object({
 	// El plantId debe ser un string no vacío que coincida con un ID del catálogo de plantas
 	plantId: z.string().min(1, 'El ID de la planta es requerido'),
+});
+
+/**
+ * Esquema para validar la creación de un nuevo lote de cultivo.
+ */
+export const addBatchSchema = z.object({
+	plantId: z
+		.string('El ID de la planta es obligatorio.')
+		.min(1, 'El ID de la planta no puede estar vacío.'),
+
+	quantity: z
+		.number('La cantidad es obligatoria.')
+		.int()
+		.positive('La cantidad debe ser un número entero positivo.'),
+
+	notes: z.string().optional(), // Las notas son opcionales
+});
+
+/**
+ * Esquema para validar la actualización del estado de una instancia.
+ */
+export const updateInstanceSchema = z.object({
+	batchId: z.uuid('El ID del lote debe ser un UUID válido.'),
+	instanceId: z.uuid('El ID de la instancia debe ser un UUID válido.'),
+	status: z.enum(
+		['germinando', 'creciendo', 'lista', 'cosechada', 'fallida'],
+		{
+			error: () => ({ message: 'El estado proporcionado no es válido.' }),
+		}
+	),
 });

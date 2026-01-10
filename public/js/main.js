@@ -50,6 +50,23 @@ document.addEventListener('DOMContentLoaded', () => {
 	initModal();
 	initThemeSwitcher();
 
+	// --- LÓGICA DEL MENÚ HAMBURGUESA ---
+    const hamburgerButton = document.getElementById('hamburger-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (hamburgerButton && mobileMenu) {
+        hamburgerButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const icon = hamburgerButton.querySelector('i');
+            // Cambiar entre ícono de hamburguesa y 'X'
+            if (mobileMenu.classList.contains('hidden')) {
+                icon.className = 'fas fa-bars';
+            } else {
+                icon.className = 'fas fa-times';
+            }
+        });
+    }
+
 	// Lógica de autenticación y actualización de UI
 
 	// Leer el token y los datos de usuario desde el almacenamiento local.

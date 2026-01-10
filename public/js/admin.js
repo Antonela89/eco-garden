@@ -45,12 +45,6 @@ export const initAdmin = async () => {
 	const addPlantButton = document.getElementById('add-plant-button');
 	const tableBody = document.getElementById('admin-plant-table');
 
-	// Configurar el botón de cierre de sesión
-	logoutButton.addEventListener('click', () => {
-		localStorage.removeItem('token');
-		window.location.href = '/index.html';
-	});
-
 	// Función para renderizar (o re-renderizar) la tabla de plantas
 	const renderTable = (plants) => {
 		tableBody.innerHTML = ''; // Limpiar tabla

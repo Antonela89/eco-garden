@@ -635,7 +635,7 @@ export const createAlertModalContent = (title, message, type = 'success') => {
             ${icon}
             <h3 class="text-2xl font-bold">${title}</h3>
             <p>${message}</p>
-            <button class="js-close-moda mt-4 bg-eco-green-dark text-white font-bold px-8 py-2 rounded-md">
+            <button class="js-close-modal mt-4 bg-eco-green-dark text-white font-bold px-8 py-2 rounded-md">
                 Entendido
             </button>
         </div>

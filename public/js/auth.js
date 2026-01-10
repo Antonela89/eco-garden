@@ -1,7 +1,7 @@
-// Importación de fetch
+import { getThemeButtonHTML } from './theme.js';
 import { loginUser, registerUser } from './api.js';
 import { openModal, closeModal } from './modal.js';
-import { createAlertModalContent } from './ui.js';
+import { createAlertModalContent, createLoginModalContent } from './ui.js';
 
 // -----------------------------------
 // MANEJADORES DE FORMULARIOS
@@ -40,7 +40,6 @@ export const handleRegister = () => {
 				closeModal();
 				window.location.href = '/index.html';
 			}, 3000);
-
 		} catch (error) {
 			openModal(
 				createAlertModalContent(
@@ -83,7 +82,14 @@ export const handleLogin = () => {
 
 			window.location.href = '/html/dashboard.html';
 		} catch (error) {
-			openModal(createAlertModalContent('Error de Acceso', 'Email o contraseña incorrectos.', 'error'), 'sm');
+			openModal(
+				createAlertModalContent(
+					'Error de Acceso',
+					'Email o contraseña incorrectos.',
+					'error'
+				),
+				'sm'
+			);
 
 			// --- RESTAURAR BOTÓN EN CASO DE ERROR ---
 			submitButton.disabled = false;
@@ -92,27 +98,46 @@ export const handleLogin = () => {
 	});
 };
 
+// --- FUNCIONES AUXILIARES DE NAVEGACIÓN ---
+
 /**
- * Actualizar la barra de navegación para mostrar el estado de "Usuario Autenticado".
+ * Función auxiliar para cerrar sesión.
+ * Centraliza la lógica para ser llamada desde Desktop y Mobile.
+ */
+const handleLogout = () => {
+	localStorage.removeItem('token');
+	localStorage.removeItem('user');
+	window.location.href = '/index.html';
+};
+
+/**
+ * Función auxiliar para abrir el modal de login.
+ */
+const openLoginModal = () => {
+	openModal(createLoginModalContent(), 'sm');
+	handleLogin();
+};
+
+// --- MANEJO DE UI DE NAVEGACIÓN ---
+
+/**
+ * Actualizar AMBAS navbars (Desktop y Mobile) para mostrar el estado de "Usuario Autenticado".
  * @param {object} user - El objeto de usuario decodificado del token.
  */
 export const updateNavOnLogin = (user) => {
-	const navMenu = document.getElementById('nav-menu');
-	if (!navMenu) return;
+	const navMenuDesktop = document.getElementById('nav-menu-desktop');
+	const navMenuMobile = document.getElementById('nav-menu-mobile');
+	if (!navMenuDesktop || !navMenuMobile) return;
 
-	const themeButtonHTML =
-		document.getElementById('theme-toggle')?.outerHTML ||
-		'<button id="theme-toggle" class="text-xl text-gray-600 hover:text-eco-green-dark transition dark:text-gray-300 dark:hover:text-green-300"><i class="fas fa-moon"></i></button>';
-
-	// --- HTML CON DROPDOWN ---
-	navMenu.innerHTML = `
+	// --- RENDERIZAR MENÚ DESKTOP ---
+	navMenuDesktop.innerHTML = `
         <!-- Botón principal a la Huerta -->
         <a href="/html/dashboard.html" class="bg-eco-green-dark text-white px-4 py-2 rounded-md font-bold hover:bg-opacity-80 transition active:scale-95 flex items-center gap-2">
             <i class="fas fa-leaf"></i>
             <span>Mi Huerta</span>
         </a>
 
-        ${themeButtonHTML}
+        ${getThemeButtonHTML()}
 
         <!-- Contenedor del Menú Desplegable -->
         <div class="relative" id="profile-menu-container">
@@ -131,24 +156,46 @@ export const updateNavOnLogin = (user) => {
 						: ''
 				}
                 <div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
-                <button id="logout-button" class="block w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700">Cerrar Sesión</button>
+                <button id="logout-button-desktop" class="block w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700">Cerrar Sesión</button>
             </div>
         </div>
     `;
 
-	// --- LÓGICA PARA EL DROPDOWN ---
+	// --- RENDERIZAR MENÚ MOBILE ---
+	// Clases comunes para los enlaces del menú móvil para mantener consistencia
+	const mobileLinkClasses =
+		'block p-4 text-base font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors';
+
+	navMenuMobile.innerHTML = `
+	 	${
+			user.role === 'admin'
+				? `<a href="/html/admin.html" class="${mobileLinkClasses} text-yellow-500">Panel Admin</a>`
+				: ''
+		}
+		<div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
+        <a href="/html/dashboard.html" class="${mobileLinkClasses}">Mi Huerta</a>
+		<div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
+        <a href="/html/profile.html" class="${mobileLinkClasses}">Mi Perfil</a>
+		<div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
+		<div class="${mobileLinkClasses} flex justify-between items-center cursor-pointer">
+            <span>Cambiar Tema</span>
+            ${getThemeButtonHTML()}
+        </div>
+        <div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
+        <button id="logout-button-mobile" class="${mobileLinkClasses} w-full text-left text-red-500">Cerrar Sesión</button>
+    `;
+
+	// --- ASIGNAR LISTENERS A LOS NUEVOS ELEMENTOS ---
+	// Dropdown de perfil
 	const menuContainer = document.getElementById('profile-menu-container');
 	const menuButton = document.getElementById('profile-menu-button');
 	const dropdown = document.getElementById('profile-dropdown');
-
 	if (menuButton && dropdown) {
 		menuButton.addEventListener('click', (e) => {
-			e.stopPropagation(); // Evita que el clic se propague al 'document'
+			e.stopPropagation();
 			dropdown.classList.toggle('hidden');
 		});
 	}
-
-	// Cerrar el dropdown si se hace clic fuera
 	document.addEventListener('click', (e) => {
 		if (
 			dropdown &&
@@ -159,31 +206,57 @@ export const updateNavOnLogin = (user) => {
 		}
 	});
 
-	// Listener de Logout
-	document.getElementById('logout-button').addEventListener('click', () => {
-		localStorage.removeItem('token');
-		localStorage.removeItem('user');
-		window.location.href = '/index.html';
-	});
+	// Botones de Logout
+	document
+		.getElementById('logout-button-desktop')
+		.addEventListener('click', handleLogout);
+	document
+		.getElementById('logout-button-mobile')
+		.addEventListener('click', handleLogout);
 
+	// Reactivar el botón del tema
 	if (window.reInitThemeButton) window.reInitThemeButton();
 };
+
 /**
  * Restaurar la barra de navegación al estado "Visitante".
  */
 export const updateNavOnLogout = () => {
-	const navMenu = document.getElementById('nav-menu');
-	if (!navMenu) return;
+	const navMenuDesktop = document.getElementById('nav-menu-desktop');
+	const navMenuMobile = document.getElementById('nav-menu-mobile');
 
-	navMenu.innerHTML = `
-        <button id="theme-toggle" class="text-xl text-gray-600 hover:text-eco-green-dark transition dark:text-gray-300 dark:hover:text-green-300">
-            <i class="fas fa-moon"></i>
-        </button>
-        <button id="login-button" class="bg-eco-green-dark text-white px-4 py-2 rounded-md font-bold hover:bg-opacity-80 transition active:scale-95">
+	if (!navMenuDesktop || !navMenuMobile) return;
+
+	// --- RENDERIZAR MENÚS DE VISITANTE ---
+
+	navMenuDesktop.innerHTML = `
+        ${getThemeButtonHTML()} 
+		<div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
+        <button id="login-button-desktop" class="bg-eco-green-dark text-white px-4 py-2 rounded-md font-bold hover:bg-opacity-80 transition active:scale-95">
             Ingresar
         </button>
     `;
 
-	// La lógica de abrir el modal de login ahora vivirá en main.js
+	// Clases comunes para los enlaces del menú móvil para mantener consistencia
+	const mobileLinkClasses =
+		'block w-full text-base p-4 font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex';
+	navMenuMobile.innerHTML = `
+        <button id="login-button-mobile" class="${mobileLinkClasses}">Ingresar</button>
+		<div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
+		<div id="mobile-theme-switcher" class="${mobileLinkClasses} flex justify-between items-center cursor-pointer">
+            <span>Cambiar Tema</span>
+            ${getThemeButtonHTML()}
+        </div>
+    `;
+
+	// --- ASIGNAR LISTENERS ---
+	document
+		.getElementById('login-button-desktop')
+		.addEventListener('click', openLoginModal);
+	document
+		.getElementById('login-button-mobile')
+		.addEventListener('click', openLoginModal);
+
+	// Reactivar el botón del tema
 	if (window.reInitThemeButton) window.reInitThemeButton();
 };

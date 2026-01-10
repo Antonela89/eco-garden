@@ -143,6 +143,7 @@ body {
 
 /* ETAPA 1: Semilla pulsa y luego se abre */
 @keyframes pulse-and-break-left {
+
     /* Cerrada */
     0% {
         transform: rotate(0) scale(1);
@@ -173,6 +174,7 @@ body {
 }
 
 @keyframes pulse-and-break-right {
+
     /* Cerrada */
     0% {
         transform: rotate(0) scale(1);
@@ -300,5 +302,50 @@ body {
     100% {
         transform: rotate(45deg) scale(1);
         opacity: 1;
+    }
+}
+
+/* Animación de Latido para Badges */
+@keyframes heartbeat {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.animate-heartbeat {
+    animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+/* fondo de gradiente animado */
+.bg-animated-gradient {
+    background-size: 200% 200%;
+    background-image: linear-gradient(-45deg,
+            #22C55E,
+            #4ADE80,
+            #86EFAC,
+            #4ADE80,
+            #22C55E);
+    animation: gradient-flow 3s ease-in-out infinite;
+}
+
+@keyframes gradient-flow {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
     }
 }

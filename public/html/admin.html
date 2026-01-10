@@ -25,40 +25,57 @@
 <body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-gray-200">
 
     <!-- ------------------- HEADER Y NAVEGACIÓN ------------------- -->
-    <header class="bg-white dark:bg-dark-surface shadow-md sticky top-0 z-10">
+    <header class="bg-white dark:bg-dark-surface shadow-md sticky top-0 z-20">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
+                <!-- Logo (siempre visible) -->
                 <a href="/" class="flex items-center gap-2 text-2xl font-extrabold text-eco-green-dark">
                     <i class="fas fa-seedling"></i>
                     <span>Eco-Garden</span>
                 </a>
-                <!-- Contenedor para el menú dinámico -->
-                <div id="nav-menu" class="flex items-center gap-4">
-                    <!-- JavaScript inyectará aquí el estado de autenticación -->
+
+                <!-- Contenedor para el menú dinámico (versión Desktop) -->
+                <div id="nav-menu-desktop" class="hidden md:flex items-center gap-4">
+                    <!-- JavaScript inyectará aquí los botones para Desktop -->
+                </div>
+
+                <!-- Botón Hamburguesa (solo visible en Mobile) -->
+                <div class="md:hidden flex items-center">
+                    <button id="hamburger-button" class="text-2xl text-gray-600 dark:text-gray-300">
+                        <i class="fas fa-bars"></i>
+                    </button>
                 </div>
             </div>
         </nav>
+
+        <!-- Menú Desplegable para Mobile (oculto por defecto) -->
+        <div id="mobile-menu"
+            class="hidden md:hidden bg-white dark:bg-dark-surface border-t border-gray-200 dark:border-gray-700">
+            <div id="nav-menu-mobile" class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <!-- JavaScript inyectará aquí los enlaces para Mobile -->
+            </div>
+        </div>
     </header>
 
     <!-- ------------------- CONTENIDO PRINCIPAL ------------------- -->
-    <main class="max-w-7xl mx-auto py-8 px-4">
+    <main class="min-w-sx max-w-4xl mx-auto px-4 py-8 flex flex-col justify-center items-center">
         <!-- CONTENIDO DEL PANEL ADMIN -->
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-extrabold">Gestionar Catálogo</h1>
+        <div class="flex justify-between items-center mb-6 w-full">
+            <h1 class="text-lg md:text-3xl font-extrabold">Gestionar Catálogo</h1>
             <button id="add-plant-button"
                 class="bg-blue-500 text-white px-6 py-2 rounded-md font-bold hover:bg-blue-600">
-                <i class="fas fa-plus mr-2"></i>Añadir Nueva Especie
+                <i class="fas fa-plus mr-2"></i>Añadir
             </button>
         </div>
 
         <!-- Tabla de plantas -->
-        <div class="bg-white dark:bg-dark-surface shadow-lg rounded-lg overflow-x-auto">
+        <div class="bg-white dark:bg-dark-surface shadow-lg w-full">
             <table class="w-full text-sm text-left">
-                <thead class="bg-gray-50 dark:bg-gray-700 text-xs uppercase">
+                <thead class="bg-gray-50 dark:bg-gray-700 text-xs uppercase border-b border-gray-400 dark:border-gray-600 my-1">
                     <tr>
                         <th class="px-6 py-3">Nombre</th>
-                        <th class="px-6 py-3">Familia</th>
-                        <th class="px-6 py-3">Dificultad</th>
+                        <th class="px-6 py-3 hidden sm:table-cell">Familia</th>
+                        <th class="px-6 py-3 hidden md:table-cell">Dificultad</th>
                         <th class="px-6 py-3 text-right">Acciones</th>
                     </tr>
                 </thead>
@@ -73,7 +90,7 @@
     <div id="modal-container"
         class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50 p-4">
         <div id="modal-content-area"
-            class="bg-white dark:bg-dark-surface rounded-lg shadow-2xl w-full transform transition-all animate-fade-in-down overflow-y-auto max-h-[90vh]">
+            class="bg-white dark:bg-dark-surface rounded-lg shadow-2xl w-full flex flex-col max-h-[90vh]">
             <!-- El contenido se inyectará aquí con JavaScript -->
         </div>
     </div>

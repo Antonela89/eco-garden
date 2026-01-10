@@ -44,20 +44,36 @@
 <body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-gray-200 transition-colors duration-300 flex flex-col justify-center items-center gap-6"> 
 
     <!-- ------------------- HEADER Y NAVEGACIÓN ------------------- -->
-    <header class="bg-white dark:bg-dark-surface shadow-md sticky top-0 z-10 w-full">
+    <header class="bg-white dark:bg-dark-surface shadow-md sticky top-0 z-20">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
+                <!-- Logo (siempre visible) -->
                 <a href="/" class="flex items-center gap-2 text-2xl font-extrabold text-eco-green-dark">
                     <i class="fas fa-seedling"></i>
                     <span>Eco-Garden</span>
                 </a>
-                <h1 class="text-3xl font-bold text-gray-800 dark:text-white mt-4">Crea tu Cuenta</h1>
-                <!-- Contenedor para el menú dinámico -->
-                <div id="nav-menu" class="flex items-center gap-4">
-                    <!-- JavaScript inyectará aquí los botones de 'Ingresar' o 'Mi Perfil', 'Logout', etc. -->
+
+                <!-- Contenedor para el menú dinámico (versión Desktop) -->
+                <div id="nav-menu-desktop" class="hidden md:flex items-center gap-4">
+                    <!-- JavaScript inyectará aquí los botones para Desktop -->
+                </div>
+
+                <!-- Botón Hamburguesa (solo visible en Mobile) -->
+                <div class="md:hidden flex items-center">
+                    <button id="hamburger-button" class="text-2xl text-gray-600 dark:text-gray-300">
+                        <i class="fas fa-bars"></i>
+                    </button>
                 </div>
             </div>
         </nav>
+
+        <!-- Menú Desplegable para Mobile (oculto por defecto) -->
+        <div id="mobile-menu"
+            class="hidden md:hidden bg-white dark:bg-dark-surface border-t border-gray-200 dark:border-gray-700">
+            <div id="nav-menu-mobile" class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <!-- JavaScript inyectará aquí los enlaces para Mobile -->
+            </div>
+        </div>
     </header>
 
     <!-- ------------------- CONTENIDO PRINCIPAL ------------------- -->

@@ -744,11 +744,11 @@ export const createManageBatchModalContent = (batch) => {
     batch.instances.forEach((instance, index) => {
         // Objeto para mapear estados a íconos y colores
         const statusInfo = {
-            germinando: { icon: 'fa-seedling', color: 'text-white' },
-            creciendo: { icon: 'fa-leaf', color: 'text-blue-500' },
-            lista: { icon: 'fa-check-circle', color: 'text-green-500' },
-            cosechada: { icon: 'fa-truck-ramp-box', color: 'text-yellow-600' },
-            fallida: { icon: 'fa-times-circle', color: 'text-red-500' }
+            germinando: {icon: 'fa-circle-notch', color:'text-gray-500 dark:text-gray-300' },
+            creciendo: {icon: 'fa-leaf', color: 'text-blue-500' },
+            lista: {icon: 'fa-check-circle', color: 'text-green-500' },
+            cosechada: {icon: 'fa-truck-ramp-box', color: 'text-yellow-600' },
+            fallida: {icon: 'fa-times-circle', color: 'text-red-500' }
         };
 
         instancesHTML += `
@@ -759,7 +759,7 @@ export const createManageBatchModalContent = (batch) => {
                 </div>
                 <!-- Dropdown para cambiar el estado de ESTA instancia -->
                 <select data-instance-id="${instance.instanceId}" class="instance-status-select bg-gray-100 dark:bg-gray-700 rounded p-1 text-sm">
-                    <option value="germinando" ${instance.status === 'germinando' ? 'selected' : ''}>Germinando</option>
+                    <option value="germinando" ${instance.status === 'germinando' ? 'selected' : ''}>Plantada</option>
                     <option value="creciendo" ${instance.status === 'creciendo' ? 'selected' : ''}>Creciendo</option>
                     <option value="lista" ${instance.status === 'lista' ? 'selected' : ''}>Lista</option>
                     <option value="cosechada" ${instance.status === 'cosechada' ? 'selected' : ''}>Cosechada</option>

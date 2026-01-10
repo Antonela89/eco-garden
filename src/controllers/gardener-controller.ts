@@ -125,32 +125,32 @@ export class GardenerController {
 	};
 
 	static updateProfile = (req: Request, res: Response) => {
-    const userId = req.user!.id;
-    const partialData = req.body;
+		const userId = req.user!.id;
+		const partialData = req.body;
 
-    // Buscar al usuario actual en la base de datos
-    const currentUser = GardenerModel.getById(userId);
-    if (!currentUser) {
-        return res.status(404).json({ message: 'Usuario no encontrado' });
-    }
+		// Buscar al usuario actual en la base de datos
+		const currentUser = GardenerModel.getById(userId);
+		if (!currentUser) {
+			return res.status(404).json({ message: 'Usuario no encontrado' });
+		}
 
-    // Si se envió una nueva contraseña, encriptarla
-    if (partialData.password) {
-        partialData.password = bcrypt.hashSync(partialData.password, 10);
-    }
-    
-    // Crear el objeto COMPLETO fusionando los datos viejos con los nuevos
-    const fullNewData = {
-        ...currentUser,
-        ...partialData
-    };
+		// Si se envió una nueva contraseña, encriptarla
+		if (partialData.password) {
+			partialData.password = bcrypt.hashSync(partialData.password, 10);
+		}
 
-    // Llamar al modelo con el objeto completo para el "reemplazo"
-    const updatedUser = GardenerModel.updateByID(userId, fullNewData);
-        
-    const { password, ...userResponse } = updatedUser!;
-    res.json({ message: 'Perfil actualizado', user: userResponse });
-};
+		// Crear el objeto COMPLETO fusionando los datos viejos con los nuevos
+		const fullNewData = {
+			...currentUser,
+			...partialData,
+		};
+
+		// Llamar al modelo con el objeto completo para el "reemplazo"
+		const updatedUser = GardenerModel.updateByID(userId, fullNewData);
+
+		const { password, ...userResponse } = updatedUser!;
+		res.json({ message: 'Perfil actualizado', user: userResponse });
+	};
 
 	// ---------------------------------------------
 	//   GESTIÓN DE LA HUERTA (LÓGICA RELACIONAL)
@@ -181,64 +181,62 @@ export class GardenerController {
 		res.json(detailedGarden);
 	};
 
-	/**
-	 * Agrega una planta del catálogo general (.json) a la huerta personal del jardinero.
-	 */
-	static addToGarden = (req: Request, res: Response) => {
-		// Normalizar el ID de la planta antes de intentar agregarla
-		const plantId = slugify(req.body.plantId as string);
-
-		// usar metodo del modelo para agregar
-		const success = GardenerModel.addPlantToGarden(req.user!.id, plantId);
+	// Reemplaza 'addToGarden' con esto:
+	static addBatchToGarden = (req: Request, res: Response) => {
+		const { plantId, quantity, notes } = req.body;
 
 		// Validación
-		success
-			? res
-					.status(200)
-					.json({ message: 'Planta agregada con éxito a tu huerta' })
-			: res.status(400).json({
-					message: 'No se pudo agregar la planta (posible duplicado)',
-			  });
+		if (!plantId || !quantity) {
+        return res.status(400).json({ message: "Faltan 'plantId' y 'quantity'." });
+    }
+
+		const newBatch = GardenerModel.addCropBatch(req.user!.id, {
+			plantId,
+			quantity,
+			notes,
+		});
+		if (!newBatch)
+			return res
+				.status(400)
+				.json({ message: 'No se pudo añadir el lote.' });
+		res.status(201).json({
+			message: 'Lote añadido con éxito',
+			batch: newBatch,
+		});
 	};
 
-	/**
-	 * Actualiza el estado de evolución de un cultivo (ej: de 'creciendo' a 'listo').
-	 */
-	static updatePlantStatus = (req: Request, res: Response) => {
-		// Desestrucutrar
-		const { plantId, status } = req.body;
-
-		// Usar el modelo
-		const success = GardenerModel.updateGardenStatus(
+	// Reemplaza 'updatePlantStatus' con esto:
+	static updateInstance = (req: Request, res: Response) => {
+		const { batchId, instanceId, status } = req.body;
+		const success = GardenerModel.updateInstanceStatus(
 			req.user!.id,
-			plantId,
+			batchId,
+			instanceId,
 			status
 		);
-
-		// Validación
-		success
-			? res.json({ message: 'Estado de cultivo actualizado' })
-			: res
-					.status(400)
-					.json({ message: 'Error al actualizar el estado' });
+		if (!success)
+			return res
+				.status(404)
+				.json({ message: 'No se encontró la instancia o el lote.' });
+		res.json({ message: 'Estado de la instancia actualizado.' });
 	};
 
-	/**
-	 * Elimina permanentemente una planta de la huerta del usuario.
-	 */
-	static removeFromGarden = (req: Request, res: Response) => {
-		// Desestructurar
-		const { plantId } = req.params;
+	// Reemplaza 'removeFromGarden' con esto:
+	static removeBatchFromGarden = (req: Request, res: Response) => {
+		const { batchId } = req.params;
 
-		// Usar el modelo
-		const success = GardenerModel.removePlantFromGarden(
-			req.user!.id,
-			plantId as string
-		);
+		// Verificar que el batchId realmente vino en la URL
+		if (!batchId) {
+			return res
+				.status(400)
+				.json({ message: 'El ID del lote es requerido.' });
+		}
 
-		// Validación
-		success
-			? res.json({ message: 'Planta eliminada de tu huerta' })
-			: res.status(400).json({ message: 'Error al eliminar la planta' });
+		const success = GardenerModel.removeCropBatch(req.user!.id, batchId);
+		if (!success)
+			return res
+				.status(404)
+				.json({ message: 'No se encontró el lote para eliminar.' });
+		res.json({ message: 'Lote eliminado de la huerta.' });
 	};
 }

@@ -31,11 +31,14 @@ gardenerRouter.get('/garden', GardenerController.getMyGarden);
 
 // --- GESTIÓN DE CULTIVOS ---
 
-/** @route POST /api/gardener/garden -> Agrega una planta del catálogo a la huerta personal */
-gardenerRouter.post('/garden', GardenerController.addToGarden);
-/** @route PATCH /api/gardener/garden/status -> Cambia el estado del cultivo (ej: de creciendo a listo) */
-gardenerRouter.patch('/garden/status', GardenerController.updatePlantStatus);
-/** @route DELETE /api/gardener/garden/:plantId -> Quita un cultivo de la huerta personal */
-gardenerRouter.delete('/garden/:plantId', GardenerController.removeFromGarden);
+/** @route POST /api/garden/batch -> Agrega una cultivo de la planta del catálogo a la huerta personal */
+gardenerRouter.post('/garden/batch', GardenerController.addBatchToGarden);
+/** @route PATCH /api/garden/instance -> Edita del cultivo (ej: de creciendo a listo) */
+gardenerRouter.patch('/garden/instance', GardenerController.updateInstance);
+/** @route DELETE /api/garden/batch/:batchId -> Quita un cultivo de la huerta personal */
+gardenerRouter.delete('/garden/batch/:batchId', GardenerController.removeBatchFromGarden);
 
 export default gardenerRouter;
+
+
+

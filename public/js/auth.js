@@ -1,4 +1,4 @@
-// Importación de fetch
+import { getThemeButtonHTML } from './theme.js';
 import { loginUser, registerUser } from './api.js';
 import { openModal, closeModal } from './modal.js';
 import { createAlertModalContent, createLoginModalContent } from './ui.js';
@@ -129,10 +129,6 @@ export const updateNavOnLogin = (user) => {
 	const navMenuMobile = document.getElementById('nav-menu-mobile');
 	if (!navMenuDesktop || !navMenuMobile) return;
 
-	const themeButtonHTML =
-		document.getElementById('theme-toggle')?.outerHTML ||
-		'<button id="theme-toggle" class="text-xl text-gray-600 hover:text-eco-green-dark transition dark:text-gray-300 dark:hover:text-green-300"><i class="fas fa-moon"></i></button>';
-
 	// --- RENDERIZAR MENÚ DESKTOP ---
 	navMenuDesktop.innerHTML = `
         <!-- Botón principal a la Huerta -->
@@ -141,7 +137,7 @@ export const updateNavOnLogin = (user) => {
             <span>Mi Huerta</span>
         </a>
 
-        ${themeButtonHTML}
+        ${getThemeButtonHTML()}
 
         <!-- Contenedor del Menú Desplegable -->
         <div class="relative" id="profile-menu-container">
@@ -166,16 +162,26 @@ export const updateNavOnLogin = (user) => {
     `;
 
 	// --- RENDERIZAR MENÚ MOBILE ---
+	// Clases comunes para los enlaces del menú móvil para mantener consistencia
+	const mobileLinkClasses =
+		'block p-4 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors';
+
 	navMenuMobile.innerHTML = `
-        <a href="/html/dashboard.html" class="block px-4 py-2 text-eco-green-dark dark:text-eco-green-dark hover:bg-gray-100 dark:hover:bg-gray-700">Mi Huerta</a>
-        <a href="/html/profile.html" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Mi Perfil</a>
+        <a href="/html/dashboard.html" class="${mobileLinkClasses}">Mi Huerta</a>
+        <a href="/html/profile.html" class="${mobileLinkClasses}">Mi Perfil</a>
         ${
 			user.role === 'admin'
-				? '<a href="/html/admin.html" class="block px-4 py-2 text-sm text-yellow-500 hover:bg-gray-100 dark:hover:bg-gray-700">Panel Admin</a>'
+				? `<a href="/html/admin.html" class="${mobileLinkClasses} text-yellow-500">Panel Admin</a>`
 				: ''
 		}
+		
+		<div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
+		<div class="px-3 py-2 flex justify-between items-center">
+            <span>Cambiar Tema</span>
+            ${getThemeButtonHTML()}
+        </div>
         <div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
-        <button id="logout-button-mobile" class="block w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700">Cerrar Sesión</button>
+        <button id="logout-button-mobile" class="${mobileLinkClasses} text-red-500">Cerrar Sesión</button>
     `;
 
 	// --- ASIGNAR LISTENERS A LOS NUEVOS ELEMENTOS ---
@@ -209,7 +215,7 @@ export const updateNavOnLogin = (user) => {
 
 	// Reactivar el botón del tema
 	if (window.reInitThemeButton) window.reInitThemeButton();
-}
+};
 
 /**
  * Restaurar la barra de navegación al estado "Visitante".
@@ -217,25 +223,29 @@ export const updateNavOnLogin = (user) => {
 export const updateNavOnLogout = () => {
 	const navMenuDesktop = document.getElementById('nav-menu-desktop');
 	const navMenuMobile = document.getElementById('nav-menu-mobile');
-	console.log(navMenuDesktop);
-	console.log(navMenuMobile);
-	
-	
+
 	if (!navMenuDesktop || !navMenuMobile) return;
 
 	// --- RENDERIZAR MENÚS DE VISITANTE ---
 
 	navMenuDesktop.innerHTML = `
-        <button id="theme-toggle" class="text-xl text-gray-600 hover:text-eco-green-dark transition dark:text-gray-300 dark:hover:text-green-300">
-            <i class="fas fa-moon"></i>
-        </button>
+        ${getThemeButtonHTML()} 
+		<div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
         <button id="login-button-desktop" class="bg-eco-green-dark text-white px-4 py-2 rounded-md font-bold hover:bg-opacity-80 transition active:scale-95">
             Ingresar
         </button>
     `;
 
+	// Clases comunes para los enlaces del menú móvil para mantener consistencia
+	const mobileLinkClasses =
+		'block w-full text-base p-4 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex';
 	navMenuMobile.innerHTML = `
-        <button id="login-button-mobile" class="block px-4 py-2 text-eco-green-dark dark:text-eco-green-dark hover:bg-gray-100 dark:hover:bg-gray-700">Ingresar</button>
+        <button id="login-button-mobile" class="${mobileLinkClasses}">Ingresar</button>
+		<div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
+		<div id="mobile-theme-switcher" class="${mobileLinkClasses} flex justify-between items-center cursor-pointer">
+            <span>Cambiar Tema</span>
+            ${getThemeButtonHTML()}
+        </div>
     `;
 
 	// --- ASIGNAR LISTENERS ---

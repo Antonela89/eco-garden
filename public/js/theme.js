@@ -69,8 +69,21 @@ export const initThemeSwitcher = () => {
 			// Limpiar listeners antiguos para evitar duplicados.
 			button.removeEventListener('click', toggleTheme);
 			// Asignar el nuevo listener.
-			button.addEventListener('click', toggleTheme);
+			button.addEventListener('click', (e) => {
+				e.stopPropagation(); // Evitar que el clic se propague al div padre
+				toggleTheme();
+			});
 		});
+
+		// Contenedor del tema en el menú móvil
+		const mobileThemeSwitcher = document.getElementById(
+			'mobile-theme-switcher'
+		);
+		if (mobileThemeSwitcher) {
+			mobileThemeSwitcher.removeEventListener('click', toggleTheme);
+			mobileThemeSwitcher.addEventListener('click', toggleTheme);
+		}
+		
 		// Sincronizar el ícono inmediatamente
 		updateThemeIcons(localStorage.getItem('theme') || 'light');
 	};

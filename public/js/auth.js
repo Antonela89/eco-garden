@@ -161,8 +161,10 @@ export const updateNavOnLogin = (user) => {
 
 	// Listener de Logout
 	document.getElementById('logout-button').addEventListener('click', () => {
+		// Limpiar completamente el almacenamiento local de las credenciales de sesión.
 		localStorage.removeItem('token');
 		localStorage.removeItem('user');
+		// Redirigir al usuario a la página de inicio.
 		window.location.href = '/index.html';
 	});
 

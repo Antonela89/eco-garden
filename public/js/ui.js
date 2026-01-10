@@ -129,7 +129,7 @@ export const createPlantCard = (plant) => {
                 ${
 					isReadyToSow
 						? `
-                <span class="absolute top-2 right-2 bg-eco-green-dark text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                <span class="absolute top-2 right-2 bg-eco-green-dark text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg ring-2 ring-white/50 animate-heartbeat">
                     <i class="fas fa-star mr-1"></i>¡Siembra Ahora!
                 </span>`
 						: ''

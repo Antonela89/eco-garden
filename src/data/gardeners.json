@@ -6,5 +6,13 @@
     "role": "gardener",
     "username": "Jardin de Anto",
     "id": "584213f2-6843-4ac0-8b34-897a75f2fba3"
+  },
+  {
+    "email": "inta@admin.com",
+    "password": "$2b$10$XZejytJg2D1XuMI8GfGbEeUj4YhyDOvKujORNB39jkELDfrlYTO3y",
+    "myPlants": [],
+    "role": "admin",
+    "username": "inta_admin",
+    "id": "db3ff6de-f630-4d6e-a36f-1ff182311831"
   }
 ]

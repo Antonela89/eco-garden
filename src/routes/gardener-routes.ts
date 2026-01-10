@@ -4,6 +4,10 @@ import { Router } from 'express';
 import { GardenerController } from '../controllers/gardener-controller';
 // Importación de middleware de autenticación
 import { verifyToken } from '../middlewares/authentication-middleware';
+// Importación de middleware de validación
+import { validateSchema } from '../middlewares/validator-middleware';
+// Importación de esquema de edición de usuario
+import { updateProfileSchema } from '../schemas/gardener-schema';
 
 // Instancia de Router
 const gardenerRouter = Router();
@@ -19,6 +23,8 @@ gardenerRouter.use(verifyToken);
 
 /** @route GET /api/gardener/profile -> Obtiene datos básicos del usuario */
 gardenerRouter.get('/profile', GardenerController.getProfile);
+/** @route PUT /api/gardener/profile -> Edita datos básicos del usuario */
+gardenerRouter.put('/profile', validateSchema(updateProfileSchema), GardenerController.updateProfile);
 /** @route GET /api/gardener/garden -> Obtiene la huerta con información detallada del catálogo */
 gardenerRouter.get('/garden', GardenerController.getMyGarden);
 

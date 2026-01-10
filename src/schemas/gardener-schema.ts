@@ -44,6 +44,20 @@ export const loginSchema = z.object({
 	password: z.string().min(1, 'La contraseña es requerida'),
 });
 
+// El schema base con todas las reglas
+const gardenerBaseSchema = z.object({
+    username: z.string().min(3).max(20).optional(),
+    email: z.email().optional(),
+    password: z.string().min(8).regex(/[A-Z]/).regex(/[0-9]/).optional(),
+});
+
+/**
+ * updateProfileSchema
+ * Esquema simplificado para la edición del perfil de usuario.
+ * Solo requiere las credenciales básicas de acceso.
+ */
+export const updateProfileSchema = gardenerBaseSchema;
+
 /**
  * addPlantToHuertaSchema
  * Valida la información necesaria para que un jardinero agregue un cultivo a su huerta.

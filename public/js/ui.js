@@ -289,74 +289,76 @@ export const createPlantDetailsContent = (plant, user) => {
             </div>`;
 
 	return `
-        <header class="p-6 border-b dark:border-gray-700 flex justify-between items-start">
-            <div>
-                <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white">${
-					plant.nombre
-				}</h2>
-                <p class="text-md text-gray-500">${plant.familia}</p>
-            </div>
-            <button class="js-close-modal text-3xl text-gray-400 hover:text-red-500 transition transform hover:rotate-90">
-                <i class="fas fa-times"></i>
-            </button>
-        </header>
+            <!-- HEADER -->
+            <header class="p-6 border-b dark:border-gray-700 flex justify-between items-start flex-shrink-0">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white">${
+						plant.nombre
+					}</h2>
+                    <p class="text-md text-gray-500">${plant.familia}</p>
+                </div>
+                <button class="js-close-modal text-3xl text-gray-400 hover:text-red-500 transition transform hover:rotate-90">
+                    <i class="fas fa-times"></i>
+                </button>
+            </header>
 
-        <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Columna de Imagen y Badges -->
-            <div>
-                <img src="${plant.imagen}" alt="${
+            <!-- CUERPO DEL MODAL (Con scroll) -->
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 overflow-y-scroll flex-grow">
+                <!-- Columna de Imagen y Badges -->
+                <div>
+                    <img src="${plant.imagen}" alt="${
 		plant.nombre
 	}" class="w-full h-64 object-cover rounded-lg shadow-md mb-4">
-                <div class="flex flex-wrap gap-2 text-sm">
-                    <span class="font-semibold px-3 py-1 rounded-full bg-green-100 text-green-800">${
-						plant.dificultad
-					}</span>
-                    <span class="font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-800">${
-						plant.aptoMaceta ? 'Apto Maceta' : 'No Apto Maceta'
-					}</span>
-                    <span class="font-semibold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">${
-						plant.toleranciaSombra
-							? 'Tolera Sombra'
-							: 'Requiere Sol'
-					}</span>
-                </div>
-            </div>
-
-            <!-- Columna de Detalles Técnicos -->
-            <div>
-                <div class="mb-4">
-                    <h4 class="font-bold text-lg mb-2 border-b dark:border-gray-600 pb-1">Siembra</h4>
-                    <p><strong>Método:</strong> ${plant.metodo.join(', ')}</p>
-
-                    ${createSowingCalendar(plant.siembra)}
-
-                </div>
-                <div class="mb-4">
-                    <h4 class="font-bold text-lg mb-2 border-b dark:border-gray-600 pb-1">Cosecha y Espacio</h4>
-                    <p><strong>Tiempo de Cosecha:</strong> ${formatHarvestDays(
-						plant
-					)} días</p>
-                    <p><strong>Distancia:</strong> ${
-						plant.distancia.entrePlantas
-					} cm entre plantas, ${
+                    <div class="flex flex-wrap gap-2 text-sm">
+                        <span class="font-semibold px-3 py-1 rounded-full bg-green-100 text-green-800">${
+							plant.dificultad
+						}</span>
+                        <span class="font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-800">${
+							plant.aptoMaceta ? 'Apto Maceta' : 'No Apto Maceta'
+						}</span>
+                        <span class="font-semibold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">${
+							plant.toleranciaSombra
+								? 'Tolera Sombra'
+								: 'Requiere Sol'
+						}</span>
+                    </div>
+                </div> 
+                <!-- Columna de Detalles Técnicos -->
+                <div>
+                    <div class="mb-4">
+                        <h4 class="font-bold text-lg mb-2 border-b dark:border-gray-600 pb-1">Siembra</h4>
+                        <p><strong>Método:</strong> ${plant.metodo.join(
+							', '
+						)}</p>
+                        ${createSowingCalendar(plant.siembra)}
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="font-bold text-lg mb-2 border-b dark:border-gray-600 pb-1">Cosecha y Espacio</h4>
+                        <p><strong>Tiempo de Cosecha:</strong> ${formatHarvestDays(
+							plant
+						)} días</p>
+                        <p><strong>Distancia:</strong> ${
+							plant.distancia.entrePlantas
+						} cm entre plantas, ${
 		plant.distancia.entreLineas
 	} cm entre líneas</p>
-                </div>
-                <div class="mb-4">
-                    <h4 class="font-bold text-lg mb-2 border-b dark:border-gray-600 pb-1">Asociaciones y Rotación</h4>
-                    <p><strong>Cultivos Amigos:</strong> ${plant.asociacion.join(
-						', '
-					)}</p>
-                    <p><strong>Rotación Recomendada:</strong> ${plant.rotacion.join(
-						', '
-					)}</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-2 border-b dark:border-gray-600 pb-1">Asociaciones y Rotación</h4>
+                        <p><strong>Cultivos Amigos:</strong> ${plant.asociacion.join(
+							', '
+						)}</p>
+                        <p><strong>Rotación Recomendada:</strong> ${plant.rotacion.join(
+							', '
+						)}</p>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <footer class="p-6 bg-gray-50 dark:bg-gray-800 border-t dark:border-gray-700 text-right">
-            ${footerContent}
-        </footer>
+            <!-- FOOTER FIJO -->
+            <footer class="p-6 bg-gray-50 dark:bg-gray-800 border-t dark:border-gray-700 text-right mt-auto flex-shrink-0">
+                ${footerContent}
+            </footer>
     `;
 };
 

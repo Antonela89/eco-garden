@@ -73,9 +73,22 @@ const createSowingCalendar = (siembraMonths) => {
  * @returns {boolean} - true si es temporada, false si no.
  */
 const isSowableNow = (plant) => {
-    const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-    const mesActual = meses[new Date().getMonth()];
-    return plant.siembra.flat().includes(mesActual);
+	const meses = [
+		'Enero',
+		'Febrero',
+		'Marzo',
+		'Abril',
+		'Mayo',
+		'Junio',
+		'Julio',
+		'Agosto',
+		'Septiembre',
+		'Octubre',
+		'Noviembre',
+		'Diciembre',
+	];
+	const mesActual = meses[new Date().getMonth()];
+	return plant.siembra.flat().includes(mesActual);
 };
 
 // -----------------------------------
@@ -95,24 +108,32 @@ export const createPlantCard = (plant) => {
 		Difícil: 'bg-red-100 text-red-800',
 	};
 
-     // Determinar si la planta es apta para la siembra actual
-    const isReadyToSow = isSowableNow(plant);
-    
-    // Definir clases dinámicas para el borde
-    const cardBorder = isReadyToSow 
-        ? 'border-4 border-eco-green-light' // Borde verde si es apta
-        : 'border border-transparent';      // Borde transparente si no
+	// Determinar si la planta es apta para la siembra actual
+	const isReadyToSow = isSowableNow(plant);
+
+	// Definir clases dinámicas para el borde
+	const cardBorder = isReadyToSow
+		? 'border-4 border-eco-green-light' // Borde verde si es apta
+		: 'border border-transparent'; // Borde transparente si no
 
 	return `
-        <div data-plant-id="${plant.id}" class="cursor-pointer bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300 ${cardBorder}"">
+        <div data-plant-id="${
+			plant.id
+		}" class="cursor-pointer bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300 ${cardBorder}"">
             <!-- Imagen de la planta -->
-            <img src="${plant.imagen}" alt="${plant.nombre}" class="w-full h-48 object-cover">
+            <img src="${plant.imagen}" alt="${
+		plant.nombre
+	}" class="w-full h-48 object-cover">
 
             <!-- Badge de "¡Siembra Ahora!" -->
-                ${isReadyToSow ? `
+                ${
+					isReadyToSow
+						? `
                 <span class="absolute top-2 right-2 bg-eco-green-dark text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
                     <i class="fas fa-star mr-1"></i>¡Siembra Ahora!
-                </span>` : ''}
+                </span>`
+						: ''
+				}
             
             <div class="p-4">
                 <!-- Nombre y Familia -->
@@ -196,7 +217,9 @@ export const createMyGardenCard = (myPlant) => {
 	const progressPercentage = Math.min(100, (daysPassed / totalDays) * 100);
 
 	return `
-        <article data-plant-id="${myPlant.plantId}" class="bg-white dark:bg-dark-surface rounded-lg shadow-lg overflow-hidden flex flex-col">
+        <article data-plant-id="${
+			myPlant.plantId
+		}" class="bg-white dark:bg-dark-surface rounded-lg shadow-lg overflow-hidden flex flex-col">
             <img src="${myPlant.imagen}" alt="${
 		myPlant.nombre
 	}" class="w-full h-40 object-cover">
@@ -556,7 +579,7 @@ export const createLoginModalContent = () => {
 export const createConfirmModalContent = (
 	message,
 	confirmText = 'Confirmar',
-    entityId = null
+	entityId = null
 ) => {
 	return `
         <div class="p-8 text-center flex flex-col items-center gap-6">
@@ -602,11 +625,12 @@ export const createProfileModalContent = (user) => {
  * @param {'success' | 'error'} type - El tipo de alerta.
  */
 export const createAlertModalContent = (title, message, type = 'success') => {
-    const icon = type === 'success' 
-        ? '<i class="fas fa-check-circle text-5xl text-green-500"></i>'
-        : '<i class="fas fa-times-circle text-5xl text-red-500"></i>';
+	const icon =
+		type === 'success'
+			? '<i class="fas fa-check-circle text-5xl text-green-500"></i>'
+			: '<i class="fas fa-times-circle text-5xl text-red-500"></i>';
 
-    return `
+	return `
         <div class="p-8 text-center flex flex-col items-center gap-4">
             ${icon}
             <h3 class="text-2xl font-bold">${title}</h3>
@@ -618,3 +642,30 @@ export const createAlertModalContent = (title, message, type = 'success') => {
     `;
 };
 
+/**
+ * Crear el HTML para el formulario de edición de perfil.
+ * @param {object} user - El usuario actual para pre-rellenar el campo.
+ * @returns {string}
+ */
+export const createProfileFormModalContent = (user) => {
+	return `
+        <header class="p-6 flex justify-between items-center border-b dark:border-gray-700">
+            <h2 class="text-2xl font-bold">Editar Perfil</h2>
+            <button class="js-close-modal text-3xl">&times;</button>
+        </header>
+        <form id="profile-form" class="p-8">
+            <div>
+                <label for="username" class="block text-sm font-medium">Nombre de Usuario</label>
+                <input type="text" id="username" name="username" value="${user.username}" 
+                    class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
+            </div>
+            <!-- NOTA: La edición de email y password es más compleja (requiere confirmación)
+                por lo que se deja fuera por ahora para simplificar. -->
+
+            <footer class="mt-8 flex justify-end gap-4">
+                <button type="button" class="js-close-modal px-6 py-2 rounded-md">Cancelar</button>
+                <button type="submit" class="bg-eco-green-dark text-white font-bold px-6 py-2 rounded-md">Guardar Cambios</button>
+            </footer>
+        </form>
+    `;
+};

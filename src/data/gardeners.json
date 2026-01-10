@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "email": "anto@example.com",
+    "password": "$2b$10$ef9Q1ijieCwd2XofoK/2DuA8SbW2bCM3sabhHN9KS9TBktJ5p5goq",
+    "myPlants": [],
+    "role": "gardener",
+    "username": "Jardin de Anto",
+    "id": "584213f2-6843-4ac0-8b34-897a75f2fba3"
+  }
+]

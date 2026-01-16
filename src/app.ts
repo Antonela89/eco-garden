@@ -28,8 +28,8 @@ const app = express();
 app.use(helmet({
     contentSecurityPolicy: {
         directives: {
-            // Permitir que, por defecto, todo se cargue desde dominio propio ('self')
-            defaultSrc: ["'self'"],
+            // Permitir que, por defecto, todo se cargue desde dominio propio ('self') o desde la url de deploy
+            defaultSrc: ["'self'", "https://ecogarden-w8ks.onrender.com"],
             
             // Definir de dónde se pueden cargar los scripts
             scriptSrc: [

@@ -3,6 +3,13 @@
  * @param {object} [plant=null] - Si se provee una planta, rellena el formulario para edición.
  * @returns {string} El string HTML del formulario.
  */
+
+const labelClass =
+	'block text-sm font-medium text-eco-brown dark:text-gray-300';
+
+const inputClass =
+	'mt-1 block w-full rounded-md px-3 py-2 bg-transparent border-2 border-gray-200 focus:border-eco-green-dark focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-dark-surface dark:focus:border-eco-green-light';
+    
 export const createAdminPlantForm = (plant = null) => {
 	const isEditing = plant !== null;
 	const title = isEditing ? 'Editar Especie' : 'Añadir Nueva Especie';
@@ -21,44 +28,42 @@ export const createAdminPlantForm = (plant = null) => {
                 <!-- Columna Izquierda -->
                 <div class="flex flex-col gap-4">
                     <div>
-                        <label for="id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">ID (slug)</label>
+                        <label for="id" class="${labelClass}">ID (slug)</label>
                         <input type="text" id="id" name="id" value="${
 							plant?.id || ''
 						}" 
                             ${isEditing ? 'readonly' : 'required'} 
-                            class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2 ${
-								isEditing
-									? 'bg-gray-100 cursor-not-allowed'
-									: ''
-							}">
+                            class="${inputClass} ${
+		isEditing ? 'bg-gray-100 cursor-not-allowed' : ''
+	}">
                     </div>
                     <div>
-                        <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre</label>
+                        <label for="nombre" class="${labelClass}">Nombre</label>
                         <input type="text" id="nombre" name="nombre" value="${
 							plant?.nombre || ''
 						}" required 
-                            class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
+                            class="${inputClass}">
                     </div>
                     <div>
-                        <label for="familia" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Familia</label>
+                        <label for="familia" class="${labelClass}">Familia</label>
                         <input type="text" id="familia" name="familia" value="${
 							plant?.familia || ''
 						}" required 
-                            class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
+                            class="${inputClass}">
                     </div>
                     <div>
-                        <label for="clima" class="block text-sm font-medium text-gray-700 dark:text-gray-300 px-3 py-2">Clima</label>
+                        <label for="clima" class="${labelClass}">Clima</label>
                         <input type="text" id="clima" name="clima" value="${
 							plant?.clima || ''
 						}" required 
-                            class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
+                            class="${inputClass}">
                     </div>
                     <div>
-                        <label for="imagen" class="block text-sm font-medium text-gray-700 dark:text-gray-300 px-3 py-2">URL de Imagen</label>
+                        <label for="imagen" class="${labelClass}">URL de Imagen</label>
                         <input type="url" id="imagen" name="imagen" value="${
 							plant?.imagen || ''
 						}" required 
-                            class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
+                            class="${inputClass}">
                     </div>
                 </div>
 
@@ -66,39 +71,39 @@ export const createAdminPlantForm = (plant = null) => {
                 <div class="flex flex-col gap-4">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label for="diasCosechaMin" class="block text-sm font-medium">Cosecha (Mín)</label>
+                            <label for="diasCosechaMin" class="${labelClass}">Cosecha (Mín)</label>
                             <input type="number" id="diasCosechaMin" name="diasCosechaMin" value="${
 								plant?.diasCosecha.min || ''
 							}" required 
-                                class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
+                                class="${inputClass}">
                         </div>
                         <div>
-                            <label for="diasCosechaMax" class="block text-sm font-medium">Cosecha (Máx)</label>
+                            <label for="diasCosechaMax" class="${labelClass}">Cosecha (Máx)</label>
                             <input type="number" id="diasCosechaMax" name="diasCosechaMax" value="${
 								plant?.diasCosecha.max || ''
 							}" required 
-                                class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
+                                class="${inputClass}">
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label for="distanciaEntre" class="block text-sm font-medium">Dist. Plantas (cm)</label>
+                            <label for="distanciaEntre" class="${labelClass}">Dist. Plantas (cm)</label>
                             <input type="number" id="distanciaEntre" name="distanciaEntre" value="${
 								plant?.distancia.entrePlantas || ''
 							}" required 
-                                class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
+                                class="${inputClass}">
                         </div>
                         <div>
-                            <label for="distanciaLineas" class="block text-sm font-medium">Dist. Líneas (cm)</label>
+                            <label for="distanciaLineas" class="${labelClass}">Dist. Líneas (cm)</label>
                             <input type="number" id="distanciaLineas" name="distanciaLineas" value="${
 								plant?.distancia.entreLineas || ''
 							}" required 
-                                class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
+                                class="${inputClass}">
                         </div>
                     </div>
                     <div>
-                        <label for="dificultad" class="block text-sm font-medium">Dificultad</label>
-                        <select id="dificultad" name="dificultad" required class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
+                        <label for="dificultad" class="${labelClass}">Dificultad</label>
+                        <select id="dificultad" name="dificultad" required class="${inputClass}">
                             <option value="Fácil" ${
 								plant?.dificultad === 'Fácil' ? 'selected' : ''
 							}>Fácil</option>
@@ -131,25 +136,25 @@ export const createAdminPlantForm = (plant = null) => {
 
             <!-- Campos de texto largos (Arrays) -->
             <div class="mt-4">
-                <label for="siembra" class="block text-sm font-medium">Meses de Siembra (separados por coma)</label>
+                <label for="siembra" class="${labelClass}">Meses de Siembra (separados por coma)</label>
                 <input type="text" id="siembra" name="siembra" value="${
 					plant ? plant.siembra.flat().join(', ') : ''
 				}" required 
-                    class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
+                    class="${inputClass}">
             </div>
             <div class="mt-4">
-                <label for="asociacion" class="block text-sm font-medium">Asociaciones (separadas por coma)</label>
+                <label for="asociacion" class="${labelClass}">Asociaciones (separadas por coma)</label>
                 <input type="text" id="asociacion" name="asociacion" value="${
 					plant?.asociacion.join(', ') || ''
 				}" 
-                class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
+                class="${inputClass}">
             </div>
             <div class="mt-4">
-                <label for="rotacion" class="block text-sm font-medium">Rotación Recomendada (separada por coma)</label>
+                <label for="rotacion" class="${labelClass}">Rotación Recomendada (separada por coma)</label>
                 <input type="text" id="rotacion" name="rotacion" value="${
 					plant?.rotacion.join(', ') || ''
 				}" 
-                    class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
+                    class="${inputClass}">
             </div>
 
             <footer class="mt-8 pt-4 border-t dark:border-gray-700 flex justify-end gap-4">
@@ -175,9 +180,9 @@ export const createProfileFormContent = (user) => {
         </header>
         <form id="profile-form" class="p-8">
             <div>
-                <label for="username" class="block text-sm font-medium">Nombre de Usuario</label>
+                <label for="username" class="${labelClass}">Nombre de Usuario</label>
                 <input type="text" id="username" name="username" value="${user.username}" 
-                    class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
+                    class="${inputClass}">
             </div>
             <!-- NOTA: La edición de email y password es más compleja (requiere confirmación)
                 por lo que se deja fuera por ahora para simplificar. -->
@@ -203,14 +208,14 @@ export const createAddBatchFormContent = (plant) => {
         </header>
         <form id="add-batch-form" data-plant-id="${plant.id}" class="p-8 flex flex-col gap-4">
             <div>
-                <label for="quantity" class="block text-sm font-medium">Cantidad de Semillas/Plantines</label>
+                <label for="quantity" class="${labelClass}">Cantidad de Semillas/Plantines</label>
                 <input type="number" id="quantity" name="quantity" value="1" min="1" required 
-                    class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
+                    class="${inputClass}">
             </div>
             <div>
-                <label for="notes" class="block text-sm font-medium">Notas (opcional)</label>
+                <label for="notes" class="${labelClass}">Notas (opcional)</label>
                 <textarea id="notes" name="notes" placeholder="Ej: maceta de la esquina, lado sur..." 
-                    class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2"></textarea>
+                    class="${inputClass}"></textarea>
             </div>
             <footer class="mt-6 flex justify-end gap-4">
                 <button type="button" class="js-close-modal px-6 py-2 rounded-md">Cancelar</button>

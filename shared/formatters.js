@@ -1,9 +1,13 @@
 /**
+ * @file Contiene funciones de formateo de texto compatibles con CommonJS y ES Modules.
+ */
+
+/**
  * Transforma un texto para que la primera letra sea mayúscula y el resto minúsculas.
  * @param {string} text - Cadena de texto a formatear.
  * @returns {string} Texto formateado.
  */
-export const capitalize = (text) => {
+const capitalize = (text) => {
     if (!text || typeof text !== 'string') return text;
     return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
 };
@@ -14,7 +18,7 @@ export const capitalize = (text) => {
  * @param {any} data - Objeto de entrada (ej. req.body).
  * @returns {any} Objeto con sus valores de texto formateados.
  */
-export const formatInputData = (data) => {
+const formatInputData = (data) => {
     const formattedData = { ...data };
 
     // Definir una lista de claves que NO deben ser modificadas bajo ningún concepto
@@ -36,7 +40,7 @@ export const formatInputData = (data) => {
  * @param {string} text - Cadena de texto a procesar.
  * @returns {string} Texto normalizado en formato slug.
  */
-export const slugify = (text) => {
+const slugify = (text) => {
     if (!text || typeof text !== 'string') return text;
 
     return text
@@ -53,7 +57,7 @@ export const slugify = (text) => {
  * @param {any} data - Objeto con los datos de entrada.
  * @returns {any} Objeto con el ID formateado.
  */
-export const formatIdData = (data) => {
+const formatIdData = (data) => {
     const formattedData = { ...data };
 
     // Validar si existe la clave 'id' y si su valor es una cadena de texto
@@ -69,10 +73,23 @@ export const formatIdData = (data) => {
  * @param {string} text - El texto a normalizar.
  * @returns {string} El texto normalizado.
  */
-export const normalizeText = (text) => {
+const normalizeText = (text) => {
     if (!text || typeof text !== 'string') return '';
     return text
         .toLowerCase()
         .normalize("NFD") // Descompone los caracteres (ej: 'á' -> 'a' + '´')
         .replace(/[\u0300-\u036f]/g, ""); // Elimina los diacríticos (acentos)
 };
+
+// --- EXPORTACIÓN UNIVERSAL ---
+// Esto permite que el archivo sea usado tanto por 'require' (backend) como por 'import' (frontend)
+if (typeof module !== 'undefined' && module.exports) {
+    // Entorno CommonJS (Node.js)
+    module.exports = { capitalize, formatInputData, slugify, formatIdData, normalizeText };
+} else {
+    // Entorno ES Modules (Navegador)
+    // No es estrictamente necesario si solo usas 'export', pero es una buena práctica
+}
+
+// Para el frontend, seguimos necesitando 'export'
+export { capitalize, formatInputData, slugify, formatIdData, normalizeText };

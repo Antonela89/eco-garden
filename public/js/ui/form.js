@@ -26,7 +26,7 @@ export const createAdminPlantForm = (plant = null) => {
 							plant?.id || ''
 						}" 
                             ${isEditing ? 'readonly' : 'required'} 
-                            class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 ${
+                            class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2 ${
 								isEditing
 									? 'bg-gray-100 cursor-not-allowed'
 									: ''
@@ -37,28 +37,28 @@ export const createAdminPlantForm = (plant = null) => {
                         <input type="text" id="nombre" name="nombre" value="${
 							plant?.nombre || ''
 						}" required 
-                            class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
+                            class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
                     </div>
                     <div>
                         <label for="familia" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Familia</label>
                         <input type="text" id="familia" name="familia" value="${
 							plant?.familia || ''
 						}" required 
-                            class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
+                            class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
                     </div>
                     <div>
-                        <label for="clima" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Clima</label>
+                        <label for="clima" class="block text-sm font-medium text-gray-700 dark:text-gray-300 px-3 py-2">Clima</label>
                         <input type="text" id="clima" name="clima" value="${
 							plant?.clima || ''
 						}" required 
-                            class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
+                            class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
                     </div>
                     <div>
-                        <label for="imagen" class="block text-sm font-medium text-gray-700 dark:text-gray-300">URL de Imagen</label>
+                        <label for="imagen" class="block text-sm font-medium text-gray-700 dark:text-gray-300 px-3 py-2">URL de Imagen</label>
                         <input type="url" id="imagen" name="imagen" value="${
 							plant?.imagen || ''
 						}" required 
-                            class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
+                            class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
                     </div>
                 </div>
 
@@ -70,14 +70,14 @@ export const createAdminPlantForm = (plant = null) => {
                             <input type="number" id="diasCosechaMin" name="diasCosechaMin" value="${
 								plant?.diasCosecha.min || ''
 							}" required 
-                                class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
+                                class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
                         </div>
                         <div>
                             <label for="diasCosechaMax" class="block text-sm font-medium">Cosecha (Máx)</label>
                             <input type="number" id="diasCosechaMax" name="diasCosechaMax" value="${
 								plant?.diasCosecha.max || ''
 							}" required 
-                                class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
+                                class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
@@ -86,19 +86,19 @@ export const createAdminPlantForm = (plant = null) => {
                             <input type="number" id="distanciaEntre" name="distanciaEntre" value="${
 								plant?.distancia.entrePlantas || ''
 							}" required 
-                                class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
+                                class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
                         </div>
                         <div>
                             <label for="distanciaLineas" class="block text-sm font-medium">Dist. Líneas (cm)</label>
                             <input type="number" id="distanciaLineas" name="distanciaLineas" value="${
 								plant?.distancia.entreLineas || ''
 							}" required 
-                                class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
+                                class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
                         </div>
                     </div>
                     <div>
                         <label for="dificultad" class="block text-sm font-medium">Dificultad</label>
-                        <select id="dificultad" name="dificultad" required class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
+                        <select id="dificultad" name="dificultad" required class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
                             <option value="Fácil" ${
 								plant?.dificultad === 'Fácil' ? 'selected' : ''
 							}>Fácil</option>
@@ -135,21 +135,21 @@ export const createAdminPlantForm = (plant = null) => {
                 <input type="text" id="siembra" name="siembra" value="${
 					plant ? plant.siembra.flat().join(', ') : ''
 				}" required 
-                    class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
+                    class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
             </div>
             <div class="mt-4">
                 <label for="asociacion" class="block text-sm font-medium">Asociaciones (separadas por coma)</label>
                 <input type="text" id="asociacion" name="asociacion" value="${
 					plant?.asociacion.join(', ') || ''
 				}" 
-                class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
+                class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
             </div>
             <div class="mt-4">
                 <label for="rotacion" class="block text-sm font-medium">Rotación Recomendada (separada por coma)</label>
                 <input type="text" id="rotacion" name="rotacion" value="${
 					plant?.rotacion.join(', ') || ''
 				}" 
-                    class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
+                    class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
             </div>
 
             <footer class="mt-8 pt-4 border-t dark:border-gray-700 flex justify-end gap-4">
@@ -177,7 +177,7 @@ export const createProfileFormContent = (user) => {
             <div>
                 <label for="username" class="block text-sm font-medium">Nombre de Usuario</label>
                 <input type="text" id="username" name="username" value="${user.username}" 
-                    class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
+                    class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
             </div>
             <!-- NOTA: La edición de email y password es más compleja (requiere confirmación)
                 por lo que se deja fuera por ahora para simplificar. -->
@@ -197,7 +197,7 @@ export const createProfileFormContent = (user) => {
  */
 export const createAddBatchFormContent = (plant) => {
 	return `
-        <header class="p-6 flex justify-between items-center border-b dark:border-gray-700">
+        <header class="p-6 flex justify-between items-center border-b dark:border-gray-700" px-3 py-2>
             <h2 class="text-2xl font-bold">Añadir "${plant.nombre}"</h2>
             <button class="js-close-modal text-3xl">&times;</button>
         </header>
@@ -205,12 +205,12 @@ export const createAddBatchFormContent = (plant) => {
             <div>
                 <label for="quantity" class="block text-sm font-medium">Cantidad de Semillas/Plantines</label>
                 <input type="number" id="quantity" name="quantity" value="1" min="1" required 
-                    class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700">
+                    class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2">
             </div>
             <div>
                 <label for="notes" class="block text-sm font-medium">Notas (opcional)</label>
                 <textarea id="notes" name="notes" placeholder="Ej: maceta de la esquina, lado sur..." 
-                    class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700"></textarea>
+                    class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 px-3 py-2"></textarea>
             </div>
             <footer class="mt-6 flex justify-end gap-4">
                 <button type="button" class="js-close-modal px-6 py-2 rounded-md">Cancelar</button>

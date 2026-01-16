@@ -1,0 +1,351 @@
+/* ESTILO GLOBAL */
+body {
+    font-family: 'Nunito', sans-serif;
+}
+
+/* --- LOADER DE GERMINACIÓN --- */
+.seed-loader {
+    position: relative;
+    width: 100px;
+    height: 80px;
+}
+
+.ground {
+    width: 100%;
+    height: 3px;
+    background-color: #5D4037;
+    border-radius: 2px;
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+}
+
+/* Tallo */
+.sprout {
+    width: 5px;
+    background-color: #4ADE80;
+    position: absolute;
+    /* Nace justo debajo de la tierra */
+    bottom: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    transform-origin: bottom;
+    /* Redondear la punta del tallo para darle forma orgánica */
+    border-radius: 100% 100% 0 0;
+    /* Crecerá por encima de la tierra */
+    z-index: 3;
+    /* animation: grow-sprout 4s infinite ease-out; */
+    animation: grow-sprout-organic 4s infinite ease-out;
+}
+
+/* Semilla (hijo del tallo) */
+.seed-casing {
+    width: 16px;
+    height: 22px;
+    position: absolute;
+    /* Siempre en la punta del tallo */
+    top: 0;
+    left: -50%;
+    transform: translateX(-100%);
+    z-index: 4;
+}
+
+.seed-casing::before,
+.seed-casing::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #A37E2C;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    transform-origin: bottom center;
+}
+
+.seed-casing::before {
+    animation: pulse-and-break-left 4s infinite ease-out;
+}
+
+.seed-casing::after {
+    animation: pulse-and-break-right 4s infinite ease-out;
+}
+
+/* Hojas (hijo del tallo) */
+.leaves {
+    position: absolute;
+    top: -2px;
+    left: 50%;
+    transform: translateX(-100%);
+    width: 4px;
+    height: 4px;
+    z-index: 5;
+}
+
+.leaves::before,
+.leaves::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 18px;
+    background: #34D399;
+    border: 1px solid #076040;
+    border-radius: 50% 0;
+}
+
+.leaves::before {
+    transform-origin: bottom left;
+    animation: unfold-leaf-left 4s infinite ease-out;
+}
+
+.leaves::after {
+    transform-origin: bottom right;
+    animation: unfold-leaf-right 4s infinite ease-out;
+}
+
+/* Raíces */
+.roots {
+    width: 3px;
+    background-color: #d2b48c;
+    position: absolute;
+    /* Nace justo debajo de la tierra */
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    transform-origin: top;
+    /* Crece detrás de la tierra */
+    z-index: 1;
+    /* Curva en la punta de la raíz principal */
+    border-radius: 0 0 5px 5px;
+    animation: grow-roots 4s infinite ease-out;
+}
+
+.roots::before,
+.roots::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    background: inherit;
+    /* Curvatura en las raíces secundarias */
+    border-radius: 0 0 10px 10px;
+    transform-origin: top;
+}
+
+.roots::before {
+    transform: rotate(-30deg);
+    animation: grow-side-roots 4s infinite ease-out;
+}
+
+.roots::after {
+    transform: rotate(30deg);
+    animation: grow-side-roots 4s infinite ease-out;
+}
+
+/* --- ANIMACIONES SECUENCIALES Y SINCRONIZADAS --- */
+
+/* ETAPA 1: Semilla pulsa y luego se abre */
+@keyframes pulse-and-break-left {
+
+    /* Cerrada */
+    0% {
+        transform: rotate(0) scale(1);
+    }
+
+    /* Pulso */
+    15% {
+        transform: rotate(0) scale(1.1);
+    }
+
+    /* Vuelve a normal */
+    25% {
+        transform: rotate(0) scale(1);
+    }
+
+    /* Abierta */
+    40%,
+    60% {
+        transform: rotate(-45deg) scale(1);
+    }
+
+    /* Cae */
+    90%,
+    100% {
+        transform: rotate(-120deg) translateY(40px);
+        opacity: 0;
+    }
+}
+
+@keyframes pulse-and-break-right {
+
+    /* Cerrada */
+    0% {
+        transform: rotate(0) scale(1);
+    }
+
+    /* Pulso */
+    15% {
+        transform: rotate(0) scale(1.1);
+    }
+
+    /* Vuelve a normal */
+    25% {
+        transform: rotate(0) scale(1);
+    }
+
+    /* Abierta */
+    40%,
+    60% {
+        transform: rotate(45deg) scale(1);
+    }
+
+    /* Cae */
+    90%,
+    100% {
+        transform: rotate(120deg) translateY(40px);
+        opacity: 0;
+    }
+}
+
+/* ETAPA 2: Tallo y raíces crecen (1.2s - 2.4s) */
+/* Tallo: crece y se bambolea ligeramente al final */
+@keyframes grow-sprout-organic {
+
+    0%,
+    35% {
+        height: 0;
+    }
+
+    60% {
+        height: 40px;
+        transform: translateX(-50%) rotate(0deg);
+    }
+
+    /* Bamboleo */
+    80% {
+        height: 40px;
+        transform: translateX(-50%) rotate(-5deg);
+    }
+
+    /* Bamboleo */
+    100% {
+        height: 40px;
+        transform: translateX(-50%) rotate(1deg);
+    }
+
+}
+
+/* Raíces: principal y laterales crecen */
+@keyframes grow-roots {
+
+    0%,
+    35% {
+        height: 0;
+    }
+
+    60%,
+    100% {
+        height: 35px;
+    }
+}
+
+@keyframes grow-side-roots {
+
+    0%,
+    50% {
+        height: 0;
+    }
+
+    /* Empiezan a crecer un poco después */
+    90%,
+    100% {
+        height: 25px;
+    }
+}
+
+@keyframes grow-roots {
+
+    0%,
+    35% {
+        height: 0;
+    }
+
+    /* Crecen al mismo tiempo que el tallo */
+    60%,
+    100% {
+        height: 35px;
+    }
+}
+
+/* ETAPA 3: Hojas se abren (2.8s - 4s) */
+@keyframes unfold-leaf-left {
+
+    0%,
+    50% {
+        transform: rotate(0) scale(0);
+        opacity: 0;
+    }
+
+    60%,
+    100% {
+        transform: rotate(-90deg) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes unfold-leaf-right {
+
+    0%,
+    50% {
+        transform: rotate(0) scale(0);
+        opacity: 0;
+    }
+
+    60%,
+    100% {
+        transform: rotate(45deg) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Animación de Latido para Badges */
+@keyframes heartbeat {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.animate-heartbeat {
+    animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+/* fondo de gradiente animado */
+.bg-animated-gradient {
+    background-size: 200% 200%;
+    background-image: linear-gradient(-45deg,
+            #22C55E,
+            #4ADE80,
+            #86EFAC,
+            #4ADE80,
+            #22C55E);
+    animation: gradient-flow 3s ease-in-out infinite;
+}
+
+@keyframes gradient-flow {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}

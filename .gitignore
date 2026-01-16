@@ -1,2 +1,11 @@
+# Dependencias de Node
 node_modules
+
+# Variables de entorno locales
 .env
+
+# Configuraciones del editor
+.vscode/
+
+# Configuraciones internas de Postman
+.postman

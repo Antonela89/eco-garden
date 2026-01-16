@@ -1,98 +1,226 @@
-Para arrancar tu proyecto **Eco-Garden** desde cero con TypeScript, Express, autenticación JWT y manejo de archivos JSON, estas son las dependencias exactas que necesitas.
+# Eco-Garden API & Frontend 🌱
 
-Primero, asegúrate de estar dentro de la carpeta de tu proyecto y ejecuta los siguientes comandos:
-
-### 1. Inicializar el proyecto
-```bash
-npm init -y
-```
-
-### 2. Dependencias de Producción (las que usa la app al correr)
-Estas librerías se encargan del servidor, la seguridad y las variables de entorno:
-
-```bash
-npm install express jsonwebtoken bcryptjs dotenv cors
-```
-
-*   **`express`**: El framework para crear tu API REST.
-*   **`jsonwebtoken`**: Para generar y validar los tokens de los usuarios.
-*   **`bcryptjs`**: Para encriptar las contraseñas antes de guardarlas en tu JSON (muy importante para la seguridad).
-*   **`dotenv`**: Para manejar variables sensibles (como tu clave secreta del token) en un archivo `.env`.
-*   **`cors`**: Permite que tu Frontend se comunique con tu Backend sin bloqueos de seguridad.
-
-### 3. Dependencias de Desarrollo (solo para programar)
-Estas herramientas ayudan a que TypeScript funcione y a que el servidor se reinicie solo:
-
-```bash
-npm install -D typescript @types/node @types/express @types/jsonwebtoken @types/bcryptjs @types/cors ts-node-dev
-```
-
-*   **`typescript`**: El compilador de TS.
-*   **`@types/...`**: Los "traductores" para que TypeScript entienda las librerías de JavaScript anteriores.
-*   **`ts-node-dev`**: Es la mejor herramienta para desarrollo; compila y reinicia el servidor automáticamente cada vez que guardas un cambio.
+**Eco-Garden** es una aplicación web completa (API RESTful + Frontend) diseñada para ayudar a los entusiastas de la jardinería urbana a planificar y gestionar sus huertas. La aplicación proporciona un catálogo detallado de cultivos basado en datos del **INTA ProHuerta**, permitiendo a los usuarios registrarse, crear "lotes de cultivo" y hacer un seguimiento del progreso de cada planta individualmente.
 
 ---
 
-### 4. Configuración final (Archivos clave)
+## Consigna del Trabajo Práctico Integrador
 
-#### Archivo `.env` (en la raíz)
-Crea un archivo llamado `.env` para guardar tu secreto del token:
-```text
-PORT=3000
-JWT_SECRET=tu_semilla_secreta_prohuerta_2024
-```
+-   **Carrera:** Back End con NodeJs – comisión 202504
+-   **Profesora:** Sofia Sachetti
+-   **Objetivo:** Desarrollar y desplegar una API RESTful completa que cumpla con buenas prácticas de desarrollo profesional, organizada en módulos y con funcionalidades esenciales para un sistema realista.
 
-#### Archivo `tsconfig.json`
-Genéralo con `npx tsc --init` y asegúrate de que tenga estas líneas para evitar el error de resolución que vimos antes:
-```json
-{
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true
-  }
-}
-```
+### Funcionalidades y Requisitos Técnicos
 
-#### Scripts en `package.json`
-Modifica la sección `"scripts"` para arrancar fácil:
-```json
-"scripts": {
-  "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-  "build": "tsc",
-  "start": "node dist/server.js"
-}
-```
+#### 1. Configuración y Estructura del Proyecto (2 puntos)
+- **Estructura modular:** Crear una arquitectura clara separada en Rutas, Controladores, Modelos y Servicios/Utilidades.
+- **Variables de Entorno:** Configurar un archivo `.env` para manejar datos sensibles (claves, puerto) y asegurarse de que no se suba al repositorio (`.gitignore`).
 
-### Resumen de carpetas para empezar:
-Para que no te falte nada al dar el primer `npm run dev`, crea esta estructura mínima:
-1. `src/server.ts` (Punto de entrada).
-2. `src/data/plants.json` (Pega aquí el JSON que te pasé antes).
-3. `src/data/gardeners.json` (Crea un archivo con un array vacío: `[]`).
+#### 2. Endpoints de la API (3 puntos)
+Implementar un CRUD completo y un sistema de autenticación:
+- `POST /users/register`: Registrar usuarios con contraseñas hasheadas.
+- `POST /users/login`: Autenticar usuarios y devolver un token JWT.
+- `GET /items`: Listar todos los elementos del sistema.
+- `POST /items`: Agregar un nuevo elemento.
+- `PUT /items/:id`: Editar un elemento existente.
+- `DELETE /items/:id`: Eliminar un elemento.
 
-### Estructura del proyecto
-eco-garden/
-├── src/
-│   ├── data/             # Tus archivos JSON
-│   │   ├── gardeners.json
-│   │   └── plants.json
-│   ├── models/           # Lógica de acceso a datos
-│   │   ├── gardener-model.ts
-│   │   └── plant-model.ts
-│   ├── controllers/      # Lógica de negocio (procesar req/res)
-│   │   ├── gardener-controller.ts
-│   │   └── plant-controller.ts
-│   ├── routes/           # Definición de rutas
-│   │   ├── gardener-routes.ts
-│   │   └── plant-routes.ts
-│   ├── app.ts            # Configuración de Express
-│   └── server.ts         # Punto de entrada
-├── public/               # Frontend (HTML, CSS, TS/JS)
-├── tsconfig.json
-└── package.json
+#### 3. Seguridad y Validaciones (3 puntos)
+- **Middlewares:** Implementar middlewares para:
+    - Validar tokens de autenticación en rutas protegidas.
+    - Manejar errores de forma centralizada.
+- **Consultas `case insensitive`:** Asegurar que las búsquedas y filtros no sean sensibles a mayúsculas/minúsculas para mejorar la experiencia de usuario.
+
+#### 4. Despliegue en Render (2 puntos)
+- **Repositorio:** Subir el proyecto completo a GitHub.
+- **Configuración en Render:**
+    - Conectar el repositorio a un nuevo "Web Service".
+    - **Build Command:** `npm install && npx tsc` (o similar para compilar TypeScript).
+    - **Start Command:** `node dist/server.js` (o la ruta al archivo de inicio compilado).
+- **Verificación:** Confirmar que la API funcione correctamente en la URL pública proporcionada por Render.
+
+#### 5. Frontend (Opcional)
+- Crear una interfaz estática (`HTML`, `CSS`, `JS`) servida desde la carpeta `public/`.
+- La interfaz debe permitir interactuar con la API (listar, agregar, editar, eliminar) y mostrar feedback al usuario.
+
+#### 6. Documentación
+- **`README.md`:** Incluir una descripción del proyecto, stack tecnológico, instrucciones de instalación y uso, y la lista de endpoints.
+- **Comentarios en el código:** Documentar las funcionalidades clave para explicar la lógica implementada.
+
+---
+
+### Entregables
+1.  **Repositorio de GitHub** con el código fuente y el `README.md`.
+2.  **URL de la API desplegada en Render**.
+3.  **(Opcional)** Verificación de que el frontend se conecta y funciona con la API desplegada.
+
+---
+
+## ✨ Características Principales
+
+### Backend
+
+-   **Autenticación Segura:** Sistema de registro y login con contraseñas encriptadas (bcrypt) y autenticación basada en tokens (JWT).
+-   **Gestión de Roles:** Diferenciación entre usuarios (`gardener`) y administradores (`admin`) con permisos específicos.
+-   **Arquitectura de Lotes de Cultivo:** Un modelo de datos avanzado que permite registrar múltiples siembras de la misma especie y hacer un seguimiento individual del estado de cada planta.
+-   **Catálogo de Plantas del INTA:** Endpoints para consultar un catálogo detallado con información sobre siembra, cosecha, asociaciones y más.
+-   **Validación Robusta:** Uso de **Zod** para validar todos los datos de entrada, asegurando la integridad de la información.
+-   **Estructura Modular:** El código está organizado en Controladores, Modelos, Rutas, Schemas y Utilidades, siguiendo el principio DRY.
+
+### Frontend
+
+-   **Interfaz Moderna e Intuitiva:** Desarrollado con HTML semántico, CSS (Tailwind) y JavaScript modular (ESM).
+-   **Diseño Responsive (Mobile First):** La interfaz se adapta a cualquier dispositivo, desde móviles hasta escritorios, utilizando un menú hamburguesa para pantallas pequeñas.
+-   **Modo Oscuro/Claro:** El usuario puede elegir su tema visual preferido, y la elección se guarda en `localStorage`.
+-   **Componentes Reutilizables:** Un sistema de modales y loaders centralizado para una experiencia de usuario consistente y profesional.
+-   **Feedback Visual Avanzado:** Animaciones CSS personalizadas (loader de germinación), loaders en botones y modales de alerta para una comunicación clara con el usuario.
+
+---
+
+## 🛠️ Stack Tecnológico
+
+-   **Backend:** Node.js, Express, TypeScript
+-   **Seguridad:** JSON Web Tokens (JWT), bcrypt.js, Helmet (CSP)
+-   **Validación:** Zod
+-   **Frontend:** HTML5, CSS3, Tailwind CSS (vía CDN), JavaScript (ESM)
+-   **Iconografía:** Font Awesome
+-   **Tipografía:** Google Fonts (Nunito)
+-   **Despliegue:** Render
+
+---
+
+## 🚀 Instalación y Puesta en Marcha
+
+Sigue estos pasos para levantar el proyecto en un entorno local.
+
+### Prerrequisitos
+
+-   Node.js (v18 o superior)
+-   npm
+
+### Pasos
+
+1.  **Clonar el repositorio:**
+
+    ```bash
+    git clone https://github.com/tu-usuario/eco-garden.git
+    cd eco-garden
+    ```
+
+2.  **Instalar dependencias del Backend:**
+
+    ```bash
+    npm install
+    ```
+
+3.  **Configurar las variables de entorno:**
+
+    -   Crea un archivo `.env` en la raíz del proyecto.
+    -   Copia el contenido de `.env.example` y rellena los valores.
+
+4.  **Iniciar el servidor de desarrollo:**
+
+    ```bash
+    npm run dev
+    ```
+
+    El backend y el frontend estarán corriendo en `http://localhost:3000`.
+
+5.  **Abrir la aplicación:**
+    -   Abre tu navegador y ve a `http://localhost:3000`.
+
+---
+
+## 🔗 Endpoints de la API
+
+La API está desplegada en Render y puede ser consultada en la siguiente URL:
+`[Pegar url]`
+
+## 🔗 Endpoints de la API
+
+La URL base para todas las peticiones es `[Pegar url]`. Para el entorno local, es `http://localhost:3000`.
+
+---
+
+### 🌳 Catálogo de Plantas (Endpoints Públicos)
+
+| Método | Endpoint | Descripción | Requiere Auth |
+| :--- | :--- | :--- | :---: |
+| `GET` | `/api/plants` | Obtener la lista completa de todas las especies de plantas. | No |
+| `GET` | `/api/plants/:id` | Obtener los detalles de una planta específica por su ID (slug). | No |
+| `GET`| `/api/plants/difficulty/:level` | Filtrar plantas por nivel de dificultad (`Fácil`, `Media`, `Difícil`). | No |
+| `GET` | `/api/plants/check/:id` | Verificar si una planta está en su temporada ideal de siembra. | No |
+
+---
+
+### 👤 Autenticación
+
+| Método | Endpoint | Descripción | Body (JSON) |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/auth/register` | Registrar un nuevo usuario (jardinero). | `{ "username", "email", "password", "role" }` |
+| `POST` | `/api/auth/login` | Iniciar sesión y obtener un token JWT. | `{ "email", "password" }` |
+
+---
+
+### 🌿 Mi Huerta y Perfil (Endpoints Protegidos)
+
+*Todas las rutas en esta sección requieren un token JWT en el encabezado: `Authorization: Bearer <token>`.*
+
+| Método | Endpoint | Descripción | Body (JSON) |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/gardener/profile` | Obtener los datos del perfil del usuario autenticado. | N/A |
+| `PUT` | `/api/gardener/profile` | Actualizar datos del perfil (username, email, password). | `{ "username"?, "email"?, "newPassword"?, "currentPassword" }` |
+| `GET` | `/api/gardener/garden` | Obtener todos los lotes de cultivo de la huerta del usuario. | N/A |
+| `POST` | `/api/gardener/garden/batch`| Añadir un nuevo lote de cultivo a la huerta. | `{ "plantId", "quantity", "notes"? }` |
+| `PATCH` | `/api/gardener/garden/instance` | Actualizar el estado de una planta individual dentro de un lote. | `{ "batchId", "instanceId", "status" }` |
+| `DELETE`| `/api/gardener/garden/batch/:batchId` | Eliminar un lote de cultivo completo de la huerta. | N/A |
+
+---
+
+### 🛡️ Administración (Endpoints Protegidos - Solo Admin)
+
+*Todas las rutas en esta sección requieren un token JWT con `role: "admin"`.*
+
+| Método | Endpoint | Descripción | Body (JSON) |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/plants` | Crear una nueva especie de planta en el catálogo maestro. | Objeto `Plant` completo |
+| `PATCH` | `/api/plants/:id` | Actualizar parcialmente los datos de una planta existente. | Objeto `Plant` parcial |
+| `DELETE`| `/api/plants/:id` | Eliminar una planta del catálogo maestro. | N/A |
+
+---
+
+## 🧪 Testeo con Postman
+
+Se ha desarrollado una completa colección de tests automatizados en Postman para validar todos los endpoints.
+
+### Cómo Usar la Colección
+
+1.  **Descargar los archivos:**
+    -   [Colección de Postman](./postman/collections/Eco-garden.postman_collection.json)
+    -   [Entorno de Postman](./postman/environments/Eco-garden-local.postman_environment.json)
+
+2.  **Importar en Postman:**
+    -   Abre tu aplicación de Postman.
+    -   Haz clic en **"Import"**.
+    -   Arrastra y suelta los dos archivos `.json` descargados.
+
+3.  **Configurar y Ejecutar:**
+    -   Asegúrate de que el servidor local esté corriendo (`npm run dev`).
+    -   Selecciona el entorno importado ("Eco-garden-local") en la esquina superior derecha.
+    -   Ejecuta las peticiones individualmente o usa el **Collection Runner** para una validación completa.
+
+---
+
+## 🔮 Posibles Mejoras a Futuro
+
+La arquitectura actual del proyecto permite expandir su funcionalidad de maneras interesantes:
+
+-   **Estadísticas de Cultivo:** Crear una sección en el dashboard que muestre gráficos y estadísticas avanzadas, como la tasa de éxito de germinación por especie (`(cosechadas + listas) / total`), el tiempo promedio de cosecha, etc.
+-   **Sistema de Avisos y Notificaciones:** Implementar un sistema que envíe recordatorios al usuario (ej. "¡Es hora de cosechar tus tomates!") basados en la fecha de siembra (`plantedAt`) y los días de cosecha (`diasCosecha`).
+-   **Calendario de Huerta Global:** Crear una vista de calendario anual donde se resalten visualmente los meses de siembra para todas las plantas del catálogo, ayudando al usuario a planificar su huerta a largo plazo.
+
+---
+
+Creado con ❤️ por **Antonela Borgogno**.
+
 

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es" class="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crea tu cuenta - Eco-Garden</title>
+
+    <!-- ETIQUETAS SEO Y SOCIALES -->
+    <!-- Descripción para Google -->
+    <meta name="description"
+        content="Planifica y gestiona tu huerta urbana con Eco-Garden. Descubre qué plantar cada mes con datos del INTA ProHuerta y sigue el progreso de tus cultivos.">
+    <!-- Palabras clave -->
+    <meta name="keywords" content="huerta, jardín, urbano, plantar, INTA, ProHuerta, cultivo, orgánico, siembra">
+    <!-- Autor -->
+    <meta name="author" content="Antonela Borgogno">
+
+    <!-- Open Graph (para Facebook, LinkedIn, etc.) -->
+    <meta property="og:title" content="Eco-Garden: Tu Asistente de Huerta Urbana">
+    <meta property="og:description" content="Planifica, siembra y cosecha con la ayuda de datos profesionales.">
+    <meta property="og:image"
+        content="https://res.cloudinary.com/antonelab/image/upload/v1768567218/eco-garden/image/huerta_qwzcw9.webp">
+    <meta property="og:url" content="[URL de tu sitio desplegado]">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Eco-Garden: Tu Asistente de Huerta Urbana">
+    <meta name="twitter:description" content="Planifica, siembra y cosecha con la ayuda de datos profesionales.">
+    <meta name="twitter:image" content="https://res.cloudinary.com/antonelab/image/upload/v1768567218/eco-garden/image/huerta_qwzcw9.webp">
+
+    <!-- Favicon (ícono de la pestaña) -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/favicon/site.webmanifest">
+
+    <!-- Tailwind CSS (CDN) y Configuración -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Habilitar modo oscuro basado en una clase en <html>
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'nunito': ['Nunito', 'sans-serif'],
+                    },
+                    colors: {
+                        'eco-green-light': '#4ADE80',
+                        'eco-green-dark': '#22C55E',
+                        'eco-brown': '#5D4037',
+                        // Colores para modo oscuro
+                        'dark-bg': '#111827',
+                        'dark-surface': '#1F2937',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts: Nunito -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-gray-200 transition-colors duration-300 flex flex-col justify-center items-center gap-6"> 
+
+    <!-- ------------------- HEADER Y NAVEGACIÓN ------------------- -->
+    <header class="bg-white dark:bg-dark-surface shadow-md w-full sticky top-0 z-20">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo (siempre visible) -->
+                <a href="/" class="flex items-center gap-2 text-2xl font-extrabold text-eco-green-dark">
+                    <i class="fas fa-seedling"></i>
+                    <span>Eco-Garden</span>
+                </a>
+
+                <!-- Contenedor para el menú dinámico (versión Desktop) -->
+                <div id="nav-menu-desktop" class="hidden md:flex items-center gap-4">
+                    <!-- JavaScript inyectará aquí los botones para Desktop -->
+                </div>
+
+                <!-- Botón Hamburguesa (solo visible en Mobile) -->
+                <div class="md:hidden flex items-center">
+                    <button id="hamburger-button" class="text-2xl text-gray-600 dark:text-gray-300">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Menú Desplegable para Mobile (oculto por defecto) -->
+        <div id="mobile-menu"
+            class="hidden md:hidden bg-white dark:bg-dark-surface">
+            <div id="nav-menu-mobile" class="px-2 pb-3 space-y-1 sm:px-3">
+                <!-- JavaScript inyectará aquí los enlaces para Mobile -->
+            </div>
+        </div>
+    </header>
+
+    <!-- ------------------- CONTENIDO PRINCIPAL ------------------- -->
+    <main class="bg-white dark:bg-dark-surface p-8 rounded-lg shadow-2xl w-full max-w-md">
+
+        <!-- Contenido de Formulario de Registro -->
+        <form id="register-form" class="flex flex-col gap-4">
+            <div class="relative group">
+                <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre de
+                    Usuario</label>
+                <div class="relative mt-1">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                        <i class="fas fa-user text-gray-400 group-focus-within:text-eco-green-dark transition"></i>
+                    </span>
+                    <input type="text" id="username" name="username" required placeholder="Ej: Jardineria_Pro"
+                        class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white pl-10 shadow-sm focus:border-eco-green-dark focus:ring-eco-green-dark">
+                </div>
+            </div>
+            <div class="relative group">
+                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                <div class="relative mt-1">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                        <i class="fas fa-envelope text-gray-400 group-focus-within:text-eco-green-dark transition"></i>
+                    </span>
+                    <input type="email" id="email" name="email" required placeholder="tu@email.com"
+                        class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white pl-10 shadow-sm focus:border-eco-green-dark focus:ring-eco-green-dark">
+                </div>
+            </div>
+            <div class="relative group">
+                <label for="password"
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contraseña</label>
+                <div class="relative mt-1">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                        <i class="fas fa-lock text-gray-400 group-focus-within:text-eco-green-dark transition"></i>
+                    </span>
+                    <input type="password" id="password" name="password" required
+                        placeholder="Mín. 8 caracteres, 1 mayús, 1 núm."
+                        class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white pl-10 shadow-sm focus:border-eco-green-dark focus:ring-eco-green-dark">
+                </div>
+
+                <!-- Barra de Fortaleza -->
+                <div class="mt-2 flex items-center gap-2">
+                    <div id="strength-bar" class="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
+                        <div id="strength-indicator" class="h-full bg-red-500 transition-all duration-300"
+                            style="width: 0%;"></div>
+                    </div>
+                    <span id="strength-text" class="text-xs font-bold text-gray-500 w-20 text-right">Débil</span>
+                </div>
+            </div>
+
+            <button type="submit"
+                class="w-full bg-eco-green-dark text-white py-2 rounded-md font-bold hover:bg-opacity-80 transition active:scale-95 mt-4">
+                Crear mi Cuenta
+            </button>
+        </form>
+
+        <footer class="text-center mt-6 text-sm">
+            <p class="dark:text-white">¿Ya tienes una cuenta? <a href="/index.html"
+                    class="text-eco-green-dark font-bold hover:underline">Inicia
+                    sesión aquí</a></p>
+        </footer>
+    </main>
+
+    <!-- ------------------- CONTENEDOR GENÉRICO PARA MODALES ------------------- -->
+    <div id="modal-container"
+        class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50">
+        <div id="modal-content-area"
+            class="bg-white dark:bg-dark-surface rounded-lg overflow-hidden shadow-2xl w-full flex flex-col m-4 max-h-[90vh]">
+            <!-- El contenido se inyectará aquí con JavaScript -->
+        </div>
+    </div>
+
+    <!-- Scripts de JS -->
+    <script type="module" src="/js/main.js"></script>
+</body>
+
+</html>

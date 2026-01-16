@@ -4,6 +4,7 @@ import path from 'path';
 import { Plant, Dificultad } from '../types/plant';
 // Importación de funciones auxiliares
 import { readJSON, writeJSON } from '../utils/fileHandle';
+import { normalizeText } from '../../shared/formatters';
 
 /**
  * Ruta absoluta hacia el archivo JSON que funciona como base de datos de plantas.
@@ -60,8 +61,10 @@ export class PlantModel {
 	static getByDifficulty = (level: Dificultad): Plant[] => {
 		// Obtener todas las plantas
 		const plants = this.getAll();
+		// Normalizar el parámetro de búsqueda
+		const normalizedLevel = normalizeText(level);
 		// Filtrar las plantas cuyo campo 'dificultad' coincida con el level recibido
-		return plants.filter((p) => p.dificultad === level);
+		return plants.filter((p) => normalizeText(p.dificultad) === normalizedLevel);
 	};
 
 	// ---------------------------
@@ -100,15 +103,25 @@ export class PlantModel {
 
 		// Array de meses
 		const meses = [
-			'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-			'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+			'Enero',
+			'Febrero',
+			'Marzo',
+			'Abril',
+			'Mayo',
+			'Junio',
+			'Julio',
+			'Agosto',
+			'Septiembre',
+			'Octubre',
+			'Noviembre',
+			'Diciembre',
 		];
-        
-        // Obtener mes actual basado en el sistema
+
+		// Obtener mes actual basado en el sistema
 		const mesActual = meses[new Date().getMonth()]!;
 
-		// .flat() se usa porque algunas plantas (como el Repollo) tienen 
-        // temporadas de siembra divididas en sub-arrays en el JSON.
+		// .flat() se usa porque algunas plantas (como el Repollo) tienen
+		// temporadas de siembra divididas en sub-arrays en el JSON.
 		return plant.siembra.flat().includes(mesActual);
 	};
 
@@ -118,14 +131,14 @@ export class PlantModel {
 
 	/**
 	 * Agrega una nueva especie al catálogo.
-	 * @param {Plant} plantData 
+	 * @param {Plant} plantData
 	 * @returns {Plant}
 	 */
 	static create = (plantData: Plant): Plant | null => {
 		// VALIDACIÓN DE DUPLICADOS:
 		// Si ya existe una planta con ese ID, no se crea.
 		if (this.getById(plantData.id)) {
-			return null; 
+			return null;
 		}
 		// Obtener todas las plantas
 		const plants = this.getAll();
@@ -140,8 +153,8 @@ export class PlantModel {
 
 	/**
 	 * Actualiza los datos técnicos de una planta.
-	 * @param {string} id 
-	 * @param {Partial<Plant>} newData 
+	 * @param {string} id
+	 * @param {Partial<Plant>} newData
 	 * @returns {Plant | null}
 	 */
 	static update = (id: string, newData: Partial<Plant>): Plant | null => {
@@ -161,18 +174,18 @@ export class PlantModel {
 
 	/**
 	 * Elimina una planta del catálogo maestro (JSON).
-	 * @param {string} id 
+	 * @param {string} id
 	 * @returns {boolean}
 	 */
 	static delete = (id: string): boolean => {
 		// Obtener todas las plantas y el indice
 		const { plants, index } = this.getPlantContext(id);
-		
-		// Valdiación
-        if (index === -1) return false;
 
-        // Eliminar el elemento en la posición encontrada
-        plants.splice(index, 1);
+		// Valdiación
+		if (index === -1) return false;
+
+		// Eliminar el elemento en la posición encontrada
+		plants.splice(index, 1);
 
 		// Guardar lista actualizada
 		this.save(plants);

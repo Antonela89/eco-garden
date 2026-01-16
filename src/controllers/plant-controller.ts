@@ -7,7 +7,6 @@ import { Dificultad } from '../types/plant';
 // Importación de función auxiliar
 import {
 	formatInputData,
-	capitalize,
 	formatIdData,
 	slugify
 } from '../../shared/formatters';
@@ -50,8 +49,8 @@ export class PlantController {
 	 * Útil para interfaces de usuario que categorizan plantas por experiencia.
 	 */
 	static getByDifficulty = (req: Request, res: Response) => {
-		// Capitalizar el parámetro de la URL (ej: "fácil" -> "Fácil")
-		const level = capitalize(req.params.level as string);
+		// Obtener el parametro de busqueda
+		const level = req.params.level as string;
 
 		// Delegar el filtrado al modelo
 		const plants = PlantModel.getByDifficulty(level as Dificultad);

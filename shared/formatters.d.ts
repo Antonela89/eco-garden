@@ -17,3 +17,8 @@ export declare function slugify(text: string): string;
  * Recorrer un objeto y aplicar el formato de minúsculas (slug) únicamente al campo ID.
  */
 export declare function formatIdData(data: any): any;
+
+/**
+ * Normalizar un texto: convertir a minúsculas y quitar acentos.
+ */
+export declare function normalizeText(text: string): tring;

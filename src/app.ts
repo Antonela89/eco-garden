@@ -6,9 +6,9 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
 // Importación de Rutas
-import router from './routes/index';
+import router from './routes/index.js';
 // Importación de middleware de error
-import { errorHandler, notFound } from './middlewares/error-middleware';
+import { errorHandler, notFound } from './middlewares/error-middleware.js';
 
 /**
  * Cargar las variables de entorno configuradas en el archivo .env.

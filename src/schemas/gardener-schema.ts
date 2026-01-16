@@ -1,7 +1,7 @@
 // Importación de modulo
 import { z } from 'zod';
 // Importación de Enum
-import { Role } from '../types/gardener';
+import { Role } from '../types/gardener.js';
 
 /**
  * registerGardenerSchema

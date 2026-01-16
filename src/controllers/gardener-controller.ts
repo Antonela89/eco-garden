@@ -3,12 +3,12 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 // Importación de modelos
-import { GardenerModel } from '../models/gardener-model';
-import { PlantModel } from '../models/plant-model';
+import { GardenerModel } from '../models/gardener-model.js';
+import { PlantModel } from '../models/plant-model.js';
 // Importación de Role
-import { Role } from '../types/gardener';
+import { Role } from '../types/gardener.js';
 // Importación de función auxiliar
-import { formatInputData, slugify } from '../../shared/formatters';
+import { formatInputData, slugify } from '../../shared/formatters.js';
 
 /**
  * Clave secreta para la firma de los tokens JWT.

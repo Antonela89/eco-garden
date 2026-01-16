@@ -63,3 +63,16 @@ export const formatIdData = (data) => {
 
     return formattedData;
 };
+
+/**
+ * Normalizar un texto: convertir a minúsculas y quitar acentos.
+ * @param {string} text - El texto a normalizar.
+ * @returns {string} El texto normalizado.
+ */
+export const normalizeText = (text) => {
+    if (!text || typeof text !== 'string') return '';
+    return text
+        .toLowerCase()
+        .normalize("NFD") // Descompone los caracteres (ej: 'á' -> 'a' + '´')
+        .replace(/[\u0300-\u036f]/g, ""); // Elimina los diacríticos (acentos)
+};

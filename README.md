@@ -134,11 +134,12 @@ Sigue estos pasos para levantar el proyecto en un entorno local.
 ## 🔗 Endpoints de la API
 
 La API está desplegada en Render y puede ser consultada en la siguiente URL:
-`[Pegar url]`
+
+**[https://ecogarden-w8ks.onrender.com](https://ecogarden-w8ks.onrender.com)**
 
 ## 🔗 Endpoints de la API
 
-La URL base para todas las peticiones es `[Pegar url]`. Para el entorno local, es `http://localhost:3000`.
+La URL base para todas las peticiones es `[https://ecogarden-w8ks.onrender.com]`. Para el entorno local, es `http://localhost:3000`.
 
 ---
 

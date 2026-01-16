@@ -1,10 +1,14 @@
 // Importación de módulo
 import path from 'path';
+import { fileURLToPath } from 'url';
 // Importación de interfaces
 import { Plant, Dificultad } from '../types/plant.js';
 // Importación de funciones auxiliares
 import { readJSON, writeJSON } from '../utils/fileHandle.js';
 import { normalizeText } from '../../shared/formatters.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * Ruta absoluta hacia el archivo JSON que funciona como base de datos de plantas.

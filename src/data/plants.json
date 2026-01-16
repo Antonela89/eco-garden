@@ -41,7 +41,7 @@
         "aptoMaceta": true,
         "dificultad": "Fácil",
         "clima": "Muy resistente",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767062326/eco-garden/acelga_ga4nmo.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767499674/eco-garden/huerta/acelga_ga4nmo.webp"
     },
     {
         "id": "ajo",
@@ -75,7 +75,7 @@
         "aptoMaceta": true,
         "dificultad": "Fácil",
         "clima": "Muy resistente",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061549/eco-garden/ajo_walypa.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767499691/eco-garden/huerta/ajo_walypa.webp"
     },
     {
         "id": "albahaca",
@@ -109,7 +109,7 @@
         "aptoMaceta": true,
         "dificultad": "Media",
         "clima": "Sensible al frío",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061549/eco-garden/albahaca_lnerth.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767499202/eco-garden/huerta/albahaca_lnerth.webp"
     },
     {
         "id": "apio",
@@ -154,7 +154,7 @@
         "aptoMaceta": true,
         "dificultad": "Difícil",
         "clima": "Resistente",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061545/eco-garden/apio_bf2b00.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767499243/eco-garden/huerta/apio_bf2b00.webp"
     },
     {
         "id": "arveja",
@@ -190,7 +190,7 @@
         "aptoMaceta": false,
         "dificultad": "Fácil",
         "clima": "Resistente",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061545/eco-garden/apio_bf2b00.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767499711/eco-garden/huerta/arveja_rwy6jv.webp"
     },
     {
         "id": "batata",
@@ -225,7 +225,7 @@
         "aptoMaceta": false,
         "dificultad": "Media",
         "clima": "Sensible",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061546/eco-garden/batata_cgxafm.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767499294/eco-garden/huerta/batata_cgxafm.webp"
     },
     {
         "id": "berenjena",
@@ -259,7 +259,7 @@
         "aptoMaceta": true,
         "dificultad": "Media",
         "clima": "Muy sensible",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061544/eco-garden/berenjena_oek4hv.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767499820/eco-garden/huerta/berenjena_oek4hv.webp"
     },
     {
         "id": "brocoli",
@@ -293,7 +293,7 @@
         "aptoMaceta": true,
         "dificultad": "Media",
         "clima": "Resistente",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061545/eco-garden/brocoli_bkjkun.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767499797/eco-garden/huerta/brocoli_bkjkun.webp"
     },
     {
         "id": "cebolla",
@@ -330,7 +330,7 @@
         "aptoMaceta": true,
         "dificultad": "Media",
         "clima": "Resistente",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061545/eco-garden/cebolla_qq7vs1.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061545/eco-garden/huerta/cebolla_qq7vs1.webp"
     },
     {
         "id": "chaucha",
@@ -367,7 +367,7 @@
         "aptoMaceta": false,
         "dificultad": "Fácil",
         "clima": "Sensible",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061548/eco-garden/chaucha_dgkefp.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767499167/eco-garden/huerta/chaucha_dgkefp.webp"
     },
     {
         "id": "espinaca",
@@ -404,7 +404,7 @@
         "aptoMaceta": true,
         "dificultad": "Fácil",
         "clima": "Resistente",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061549/eco-garden/espinaca_vhkdxu.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767499899/eco-garden/huerta/espinaca_vhkdxu.webp"
     },
     {
         "id": "frutilla",
@@ -438,7 +438,7 @@
         "aptoMaceta": true,
         "dificultad": "Media",
         "clima": "Resistente",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061540/eco-garden/frutilla_xysukc.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767499939/eco-garden/huerta/frutilla_xysukc.webp"
     },
     {
         "id": "haba",
@@ -478,7 +478,7 @@
         "aptoMaceta": false,
         "dificultad": "Fácil",
         "clima": "Resistente",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061541/eco-garden/haba_mxg4dp.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767499927/eco-garden/huerta/haba_mxg4dp.webp"
     },
     {
         "id": "hinojo",
@@ -515,7 +515,7 @@
         "aptoMaceta": true,
         "dificultad": "Media",
         "clima": "Resistente",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061541/eco-garden/hinojo_zgvzmu.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767500120/eco-garden/huerta/hinojo_zgvzmu.webp"
     },
     {
         "id": "lechuga",
@@ -560,7 +560,7 @@
         "aptoMaceta": true,
         "dificultad": "Fácil",
         "clima": "Resistente",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061541/eco-garden/lechuga_ri5fp2.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061541/eco-garden/huerta/lechuga_ri5fp2.webp"
     },
     {
         "id": "maiz",
@@ -598,7 +598,7 @@
         "aptoMaceta": false,
         "dificultad": "Fácil",
         "clima": "Muy sensible",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061548/eco-garden/maiz_erexr7.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767499778/eco-garden/huerta/maiz_erexr7.webp"
     },
     {
         "id": "melon",
@@ -632,7 +632,7 @@
         "aptoMaceta": false,
         "dificultad": "Difícil",
         "clima": "Muy sensible",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061541/eco-garden/melon_eeyxgf.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767500172/eco-garden/huerta/melon_eeyxgf.webp"
     },
     {
         "id": "papa",
@@ -701,7 +701,7 @@
         "aptoMaceta": false,
         "dificultad": "Media",
         "clima": "Muy sensible",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061536/eco-garden/pepino_tcqvjg.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767500341/eco-garden/huerta/pepino_tcqvjg.webp"
     },
     {
         "id": "perejil",
@@ -746,7 +746,7 @@
         "aptoMaceta": true,
         "dificultad": "Fácil",
         "clima": "Resistente",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061536/eco-garden/perejil_iwroke.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767500356/eco-garden/huerta/perejil_iwroke.webp"
     },
     {
         "id": "pimiento",
@@ -780,7 +780,7 @@
         "aptoMaceta": true,
         "dificultad": "Media",
         "clima": "Muy sensible",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061536/eco-garden/pimiento_buq4cz.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061536/eco-garden/huerta/pimiento_buq4cz.webp"
     },
     {
         "id": "puerro",
@@ -826,7 +826,7 @@
         "aptoMaceta": true,
         "dificultad": "Media",
         "clima": "Resistente",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061537/eco-garden/puerro_tatzvp.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061537/eco-garden/huerta/puerro_tatzvp.webp"
     },
     {
         "id": "rabanito",
@@ -872,7 +872,7 @@
         "aptoMaceta": true,
         "dificultad": "Fácil",
         "clima": "Resistente",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061540/eco-garden/rabanito_sqmnyx.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767500326/eco-garden/huerta/rabanito_sqmnyx.webp"
     },
     {
         "id": "radicheta",
@@ -915,7 +915,7 @@
         "aptoMaceta": true,
         "dificultad": "Fácil",
         "clima": "Resistente",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061540/eco-garden/radicheta_sk1do5.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767500253/eco-garden/huerta/radicheta_sk1do5.webp"
     },
     {
         "id": "remolacha",
@@ -962,7 +962,7 @@
         "aptoMaceta": true,
         "dificultad": "Fácil",
         "clima": "Resistente",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767062327/eco-garden/remolacha_ernzt6.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767062327/eco-garden/huerta/remolacha_ernzt6.webp"
     },
     {
         "id": "repollo",
@@ -1008,7 +1008,7 @@
         "aptoMaceta": true,
         "dificultad": "Media",
         "clima": "Resistente",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061535/eco-garden/repollo_mar6rj.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767500287/eco-garden/huerta/repollo_mar6rj.webp"
     },
     {
         "id": "rucula",
@@ -1052,7 +1052,7 @@
         "aptoMaceta": true,
         "dificultad": "Fácil",
         "clima": "Resistente",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061535/eco-garden/rucula_pm7zpu.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767500276/eco-garden/huerta/rucula_pm7zpu.webp"
     },
     {
         "id": "tomate",
@@ -1089,7 +1089,7 @@
         "aptoMaceta": true,
         "dificultad": "Difícil",
         "clima": "Muy sensible",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061535/eco-garden/tomate_r70ba8.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767500434/eco-garden/huerta/tomate_r70ba8.webp"
     },
     {
         "id": "zanahoria",
@@ -1136,7 +1136,7 @@
         "aptoMaceta": true,
         "dificultad": "Media",
         "clima": "Resistente",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061535/eco-garden/zanahoria_eph5ei.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061535/eco-garden/huerta/zanahoria_eph5ei.webp"
     },
     {
         "id": "zapallo",
@@ -1171,7 +1171,7 @@
         "aptoMaceta": false,
         "dificultad": "Fácil",
         "clima": "Sensible",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061536/eco-garden/zapallo_ejuxfz.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767499055/eco-garden/huerta/zapallo_ejuxfz.webp"
     },
     {
         "id": "zapallito",
@@ -1208,6 +1208,6 @@
         "aptoMaceta": false,
         "dificultad": "Fácil",
         "clima": "Muy sensible",
-        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767061535/eco-garden/zapallitos_auomoc.webp"
+        "imagen": "https://res.cloudinary.com/antonelab/image/upload/v1767500451/eco-garden/huerta/zapallitos_auomoc.webp"
     }
 ]

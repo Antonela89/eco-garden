@@ -1,6 +1,7 @@
 // Importación de modulos
 import express from 'express';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
@@ -9,6 +10,9 @@ import helmet from 'helmet';
 import router from './routes/index.js';
 // Importación de middleware de error
 import { errorHandler, notFound } from './middlewares/error-middleware.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * Cargar las variables de entorno configuradas en el archivo .env.

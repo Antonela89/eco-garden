@@ -1,10 +1,15 @@
 // Importación de módulos
 import path from 'path';
+import { fileURLToPath } from 'url';
 import crypto from 'crypto';
 // Importación de Tipos
 import { Gardener, CropBatch, PlantInstance } from '../types/gardener.js';
 // Importación de funciones auxiliares
 import { readJSON, writeJSON } from '../utils/fileHandle.js';
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * Ruta absoluta hacia el archivo JSON que funciona como base de datos de jardineros.

@@ -1,4 +1,8 @@
-const API_URL = 'http://localhost:3000/api'; // URL del backend
+// Api Desarrollo
+// const API_URL = 'http://localhost:3000/api';
+
+// Api Produccion
+const API_URL = 'https://ecogarden-w8ks.onrender.com/api';
 
 // -----------------------------------
 // FUNCIONES AUXILIARES (HELPERS)

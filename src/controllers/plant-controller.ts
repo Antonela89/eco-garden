@@ -1,15 +1,15 @@
 // Importación de módulo
 import { Request, Response } from 'express';
 // Importación de modelo
-import { PlantModel } from '../models/plant-model';
+import { PlantModel } from '../models/plant-model.js';
 // Importación de Enum
-import { Dificultad } from '../types/plant';
+import { Dificultad } from '../types/plant.js';
 // Importación de función auxiliar
 import {
 	formatInputData,
 	formatIdData,
 	slugify
-} from '../../shared/formatters';
+} from '../../shared/formatters.js';
 
 /**
  * Clase PlantController

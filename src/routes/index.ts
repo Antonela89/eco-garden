@@ -1,9 +1,9 @@
 // Importación de Router y tipos específicos de express
 import { Router, Request, Response } from 'express';
 // Importación de Rutas
-import authRoutes from './auth-routes';
-import plantRoutes from './plant-routes';
-import gardenerRoutes from './gardener-routes';
+import authRoutes from './auth-routes.js';
+import plantRoutes from './plant-routes.js';
+import gardenerRoutes from './gardener-routes.js';
 
 // Instancia de Router
 const router = Router();

@@ -1,5 +1,5 @@
 // Importación de instancia aplicación de express
-import app from './app';
+import app from './app.js';
 
 /**
  * Definir el puerto de escucha consultando las variables de entorno o asignando el valor 3000 por defecto.

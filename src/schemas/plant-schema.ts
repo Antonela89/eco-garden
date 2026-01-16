@@ -1,7 +1,7 @@
 // Importación de modulo
 import { z } from 'zod';
 // Importación de Enum
-import { Dificultad } from '../types/plant';
+import { Dificultad } from '../types/plant.js';
 
 /**
  * plantSchema

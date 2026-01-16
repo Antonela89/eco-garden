@@ -2,9 +2,9 @@
 import path from 'path';
 import crypto from 'crypto';
 // Importación de Tipos
-import { Gardener, CropBatch, PlantInstance } from '../types/gardener';
+import { Gardener, CropBatch, PlantInstance } from '../types/gardener.js';
 // Importación de funciones auxiliares
-import { readJSON, writeJSON } from '../utils/fileHandle';
+import { readJSON, writeJSON } from '../utils/fileHandle.js';
 
 /**
  * Ruta absoluta hacia el archivo JSON que funciona como base de datos de jardineros.

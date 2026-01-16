@@ -1,6 +1,6 @@
 // 2° Nivel de Seguridad: solo el Admin puede hacer cambios importantes.
 import { Request, Response, NextFunction } from 'express';
-import { Role } from '../types/gardener';
+import { Role } from '../types/gardener.js';
 
 /**
  * Middleware: isAdmin

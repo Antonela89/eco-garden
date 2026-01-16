@@ -1,11 +1,11 @@
 // Importación de Router
 import { Router } from 'express';
 // Importación de controlador
-import { GardenerController } from '../controllers/gardener-controller';
+import { GardenerController } from '../controllers/gardener-controller.js';
 // Importación de middleware de validación
-import { validateSchema } from '../middlewares/validator-middleware';
+import { validateSchema } from '../middlewares/validator-middleware.js';
 // Importación de esquema
-import { registerGardenerSchema, loginSchema } from '../schemas/gardener-schema';
+import { registerGardenerSchema, loginSchema } from '../schemas/gardener-schema.js';
 
 // Instancia de Router
 const authRouter = Router();

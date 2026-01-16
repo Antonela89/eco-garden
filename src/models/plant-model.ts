@@ -1,10 +1,10 @@
 // Importación de módulo
 import path from 'path';
 // Importación de interfaces
-import { Plant, Dificultad } from '../types/plant';
+import { Plant, Dificultad } from '../types/plant.js';
 // Importación de funciones auxiliares
-import { readJSON, writeJSON } from '../utils/fileHandle';
-import { normalizeText } from '../../shared/formatters';
+import { readJSON, writeJSON } from '../utils/fileHandle.js';
+import { normalizeText } from '../../shared/formatters.js';
 
 /**
  * Ruta absoluta hacia el archivo JSON que funciona como base de datos de plantas.

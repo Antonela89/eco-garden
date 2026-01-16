@@ -1,15 +1,15 @@
 // Importación de Router
 import { Router } from 'express';
 // Importación de controlador
-import { PlantController } from '../controllers/plant-controller';
+import { PlantController } from '../controllers/plant-controller.js';
 // Importación de Middleware de autenticación
-import { verifyToken } from '../middlewares/authentication-middleware';
+import { verifyToken } from '../middlewares/authentication-middleware.js';
 // Importación de Middleware de rol administrador
-import { isAdmin } from '../middlewares/admin-middleware';
+import { isAdmin } from '../middlewares/admin-middleware.js';
 // Importación de Middleware de validación
-import { validateSchema } from '../middlewares/validator-middleware';
+import { validateSchema } from '../middlewares/validator-middleware.js';
 // Importación del esquema
-import { plantSchema } from '../schemas/plant-schema';
+import { plantSchema } from '../schemas/plant-schema.js';
 
 // Instancia de Router
 const plantRouter = Router();

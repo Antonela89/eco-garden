@@ -13,18 +13,19 @@ import {
 	updateNavOnLogin,
 	updateNavOnLogout,
 } from './auth.js';
-import { getPlants, getPlantById, addPlantToGarden } from './api.js';
+import { getPlants, getPlantById, addCropBatch } from './api.js';
+import { renderCatalog } from './ui/components.js';
+import { createAddBatchFormContent } from './ui/form.js';
 import {
-	renderCatalog,
 	createPlantDetailsContent,
 	createLoginModalContent,
 	createAlertModalContent,
-} from './ui.js';
+} from './ui/modal.js';
 import { initDashboard } from './dashboard.js';
 import { initProfile } from './profile.js';
 import { initAdmin } from './admin.js';
 import { initPasswordStrengthMeter } from './password-strength.js';
-import { initModal, openModal, closeModal } from './modal.js';
+import { initModal, openModal, closeModal } from './handle-modal.js';
 import { initThemeSwitcher } from './theme.js';
 import { getLoaderHTML } from './loader.js';
 
@@ -51,21 +52,21 @@ document.addEventListener('DOMContentLoaded', () => {
 	initThemeSwitcher();
 
 	// --- LÓGICA DEL MENÚ HAMBURGUESA ---
-    const hamburgerButton = document.getElementById('hamburger-button');
-    const mobileMenu = document.getElementById('mobile-menu');
+	const hamburgerButton = document.getElementById('hamburger-button');
+	const mobileMenu = document.getElementById('mobile-menu');
 
-    if (hamburgerButton && mobileMenu) {
-        hamburgerButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-            const icon = hamburgerButton.querySelector('i');
-            // Cambiar entre ícono de hamburguesa y 'X'
-            if (mobileMenu.classList.contains('hidden')) {
-                icon.className = 'fas fa-bars';
-            } else {
-                icon.className = 'fas fa-times';
-            }
-        });
-    }
+	if (hamburgerButton && mobileMenu) {
+		hamburgerButton.addEventListener('click', () => {
+			mobileMenu.classList.toggle('hidden');
+			const icon = hamburgerButton.querySelector('i');
+			// Cambiar entre ícono de hamburguesa y 'X'
+			if (mobileMenu.classList.contains('hidden')) {
+				icon.className = 'fas fa-bars';
+			} else {
+				icon.className = 'fas fa-times';
+			}
+		});
+	}
 
 	// Lógica de autenticación y actualización de UI
 
@@ -175,38 +176,48 @@ const initializeIndexPage = (user) => {
 
 			// Si se hizo clic en "Añadir a mi Huerta"
 			if (addToGardenBtn) {
+				e.preventDefault();
 				const plantId = addToGardenBtn.dataset.plantId;
+				const plant = await getPlantById(plantId);
 
-				// Feedback visual para el usuario
-				addToGardenBtn.disabled = true;
-				addToGardenBtn.innerHTML =
-					'<i class="fas fa-spinner fa-spin mr-2"></i>Añadiendo...';
+				openModal(createAddBatchFormContent(plant), 'md');
 
-				try {
-					await addPlantToGarden(plantId);
-					closeModal();
-					// Abrir un modal de confirmación rápido
-					openModal(
-						createAlertModalContent(
-							'¡Añadido!',
-							'La planta ha sido agregada a tu huerta.'
-						),
-						'sm'
+				// Añadimos el listener para el submit de este nuevo formulario
+				const addBatchForm = document.getElementById('add-batch-form');
+				if (addBatchForm) {
+					addBatchForm.addEventListener(
+						'submit',
+						async (formEvent) => {
+							formEvent.preventDefault();
+							const submitButton = addBatchForm.querySelector(
+								'button[type="submit"]'
+							);
+							submitButton.disabled = true;
+							submitButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
+
+							try {
+								const data = {
+									plantId: addBatchForm.dataset.plantId,
+									quantity: parseInt(
+										addBatchForm.quantity.value
+									),
+									notes: addBatchForm.notes.value,
+								};
+
+								await addCropBatch(data);
+								closeModal();
+								openModal(
+									createAlertModalContent(
+										'¡Éxito!',
+										'Tu nuevo lote ha sido añadido a la huerta.'
+									),
+									'sm'
+								);
+							} catch (error) {
+								alert(error.message);
+							}
+						}
 					);
-					// Cerrar el modal después de un éxito
-					setTimeout(() => closeModal(), 1500);
-				} catch (error) {
-					openModal(
-						createAlertModalContent(
-							'Error',
-							error.message,
-							'error'
-						),
-						'sm'
-					);
-					addToGardenBtn.disabled = false;
-					addToGardenBtn.innerHTML =
-						'<i class="fas fa-plus-circle mr-2"></i>Añadir a mi Huerta';
 				}
 			}
 

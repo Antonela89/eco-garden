@@ -1,10 +1,10 @@
 import { getPlants, createPlant, updatePlant, deletePlant } from './api.js';
-import { openModal, closeModal } from './modal.js';
+import { openModal, closeModal } from './handle-modal.js';
+import { createAdminPlantForm } from './ui/form.js';
 import {
-	createAdminPlantForm,
 	createConfirmModalContent,
 	createAlertModalContent,
-} from './ui.js';
+} from './ui/modal.js';
 import { formatIdData, formatInputData } from '../../shared/formatters.js';
 
 /**
@@ -184,28 +184,46 @@ export const initAdmin = async () => {
 			);
 
 			// Delegar en el modal para el botón de confirmar
-            const modalContainer = document.getElementById('modal-container');
-            const confirmHandler = async (event) => {
-                const confirmButton = event.target.closest('#confirm-action-button');
-                if (confirmButton && confirmButton.dataset.plantId === plantId) {
-                    // --- LOADER EN EL BOTÓN DE ELIMINAR ---
-                    confirmButton.disabled = true;
-                    confirmButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
-                    try {
-                        await deletePlant(plantId);
-                        closeModal();
-                        loadAdminData();
-                        openModal(createAlertModalContent('¡Eliminado!', `La planta "${plant.nombre}" ha sido eliminada.`), 'sm');
-                    } catch (error) {
-                        openModal(createAlertModalContent('Error', error.message, 'error'), 'sm');
-                    }
-                    // Limpiar el listener para evitar ejecuciones múltiples
-                    modalContainer.removeEventListener('click', confirmHandler);
-                }
-            };
-            modalContainer.addEventListener('click', confirmHandler);
-        }
-    });
+			const modalContainer = document.getElementById('modal-container');
+			const confirmHandler = async (event) => {
+				const confirmButton = event.target.closest(
+					'#confirm-action-button'
+				);
+				if (
+					confirmButton &&
+					confirmButton.dataset.plantId === plantId
+				) {
+					// --- LOADER EN EL BOTÓN DE ELIMINAR ---
+					confirmButton.disabled = true;
+					confirmButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
+					try {
+						await deletePlant(plantId);
+						closeModal();
+						loadAdminData();
+						openModal(
+							createAlertModalContent(
+								'¡Eliminado!',
+								`La planta "${plant.nombre}" ha sido eliminada.`
+							),
+							'sm'
+						);
+					} catch (error) {
+						openModal(
+							createAlertModalContent(
+								'Error',
+								error.message,
+								'error'
+							),
+							'sm'
+						);
+					}
+					// Limpiar el listener para evitar ejecuciones múltiples
+					modalContainer.removeEventListener('click', confirmHandler);
+				}
+			};
+			modalContainer.addEventListener('click', confirmHandler);
+		}
+	});
 
 	// Carga inicial de datos al entrar en la página
 	loadAdminData();

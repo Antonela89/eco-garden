@@ -1,7 +1,7 @@
 import { getThemeButtonHTML } from './theme.js';
 import { loginUser, registerUser } from './api.js';
-import { openModal, closeModal } from './modal.js';
-import { createAlertModalContent, createLoginModalContent } from './ui.js';
+import { openModal, closeModal } from './handle-modal.js';
+import { createAlertModalContent, createLoginModalContent } from './ui/modal.js';
 
 // -----------------------------------
 // MANEJADORES DE FORMULARIOS
@@ -148,7 +148,7 @@ export const updateNavOnLogin = (user) => {
             </button>
             
             <!-- El menú (oculto por defecto) -->
-            <div id="profile-dropdown" class="absolute right-0 mt-2 w-48 bg-white dark:bg-dark-surface rounded-md shadow-lg py-1 hidden">
+            <div id="profile-dropdown" class="absolute right-0 w-48 bg-white dark:bg-dark-surface rounded-md shadow-lg py-1 hidden">
                 <a href="/html/profile.html" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Mi Perfil</a>
                 ${
 					user.role === 'admin'

@@ -1,14 +1,16 @@
 import {
 	getMyGarden,
-	deletePlantFromGarden,
-	updatePlantStatusInGarden,
+	getPlants,
+	deleteBatchFromGarden,
+	updateInstanceStatus,
 } from './api.js';
+import { createCropBatchCard } from './ui/cards.js';
 import {
-	createMyGardenCard,
 	createConfirmModalContent,
 	createAlertModalContent,
-} from './ui.js';
-import { openModal, closeModal } from './modal.js';
+	createManageBatchModalContent,
+} from './ui/modal.js';
+import { openModal, closeModal } from './handle-modal.js';
 import { getLoaderHTML } from './loader.js';
 
 /**
@@ -36,7 +38,11 @@ export const initDashboard = async (user) => {
 		gardenContainer.innerHTML = loaderWrapper;
 
 		try {
-			const myGarden = await getMyGarden();
+			// Obtener la huerta y el catálogo completo
+			const [myGarden, plantCatalog] = await Promise.all([
+				getMyGarden(),
+				getPlants(),
+			]);
 
 			if (myGarden.length === 0) {
 				gardenContainer.innerHTML = `
@@ -47,114 +53,108 @@ export const initDashboard = async (user) => {
                     </div>
                 `;
 			} else {
+
+				const enrichedGarden = myGarden.map((batch) => {
+					const info = plantCatalog.find(
+						(p) => p.id === batch.plantId
+					);
+					return {
+						...batch,
+						plantInfo: info,
+					};
+				});
+
 				gardenContainer.innerHTML = ''; // Limpiar el loader
-				myGarden.forEach((plant) => {
-					gardenContainer.innerHTML += createMyGardenCard(plant);
+				enrichedGarden.forEach((batch) => {
+					// Otro punto crítico: ¿falla createCropBatchCard?
+					gardenContainer.innerHTML += createCropBatchCard(batch);
 				});
 			}
 		} catch (error) {
-			openModal(
-				createAlertModalContent(
-					'Error de Carga',
-					'No se pudo conectar con el servidor para cargar tu huerta. Por favor, intenta recargar la página.',
-					'error'
-				),
-				'md'
-			);
-		}
-	};
+			// Verificar si el error es de autenticación
+            if (error.name === 'AuthError') {
+                // El handleResponse ya limpió el localStorage.
+                // Mostrar el modal y redirigimos.
+                openModal(
+                    createAlertModalContent(
+                        'Sesión Expirada',
+                        'Tu sesión ha terminado. Por favor, inicia sesión de nuevo.',
+                        'error'
+                    ),
+                    'sm'
+                );
+                // Esperar un poco antes de redirigir para que el usuario vea el mensaje
+                setTimeout(() => {
+                    window.location.href = '/index.html';
+                }, 3000);
+            } else {
+                // Si es otro tipo de error (ej. de conexión), mostrar el error de carga normal
+                openModal(
+                    createAlertModalContent(
+                        'Error de Carga',
+                        'No se pudo conectar con el servidor para cargar tu huerta.  Por favor, intenta recargar la página.',
+                        'error'
+                    ),
+                    'md'
+                );
+            }
+        }
+    };
 
 	// --- MANEJO DE EVENTOS (DELEGACIÓN) ---
 	gardenContainer.addEventListener('click', async (e) => {
-		e.preventDefault(); // Prevenir comportamiento por defecto de enlaces
+		e.preventDefault();
 
-		const deleteButton = e.target.closest('[data-action="delete"]');
-		const statusButton = e.target.closest(
-			'[data-action="toggle-status-menu"]'
-		);
-		const statusLink = e.target.closest('[data-status]');
+		const deleteButton = e.target.closest('[data-action="delete-batch"]');
+		const manageButton = e.target.closest('[data-action="manage-batch"]');
 
-		// --- Lógica para ELIMINAR planta ---
 		if (deleteButton) {
 			const card = e.target.closest('article');
-			const plantId = card.dataset.plantId;
+			const batchId = card.dataset.batchId;
 			const plantName = card.querySelector('h3').textContent;
-
 			openModal(
 				createConfirmModalContent(
-					`¿Quitar "${plantName}"?`,
-					'Sí, Quitar',
-					plantId
+					`¿Eliminar el lote de "${plantName}"?`,
+					'Sí, Eliminar',
+					batchId
 				),
 				'md'
 			);
 		}
 
-		// --- Lógica para CAMBIAR ESTADO ---
-		if (statusButton) {
-			const menu = statusButton.nextElementSibling;
-			// Ocultar otros menús abiertos para evitar superposición
-			document.querySelectorAll('.status-menu').forEach((m) => {
-				if (m !== menu) m.classList.add('hidden');
-			});
-			menu.classList.toggle('hidden');
-		}
-
-		if (statusLink) {
-			const newStatus = statusLink.dataset.status;
+		if (manageButton) {
+			e.preventDefault();
 			const card = e.target.closest('article');
-			const plantId = card.dataset.plantId;
+			const batchId = card.dataset.batchId;
 
-			// --- AÑADIR FEEDBACK DE CARGA ---
-			const statusMenu = statusLink.closest('.status-menu');
-			if (statusMenu) statusMenu.classList.add('hidden'); // Ocultar el menú
+			// Necesitamos los datos completos del lote para pasarlos al modal
+			const myGarden = await getMyGarden();
+			const plantCatalog = await getPlants();
+			const batch = myGarden.find((b) => b.batchId === batchId);
+			const enrichedBatch = {
+				...batch,
+				plantInfo: plantCatalog.find((p) => p.id === batch.plantId),
+			};
 
-			const statusDisplay = card.querySelector(
-				'[data-action="toggle-status-menu"]'
-			);
-			if (statusDisplay) {
-				statusDisplay.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Actualizando...`;
-				statusDisplay.disabled = true;
-			}
-
-			try {
-				await updatePlantStatusInGarden(plantId, newStatus);
-				loadGarden(); // Recargar la huerta para ver el cambio
-			} catch (err) {
-				openModal(
-					createAlertModalContent(
-						'Error',
-						'No se pudo actualizar el estado.',
-						'error'
-					),
-					'sm'
-				);
-				loadGarden(); // Recargar para restaurar el estado visual
-			}
+			// Abrimos el modal con el contenido de gestión
+			openModal(createManageBatchModalContent(enrichedBatch), 'lg');
 		}
 	});
 
 	if (modalContainer) {
 		modalContainer.addEventListener('click', async (e) => {
 			const confirmButton = e.target.closest('#confirm-action-button');
-
 			if (confirmButton) {
-				// Obtener el ID de la planta que guardamos en algún lugar
-				const plantIdToDelete = confirmButton.dataset.plantId;
-
-				if (!plantIdToDelete) return;
-
-				confirmButton.disabled = true;
-				confirmButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
-
+				const batchIdToDelete = confirmButton.dataset.entityId;
+				if (!batchIdToDelete) return;
 				try {
-					await deletePlantFromGarden(plantIdToDelete);
+					await deleteBatchFromGarden(batchIdToDelete);
 					closeModal();
 					loadGarden();
 					openModal(
 						createAlertModalContent(
 							'¡Eliminado!',
-							'La planta ha sido quitada de tu huerta.'
+							'El lote ha sido eliminado.'
 						),
 						'sm'
 					);
@@ -162,20 +162,44 @@ export const initDashboard = async (user) => {
 					openModal(
 						createAlertModalContent(
 							'Error',
-							'No se pudo eliminar la planta.',
+							'No se pudo eliminar el lote.',
 							'error'
 						),
 						'sm'
 					);
-				} finally {
-					// Restaurar el botón en caso de error para que el modal no se quede bloqueado
-					confirmButton.disabled = false;
-					confirmButton.textContent = 'Sí, Quitar';
 				}
+			}
+		});
+
+		modalContainer.addEventListener('change', async (e) => {
+			const selectElement = e.target.closest('.instance-status-select');
+			if (selectElement) {
+				const instanceId = selectElement.dataset.instanceId;
+				const newStatus = selectElement.value;
+
+				const batchId = document.querySelector(
+					'[data-batch-id-in-modal]'
+				).dataset.batchIdInModal;
+
+				try {
+					await updateInstanceStatus(batchId, instanceId, newStatus);
+				} catch (error) {
+					openModal(
+						createAlertModalContent(
+							'Error',
+							'No se pudo actualizar el estado.',
+							'error'
+						),
+						'sm'
+					);
+				}
+
+				// Recargar la vista del dashboard para ver los cambios en las estadísticas
+				loadGarden();
 			}
 		});
 	}
 
-	// Carga inicial de datos al entrar en la página del dashboard
+	// Carga inicial de datos
 	loadGarden();
 };

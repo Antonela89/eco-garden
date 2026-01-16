@@ -94,6 +94,12 @@ app.use('/shared', express.static(sharedPath));
 /** Montar el enrutador central de la API bajo el prefijo jerárquico /api. */
 app.use('/api', router);
 
+// --- DESHABILITAR CACHÉ PARA RUTAS DE LA API ---
+app.use('/api', (req, res, next) => {
+    res.set('Cache-Control', 'no-store');
+    next();
+});
+
 // --- RUTA CATCH-ALL PARA EL FRONTEND (SPA fallback) ---
 // Si ninguna ruta de la API coincide, siempre servimos el index.html
 // Esto es ideal para SPAs donde todas las rutas del frontend se manejan client-side

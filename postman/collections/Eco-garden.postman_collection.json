@@ -2,9 +2,91 @@
   "info": {
     "_postman_id": "2d5f7da2-439e-46cb-ad64-300cb05d031b",
     "name": "Eco-garden",
+    "description": "# 🌱 Colección de la API Eco-Garden\n\nEsta colección contiene todas las peticiones necesarias para interactuar y testear la API de **Eco-Garden**, una aplicación para la gestión de huertas urbanas.\n\n## 🚀 Primeros Pasos\n\n1.  **Configurar el Entorno:** Asegúrate de tener un **Environment** seleccionado (ej. \"Eco-garden-local\") con la variable `url` apuntando a tu servidor (ej. `http://localhost:3000/api`).\n2.  **Flujo de Autenticación:** Para usar los endpoints protegidos, primero debes ejecutar las peticiones de la carpeta `Autenticación`:\n    -   `POST Register Gardener` / `POST Register Admin` para crear los usuarios de prueba.\n    -   `POST Login Gardener` / `POST Login Admin` para obtener los tokens JWT. Los scripts de test guardarán automáticamente los tokens en las variables de entorno `{{gardener_token}}` y `{{admin_token}}`.\n\n---\n\n## 📂 Estructura de la Colección\n\nLa colección está organizada en carpetas según su funcionalidad y nivel de acceso:\n\n### 👤 Autenticación\nContiene los endpoints para el registro y el inicio de sesión de usuarios.\n\n### 🌳 Catálogo de Plantas\nEndpoints públicos para consultar el catálogo maestro de plantas basado en datos del INTA. También incluye las rutas de administración (protegidas con rol `admin`) para gestionar dicho catálogo.\n\n### 🌿 Mi Huerta\nEndpoints protegidos (`Bearer Token`) para que cada usuario gestione su perfil y su huerta personal. Permite crear \"Lotes de Cultivo\", actualizar el estado de cada planta individualmente y eliminar lotes.\n\n### ✅ Bienvenida\nUna simple petición `GET` a la raíz de la API para verificar que el servidor esté online.\n\n---\n\n### 🧪 Testeo Automatizado\n\nCada petición incluye scripts en la pestaña **`Tests` (Post-response)** para validar automáticamente:\n-   **Códigos de estado HTTP** (200, 201, 400, 401, 403, 404).\n-   **Estructura de las respuestas JSON**.\n-   **Lógica de negocio** (ej. que no se puedan crear usuarios duplicados).\n-   **Captura de datos dinámicos** (tokens, IDs) para encadenar peticiones.\n\nPara ejecutar la suite de tests completa, utiliza el **Collection Runner**.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
+    {
+      "name": "Bienvenida",
+      "item": [
+        {
+          "name": "Bienvenida",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "f2e49947-d59f-4c7d-ace2-ee6bce040354",
+                "exec": [
+                  "// --- TEST PARA EL ENDPOINT DE BIENVENIDA ---\r",
+                  "\r",
+                  "// 1. Verificar que la petición fue exitosa y el servidor está online\r",
+                  "pm.test(\"Verificar estado 200: API Online y Bienvenida correcta\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "// 2. Comprobar que la respuesta es un JSON válido\r",
+                  "pm.test(\"Validar que la respuesta es un objeto JSON\", function () {\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "// 3. Verificar que el cuerpo de la respuesta contiene las propiedades clave\r",
+                  "pm.test(\"Verificar la estructura del mensaje de bienvenida\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    \r",
+                  "    // Comprobar que existan las propiedades más importantes\r",
+                  "    pm.expect(jsonData).to.have.property('app');\r",
+                  "    pm.expect(jsonData).to.have.property('version');\r",
+                  "    pm.expect(jsonData).to.have.property('author');\r",
+                  "});\r",
+                  "\r",
+                  "// 4. Validar el contenido de una propiedad específica (el nombre de la App)\r",
+                  "pm.test(\"Confirmar que el nombre de la aplicación es 'Eco-Garden API 🌱'\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.app).to.eql(\"Eco-Garden API 🌱\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "b6119bcd-492b-40f7-9f7b-6895e266af41",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "67f5397e-d52e-4ef7-b24a-fb6f1e40d0e7",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                ""
+              ]
+            },
+            "description": "### ✅ Bienvenida\n\nUna simple petición `GET` a la raíz de la API para verificar que el servidor esté online."
+          },
+          "response": []
+        }
+      ],
+      "id": "6ef07346-1190-454d-9128-8bfacca7607e",
+      "description": "**Verificar Estado de la API**\n\nPetición a la raíz (`/api`) que devuelve un mensaje de bienvenida. Ideal para confirmar que el servidor está online."
+    },
     {
       "name": "Autenticación",
       "item": [
@@ -72,7 +154,8 @@
                     "auth",
                     "register"
                   ]
-                }
+                },
+                "description": "**Registrar un Nuevo Jardinero**\n\nCrea una nueva cuenta de usuario con el rol por defecto de `gardener`. La contraseña se encripta antes de ser guardada.\n\n- **Respuesta Exitosa (201):** Devuelve un mensaje de éxito y el objeto del usuario creado (sin la contraseña).\n    \n- **Respuesta Errónea (400):** Ocurre si el email ya está registrado o si los datos no cumplen las validaciones de Zod (ej. contraseña débil)."
               },
               "response": [
                 {
@@ -103,7 +186,7 @@
                   },
                   "status": "Created",
                   "code": 201,
-                  "_postman_previewlanguage": null,
+                  "_postman_previewlanguage": "Text",
                   "header": [
                     {
                       "key": "X-Powered-By",
@@ -169,7 +252,7 @@
                   },
                   "status": "Bad Request",
                   "code": 400,
-                  "_postman_previewlanguage": null,
+                  "_postman_previewlanguage": "Text",
                   "header": [
                     {
                       "key": "X-Powered-By",
@@ -260,7 +343,8 @@
                     "auth",
                     "login"
                   ]
-                }
+                },
+                "description": "**Iniciar Sesión como Jardinero**\n\nAutentica al usuario usando email y contraseña. Si las credenciales son correctas, devuelve un token JWT.\n\n- **Script de Test:** Captura automáticamente el token y lo guarda en la variable de entorno `{{gardener_token}}`.\n    \n- **Respuesta Exitosa (200):** Devuelve el token y los datos básicos del usuario.\n    \n- **Respuesta Errónea (401):** Ocurre si las credenciales son incorrectas."
               },
               "response": [
                 {
@@ -291,7 +375,7 @@
                   },
                   "status": "OK",
                   "code": 200,
-                  "_postman_previewlanguage": null,
+                  "_postman_previewlanguage": "Text",
                   "header": [
                     {
                       "key": "X-Powered-By",
@@ -332,7 +416,8 @@
               ]
             }
           ],
-          "id": "df22cd13-6e29-4ac3-ab10-07a8fba8de08"
+          "id": "df22cd13-6e29-4ac3-ab10-07a8fba8de08",
+          "description": "Endpoints para registrar e iniciar sesión como un usuario con rol `gardener`. El script de test del `login-gardener` guardará el token resultante en la variable de entorno `{{gardener_token}}`."
         },
         {
           "name": "Admin",
@@ -396,7 +481,8 @@
                     "auth",
                     "register"
                   ]
-                }
+                },
+                "description": "**Registrar un Nuevo Administrador**\n\nCrea una nueva cuenta de usuario especificando el rol de `admin`. Para que funcione, el backend debe permitir la creación de admins desde este endpoint (o crearlo manualmente).\n\n- **Nota:** En producción, la creación de administradores suele ser una operación manual o restringida."
               },
               "response": [
                 {
@@ -427,7 +513,7 @@
                   },
                   "status": "Created",
                   "code": 201,
-                  "_postman_previewlanguage": null,
+                  "_postman_previewlanguage": "Text",
                   "header": [
                     {
                       "key": "X-Powered-By",
@@ -493,7 +579,7 @@
                   },
                   "status": "Bad Request",
                   "code": 400,
-                  "_postman_previewlanguage": null,
+                  "_postman_previewlanguage": "Text",
                   "header": [
                     {
                       "key": "X-Powered-By",
@@ -584,7 +670,8 @@
                     "auth",
                     "login"
                   ]
-                }
+                },
+                "description": "**Iniciar Sesión como Administrador**\n\nAutentica al usuario y devuelve un token JWT con privilegios de administrador.\n\n- **Script de Test:** Captura automáticamente el token y lo guarda en la variable de entorno `{{admin_token}}`."
               },
               "response": [
                 {
@@ -615,7 +702,7 @@
                   },
                   "status": "OK",
                   "code": 200,
-                  "_postman_previewlanguage": null,
+                  "_postman_previewlanguage": "Text",
                   "header": [
                     {
                       "key": "X-Powered-By",
@@ -656,10 +743,12 @@
               ]
             }
           ],
-          "id": "678991c5-c27c-43c4-8f65-43c5e5697456"
+          "id": "678991c5-c27c-43c4-8f65-43c5e5697456",
+          "description": "Endpoints para registrar e iniciar sesión como un usuario con rol `admin`. El script de test del `login-admin` guardará el token resultante en la variable de entorno `{{admin_token}}`."
         }
       ],
-      "id": "b7777c3f-cbb7-4d25-af63-7ac18cda471f"
+      "id": "b7777c3f-cbb7-4d25-af63-7ac18cda471f",
+      "description": "### 👤 Autenticación de Usuarios\n\nEsta carpeta contiene los endpoints esenciales para el ciclo de vida de la autenticación de usuarios.\n\n- **Registro (`/register`):** Permite la creación de nuevas cuentas.\n- **Inicio de Sesión (`/login`):** Valida las credenciales y emite un token JWT para acceder a las rutas protegidas."
     },
     {
       "name": "Catálogo de Plantas",
@@ -700,7 +789,8 @@
                   "path": [
                     "plants"
                   ]
-                }
+                },
+                "description": "**Obtener Catálogo Completo**\n\nDevuelve un array con todos los objetos de plantas disponibles en el sistema."
               },
               "response": [
                 {
@@ -721,7 +811,7 @@
                   },
                   "status": "OK",
                   "code": 200,
-                  "_postman_previewlanguage": null,
+                  "_postman_previewlanguage": "Text",
                   "header": [
                     {
                       "key": "X-Powered-By",
@@ -793,7 +883,8 @@
                     "plants",
                     "planta-inexistente"
                   ]
-                }
+                },
+                "description": "**Obtener Detalles de una Planta**\n\nBusca y devuelve la información completa de una planta específica usando su ID (slug) en la URL.  \nEj: `/api/plants/acelga`"
               },
               "response": [
                 {
@@ -814,7 +905,7 @@
                   },
                   "status": "OK",
                   "code": 200,
-                  "_postman_previewlanguage": null,
+                  "_postman_previewlanguage": "Text",
                   "header": [
                     {
                       "key": "X-Powered-By",
@@ -891,9 +982,217 @@
                     "check",
                     "acelga"
                   ]
-                }
+                },
+                "description": "**Verificar Temporada de Siembra**\n\nComprueba si una planta específica está en su temporada ideal de siembra según la fecha actual del servidor."
               },
-              "response": []
+              "response": [
+                {
+                  "id": "30c176e3-9365-44b7-b039-abafc008fdd7",
+                  "name": "exito",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{url}}/plants/check/acelga",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "plants",
+                        "check",
+                        "acelga"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Security-Policy",
+                      "value": "default-src 'self';script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com;style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com;font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com;img-src 'self' data: https://res.cloudinary.com;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+                    },
+                    {
+                      "key": "Cross-Origin-Opener-Policy",
+                      "value": "same-origin"
+                    },
+                    {
+                      "key": "Cross-Origin-Resource-Policy",
+                      "value": "same-origin"
+                    },
+                    {
+                      "key": "Origin-Agent-Cluster",
+                      "value": "?1"
+                    },
+                    {
+                      "key": "Referrer-Policy",
+                      "value": "no-referrer"
+                    },
+                    {
+                      "key": "Strict-Transport-Security",
+                      "value": "max-age=31536000; includeSubDomains"
+                    },
+                    {
+                      "key": "X-Content-Type-Options",
+                      "value": "nosniff"
+                    },
+                    {
+                      "key": "X-DNS-Prefetch-Control",
+                      "value": "off"
+                    },
+                    {
+                      "key": "X-Download-Options",
+                      "value": "noopen"
+                    },
+                    {
+                      "key": "X-Frame-Options",
+                      "value": "SAMEORIGIN"
+                    },
+                    {
+                      "key": "X-Permitted-Cross-Domain-Policies",
+                      "value": "none"
+                    },
+                    {
+                      "key": "X-XSS-Protection",
+                      "value": "0"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "82"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"52-cgEHNkdDGVU7JTOP8XJTCkCZ3Uc\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Fri, 16 Jan 2026 17:47:31 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": "2026-01-16T17:47:34.807Z",
+                  "body": "{\n    \"status\": \"Ideal\",\n    \"message\": \"¡Sí! Estamos en temporada de siembra para Acelga.\"\n}"
+                },
+                {
+                  "id": "feabf492-3010-4ef0-9a9d-256d8b0995a2",
+                  "name": "no es momento",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{url}}/plants/check/zapallo",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "plants",
+                        "check",
+                        "zapallo"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Security-Policy",
+                      "value": "default-src 'self';script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com;style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com;font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com;img-src 'self' data: https://res.cloudinary.com;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+                    },
+                    {
+                      "key": "Cross-Origin-Opener-Policy",
+                      "value": "same-origin"
+                    },
+                    {
+                      "key": "Cross-Origin-Resource-Policy",
+                      "value": "same-origin"
+                    },
+                    {
+                      "key": "Origin-Agent-Cluster",
+                      "value": "?1"
+                    },
+                    {
+                      "key": "Referrer-Policy",
+                      "value": "no-referrer"
+                    },
+                    {
+                      "key": "Strict-Transport-Security",
+                      "value": "max-age=31536000; includeSubDomains"
+                    },
+                    {
+                      "key": "X-Content-Type-Options",
+                      "value": "nosniff"
+                    },
+                    {
+                      "key": "X-DNS-Prefetch-Control",
+                      "value": "off"
+                    },
+                    {
+                      "key": "X-Download-Options",
+                      "value": "noopen"
+                    },
+                    {
+                      "key": "X-Frame-Options",
+                      "value": "SAMEORIGIN"
+                    },
+                    {
+                      "key": "X-Permitted-Cross-Domain-Policies",
+                      "value": "none"
+                    },
+                    {
+                      "key": "X-XSS-Protection",
+                      "value": "0"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "150"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"96-U2o49iUYksrC2hfhD5Z4RRPFA2E\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Fri, 16 Jan 2026 17:47:51 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": "2026-01-16T17:47:55.837Z",
+                  "body": "{\n    \"status\": \"No recomendada\",\n    \"message\": \"Actualmente no es el mejor momento para sembrar Zapallo. Consulta el catálogo para ver opciones de temporada.\"\n}"
+                }
+              ]
             },
             {
               "name": "getByDifficulty",
@@ -937,12 +1236,324 @@
                     "difficulty",
                     "Fácil"
                   ]
-                }
+                },
+                "description": "**Filtrar por Dificultad**\n\nDevuelve un array de plantas que coinciden con el nivel de dificultad especificado (`Fácil`, `Media`, `Difícil`)."
               },
-              "response": []
+              "response": [
+                {
+                  "id": "7e6414fb-282e-4d5c-bb3c-a70cc5262dff",
+                  "name": "Fácil",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{url}}/plants/difficulty/Fácil",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "plants",
+                        "difficulty",
+                        "Fácil"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Security-Policy",
+                      "value": "default-src 'self';script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com;style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com;font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com;img-src 'self' data: https://res.cloudinary.com;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+                    },
+                    {
+                      "key": "Cross-Origin-Opener-Policy",
+                      "value": "same-origin"
+                    },
+                    {
+                      "key": "Cross-Origin-Resource-Policy",
+                      "value": "same-origin"
+                    },
+                    {
+                      "key": "Origin-Agent-Cluster",
+                      "value": "?1"
+                    },
+                    {
+                      "key": "Referrer-Policy",
+                      "value": "no-referrer"
+                    },
+                    {
+                      "key": "Strict-Transport-Security",
+                      "value": "max-age=31536000; includeSubDomains"
+                    },
+                    {
+                      "key": "X-Content-Type-Options",
+                      "value": "nosniff"
+                    },
+                    {
+                      "key": "X-DNS-Prefetch-Control",
+                      "value": "off"
+                    },
+                    {
+                      "key": "X-Download-Options",
+                      "value": "noopen"
+                    },
+                    {
+                      "key": "X-Frame-Options",
+                      "value": "SAMEORIGIN"
+                    },
+                    {
+                      "key": "X-Permitted-Cross-Domain-Policies",
+                      "value": "none"
+                    },
+                    {
+                      "key": "X-XSS-Protection",
+                      "value": "0"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "8137"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"1fc9-UFny+026r8N6BP+4pupC/8tACNQ\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Fri, 16 Jan 2026 17:48:29 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": "2026-01-16T17:48:31.333Z",
+                  "body": "[\n    {\n        \"id\": \"acelga\",\n        \"nombre\": \"Acelga\",\n        \"familia\": \"Quenopodiáceas\",\n        \"siembra\": [\n            \"Enero\",\n            \"Febrero\",\n            \"Marzo\",\n            \"Abril\",\n            \"Mayo\",\n            \"Junio\",\n            \"Julio\",\n            \"Agosto\",\n            \"Septiembre\",\n            \"Octubre\",\n            \"Noviembre\",\n            \"Diciembre\"\n        ],\n        \"metodo\": [\n            \"Directa\",\n            \"Almácigo\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 90,\n            \"max\": 130\n        },\n        \"distancia\": {\n            \"entrePlantas\": 15,\n            \"entreLineas\": 40\n        },\n        \"asociacion\": [\n            \"Maíz\",\n            \"Lechuga\",\n            \"Escarola\"\n        ],\n        \"rotacion\": [\n            \"Legumbres\"\n        ],\n        \"toleranciaSombra\": true,\n        \"aptoMaceta\": true,\n        \"dificultad\": \"Fácil\",\n        \"clima\": \"Muy resistente\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767499674/eco-garden/huerta/acelga_ga4nmo.webp\"\n    },\n    {\n        \"id\": \"ajo\",\n        \"nombre\": \"Ajo\",\n        \"familia\": \"Liliáceas\",\n        \"siembra\": [\n            \"Marzo\",\n            \"Abril\",\n            \"Mayo\"\n        ],\n        \"metodo\": [\n            \"Directa (Diente)\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 150,\n            \"max\": 180\n        },\n        \"distancia\": {\n            \"entrePlantas\": 10,\n            \"entreLineas\": 40\n        },\n        \"asociacion\": [\n            \"Lechuga\",\n            \"Escarola\",\n            \"Remolacha\"\n        ],\n        \"rotacion\": [\n            \"Legumbres\"\n        ],\n        \"toleranciaSombra\": false,\n        \"aptoMaceta\": true,\n        \"dificultad\": \"Fácil\",\n        \"clima\": \"Muy resistente\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767499691/eco-garden/huerta/ajo_walypa.webp\"\n    },\n    {\n        \"id\": \"arveja\",\n        \"nombre\": \"Arveja\",\n        \"familia\": \"Leguminosas\",\n        \"siembra\": [\n            \"Mayo\",\n            \"Junio\",\n            \"Julio\",\n            \"Agosto\"\n        ],\n        \"metodo\": [\n            \"Directa\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 120,\n            \"max\": 150\n        },\n        \"distancia\": {\n            \"entrePlantas\": 10,\n            \"entreLineas\": 50\n        },\n        \"asociacion\": [\n            \"Repollo\",\n            \"Ajo\",\n            \"Zanahoria\"\n        ],\n        \"rotacion\": [\n            \"Frutos\",\n            \"Hortalizas de hoja\"\n        ],\n        \"toleranciaSombra\": false,\n        \"aptoMaceta\": false,\n        \"dificultad\": \"Fácil\",\n        \"clima\": \"Resistente\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767499711/eco-garden/huerta/arveja_rwy6jv.webp\"\n    },\n    {\n        \"id\": \"chaucha\",\n        \"nombre\": \"Chaucha\",\n        \"familia\": \"Leguminosas\",\n        \"siembra\": [\n            \"Septiembre\",\n            \"Octubre\",\n            \"Noviembre\",\n            \"Diciembre\",\n            \"Enero\"\n        ],\n        \"metodo\": [\n            \"Directa\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 70,\n            \"max\": 90\n        },\n        \"distancia\": {\n            \"entrePlantas\": 25,\n            \"entreLineas\": 80\n        },\n        \"asociacion\": [\n            \"Maíz\",\n            \"Zapallo\"\n        ],\n        \"rotacion\": [\n            \"Raíces\",\n            \"Bulbos\",\n            \"Frutos\"\n        ],\n        \"toleranciaSombra\": false,\n        \"aptoMaceta\": false,\n        \"dificultad\": \"Fácil\",\n        \"clima\": \"Sensible\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767499167/eco-garden/huerta/chaucha_dgkefp.webp\"\n    },\n    {\n        \"id\": \"espinaca\",\n        \"nombre\": \"Espinaca\",\n        \"familia\": \"Quenopodiáceas\",\n        \"siembra\": [\n            \"Febrero\",\n            \"Marzo\",\n            \"Abril\",\n            \"Mayo\",\n            \"Junio\"\n        ],\n        \"metodo\": [\n            \"Directa\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 45,\n            \"max\": 60\n        },\n        \"distancia\": {\n            \"entrePlantas\": 10,\n            \"entreLineas\": 35\n        },\n        \"asociacion\": [\n            \"Repollo\",\n            \"Coliflor\",\n            \"Remolacha\"\n        ],\n        \"rotacion\": [\n            \"Legumbres\",\n            \"Bulbos\"\n        ],\n        \"toleranciaSombra\": true,\n        \"aptoMaceta\": true,\n        \"dificultad\": \"Fácil\",\n        \"clima\": \"Resistente\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767499899/eco-garden/huerta/espinaca_vhkdxu.webp\"\n    },\n    {\n        \"id\": \"haba\",\n        \"nombre\": \"Haba\",\n        \"familia\": \"Leguminosas\",\n        \"siembra\": [\n            \"Abril\",\n            \"Mayo\",\n            \"Junio\",\n            \"Julio\",\n            \"Agosto\"\n        ],\n        \"metodo\": [\n            \"Directa (a golpe)\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 150,\n            \"max\": 180\n        },\n        \"distancia\": {\n            \"entrePlantas\": 25,\n            \"entreLineas\": 70\n        },\n        \"asociacion\": [\n            \"Chaucha de metro\",\n            \"Repollo\",\n            \"Hojas\",\n            \"Frutos\"\n        ],\n        \"rotacion\": [\n            \"Bulbos\",\n            \"Raíces\",\n            \"Hojas\",\n            \"Frutos\"\n        ],\n        \"toleranciaSombra\": false,\n        \"aptoMaceta\": false,\n        \"dificultad\": \"Fácil\",\n        \"clima\": \"Resistente\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767499927/eco-garden/huerta/haba_mxg4dp.webp\"\n    },\n    {\n        \"id\": \"lechuga\",\n        \"nombre\": \"Lechuga\",\n        \"familia\": \"Compuestas\",\n        \"siembra\": [\n            \"Enero\",\n            \"Febrero\",\n            \"Marzo\",\n            \"Abril\",\n            \"Mayo\",\n            \"Junio\",\n            \"Julio\",\n            \"Agosto\",\n            \"Septiembre\",\n            \"Octubre\",\n            \"Noviembre\",\n            \"Diciembre\"\n        ],\n        \"metodo\": [\n            \"Almácigo\",\n            \"Directa\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 60,\n            \"max\": 90\n        },\n        \"distancia\": {\n            \"entrePlantas\": 20,\n            \"entreLineas\": 25\n        },\n        \"asociacion\": [\n            \"Bulbos\",\n            \"Raíces\",\n            \"Zanahoria\",\n            \"Remolacha\"\n        ],\n        \"rotacion\": [\n            \"Legumbres\"\n        ],\n        \"toleranciaSombra\": true,\n        \"aptoMaceta\": true,\n        \"dificultad\": \"Fácil\",\n        \"clima\": \"Resistente\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767061541/eco-garden/huerta/lechuga_ri5fp2.webp\"\n    },\n    {\n        \"id\": \"maiz\",\n        \"nombre\": \"Maíz - Choclo\",\n        \"familia\": \"Gramíneas\",\n        \"siembra\": [\n            \"Agosto\",\n            \"Septiembre\",\n            \"Octubre\",\n            \"Noviembre\"\n        ],\n        \"metodo\": [\n            \"Directa (a golpe)\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 100,\n            \"max\": 130\n        },\n        \"distancia\": {\n            \"entrePlantas\": 30,\n            \"entreLineas\": 70\n        },\n        \"asociacion\": [\n            \"Batata\",\n            \"Maní\",\n            \"Zapallo\",\n            \"Chaucha\"\n        ],\n        \"rotacion\": [\n            \"Frutos\",\n            \"Bulbos\",\n            \"Raíces\"\n        ],\n        \"toleranciaSombra\": false,\n        \"aptoMaceta\": false,\n        \"dificultad\": \"Fácil\",\n        \"clima\": \"Muy sensible\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767499778/eco-garden/huerta/maiz_erexr7.webp\"\n    },\n    {\n        \"id\": \"perejil\",\n        \"nombre\": \"Perejil\",\n        \"familia\": \"Apiáceas\",\n        \"siembra\": [\n            \"Enero\",\n            \"Febrero\",\n            \"Marzo\",\n            \"Abril\",\n            \"Mayo\",\n            \"Junio\",\n            \"Julio\",\n            \"Agosto\",\n            \"Septiembre\",\n            \"Octubre\",\n            \"Noviembre\",\n            \"Diciembre\"\n        ],\n        \"metodo\": [\n            \"Directa (a chorrillo)\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 75,\n            \"max\": 75\n        },\n        \"distancia\": {\n            \"entrePlantas\": 1,\n            \"entreLineas\": 25\n        },\n        \"asociacion\": [\n            \"Tomate\",\n            \"Coles\",\n            \"Zanahoria\"\n        ],\n        \"rotacion\": [\n            \"Bulbos\",\n            \"Raíces\",\n            \"Legumbres\"\n        ],\n        \"toleranciaSombra\": true,\n        \"aptoMaceta\": true,\n        \"dificultad\": \"Fácil\",\n        \"clima\": \"Resistente\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767500356/eco-garden/huerta/perejil_iwroke.webp\"\n    },\n    {\n        \"id\": \"rabanito\",\n        \"nombre\": \"Rabanito\",\n        \"familia\": \"Brasicáceas\",\n        \"siembra\": [\n            \"Enero\",\n            \"Febrero\",\n            \"Marzo\",\n            \"Abril\",\n            \"Mayo\",\n            \"Junio\",\n            \"Julio\",\n            \"Agosto\",\n            \"Septiembre\",\n            \"Octubre\",\n            \"Noviembre\",\n            \"Diciembre\"\n        ],\n        \"metodo\": [\n            \"Directa (a chorrillo)\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 25,\n            \"max\": 30\n        },\n        \"distancia\": {\n            \"entrePlantas\": 5,\n            \"entreLineas\": 25\n        },\n        \"asociacion\": [\n            \"Taco de reina\",\n            \"Lechuga\",\n            \"Zanahoria\",\n            \"Acelga\"\n        ],\n        \"rotacion\": [\n            \"Bulbos\",\n            \"Raíces\",\n            \"Legumbres\"\n        ],\n        \"toleranciaSombra\": true,\n        \"aptoMaceta\": true,\n        \"dificultad\": \"Fácil\",\n        \"clima\": \"Resistente\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767500326/eco-garden/huerta/rabanito_sqmnyx.webp\"\n    },\n    {\n        \"id\": \"radicheta\",\n        \"nombre\": \"Radicheta\",\n        \"familia\": \"Compuestas\",\n        \"siembra\": [\n            \"Agosto\",\n            \"Septiembre\",\n            \"Octubre\",\n            \"Noviembre\",\n            \"Diciembre\",\n            \"Enero\",\n            \"Febrero\",\n            \"Marzo\",\n            \"Abril\",\n            \"Mayo\"\n        ],\n        \"metodo\": [\n            \"Directa (a chorrillo)\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 70,\n            \"max\": 90\n        },\n        \"distancia\": {\n            \"entrePlantas\": 1,\n            \"entreLineas\": 20\n        },\n        \"asociacion\": [\n            \"Coles\",\n            \"Bulbos\",\n            \"Raíces\"\n        ],\n        \"rotacion\": [\n            \"Bulbos\",\n            \"Raíces\",\n            \"Legumbres\"\n        ],\n        \"toleranciaSombra\": false,\n        \"aptoMaceta\": true,\n        \"dificultad\": \"Fácil\",\n        \"clima\": \"Resistente\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767500253/eco-garden/huerta/radicheta_sk1do5.webp\"\n    },\n    {\n        \"id\": \"remolacha\",\n        \"nombre\": \"Remolacha\",\n        \"familia\": \"Quenopodiáceas\",\n        \"siembra\": [\n            \"Enero\",\n            \"Febrero\",\n            \"Marzo\",\n            \"Abril\",\n            \"Mayo\",\n            \"Junio\",\n            \"Julio\",\n            \"Agosto\",\n            \"Septiembre\",\n            \"Octubre\",\n            \"Noviembre\",\n            \"Diciembre\"\n        ],\n        \"metodo\": [\n            \"Directa\",\n            \"Almácigo\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 100,\n            \"max\": 130\n        },\n        \"distancia\": {\n            \"entrePlantas\": 10,\n            \"entreLineas\": 40\n        },\n        \"asociacion\": [\n            \"Repollo\",\n            \"Lechuga\",\n            \"Ajo\"\n        ],\n        \"rotacion\": [\n            \"Legumbres\",\n            \"Bulbos\",\n            \"Raíces\",\n            \"Hojas\"\n        ],\n        \"toleranciaSombra\": true,\n        \"aptoMaceta\": true,\n        \"dificultad\": \"Fácil\",\n        \"clima\": \"Resistente\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767062327/eco-garden/huerta/remolacha_ernzt6.webp\"\n    },\n    {\n        \"id\": \"rucula\",\n        \"nombre\": \"Rúcula\",\n        \"familia\": \"Brasicáceas\",\n        \"siembra\": [\n            \"Enero\",\n            \"Febrero\",\n            \"Marzo\",\n            \"Abril\",\n            \"Mayo\",\n            \"Junio\",\n            \"Julio\",\n            \"Agosto\",\n            \"Septiembre\",\n            \"Octubre\",\n            \"Noviembre\",\n            \"Diciembre\"\n        ],\n        \"metodo\": [\n            \"Directa (a chorrillo)\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 30,\n            \"max\": 60\n        },\n        \"distancia\": {\n            \"entrePlantas\": 1,\n            \"entreLineas\": 20\n        },\n        \"asociacion\": [\n            \"Raíces\",\n            \"Bulbos\"\n        ],\n        \"rotacion\": [\n            \"Bulbos\",\n            \"Raíces\",\n            \"Legumbres\"\n        ],\n        \"toleranciaSombra\": true,\n        \"aptoMaceta\": true,\n        \"dificultad\": \"Fácil\",\n        \"clima\": \"Resistente\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767500276/eco-garden/huerta/rucula_pm7zpu.webp\"\n    },\n    {\n        \"id\": \"zapallo\",\n        \"nombre\": \"Zapallo\",\n        \"familia\": \"Cucurbitáceas\",\n        \"siembra\": [\n            \"Septiembre\",\n            \"Octubre\",\n            \"Noviembre\"\n        ],\n        \"metodo\": [\n            \"Directa (a golpe)\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 120,\n            \"max\": 150\n        },\n        \"distancia\": {\n            \"entrePlantas\": 1,\n            \"entreLineas\": 2.5\n        },\n        \"asociacion\": [\n            \"Maíz\",\n            \"Poroto\"\n        ],\n        \"rotacion\": [\n            \"Raíces\",\n            \"Legumbres\",\n            \"Hojas\"\n        ],\n        \"toleranciaSombra\": false,\n        \"aptoMaceta\": false,\n        \"dificultad\": \"Fácil\",\n        \"clima\": \"Sensible\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767499055/eco-garden/huerta/zapallo_ejuxfz.webp\"\n    },\n    {\n        \"id\": \"zapallito\",\n        \"nombre\": \"Zapallito\",\n        \"familia\": \"Cucurbitáceas\",\n        \"siembra\": [\n            \"Septiembre\",\n            \"Octubre\",\n            \"Noviembre\",\n            \"Diciembre\",\n            \"Enero\"\n        ],\n        \"metodo\": [\n            \"Directa (a golpe)\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 45,\n            \"max\": 60\n        },\n        \"distancia\": {\n            \"entrePlantas\": 100,\n            \"entreLineas\": 100\n        },\n        \"asociacion\": [\n            \"Maíz\",\n            \"Poroto\"\n        ],\n        \"rotacion\": [\n            \"Raíces\",\n            \"Legumbres\",\n            \"Hojas\"\n        ],\n        \"toleranciaSombra\": false,\n        \"aptoMaceta\": false,\n        \"dificultad\": \"Fácil\",\n        \"clima\": \"Muy sensible\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767500451/eco-garden/huerta/zapallitos_auomoc.webp\"\n    }\n]"
+                },
+                {
+                  "id": "c1088c16-76b1-4146-85d3-b6e127ffff8a",
+                  "name": "Dificil",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{url}}/plants/difficulty/Difícil",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "plants",
+                        "difficulty",
+                        "Difícil"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Security-Policy",
+                      "value": "default-src 'self';script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com;style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com;font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com;img-src 'self' data: https://res.cloudinary.com;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+                    },
+                    {
+                      "key": "Cross-Origin-Opener-Policy",
+                      "value": "same-origin"
+                    },
+                    {
+                      "key": "Cross-Origin-Resource-Policy",
+                      "value": "same-origin"
+                    },
+                    {
+                      "key": "Origin-Agent-Cluster",
+                      "value": "?1"
+                    },
+                    {
+                      "key": "Referrer-Policy",
+                      "value": "no-referrer"
+                    },
+                    {
+                      "key": "Strict-Transport-Security",
+                      "value": "max-age=31536000; includeSubDomains"
+                    },
+                    {
+                      "key": "X-Content-Type-Options",
+                      "value": "nosniff"
+                    },
+                    {
+                      "key": "X-DNS-Prefetch-Control",
+                      "value": "off"
+                    },
+                    {
+                      "key": "X-Download-Options",
+                      "value": "noopen"
+                    },
+                    {
+                      "key": "X-Frame-Options",
+                      "value": "SAMEORIGIN"
+                    },
+                    {
+                      "key": "X-Permitted-Cross-Domain-Policies",
+                      "value": "none"
+                    },
+                    {
+                      "key": "X-XSS-Protection",
+                      "value": "0"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "1578"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"62a-gEicEDMbQonlZ3d+dKRlOz6SFBI\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Fri, 16 Jan 2026 17:49:27 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": "2026-01-16T17:49:36.499Z",
+                  "body": "[\n    {\n        \"id\": \"apio\",\n        \"nombre\": \"Apio\",\n        \"familia\": \"Umbelíferas\",\n        \"siembra\": [\n            \"Enero\",\n            \"Febrero\",\n            \"Marzo\",\n            \"Abril\",\n            \"Mayo\",\n            \"Junio\",\n            \"Julio\",\n            \"Agosto\",\n            \"Septiembre\",\n            \"Octubre\",\n            \"Noviembre\",\n            \"Diciembre\"\n        ],\n        \"metodo\": [\n            \"Almácigo\",\n            \"Transplante\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 100,\n            \"max\": 130\n        },\n        \"distancia\": {\n            \"entrePlantas\": 25,\n            \"entreLineas\": 45\n        },\n        \"asociacion\": [\n            \"Puerro\",\n            \"Repollo\",\n            \"Lechuga\"\n        ],\n        \"rotacion\": [\n            \"Raíces\",\n            \"Bulbos\"\n        ],\n        \"toleranciaSombra\": true,\n        \"aptoMaceta\": true,\n        \"dificultad\": \"Difícil\",\n        \"clima\": \"Resistente\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767499243/eco-garden/huerta/apio_bf2b00.webp\"\n    },\n    {\n        \"id\": \"melon\",\n        \"nombre\": \"Melón\",\n        \"familia\": \"Cucurbitáceas\",\n        \"siembra\": [\n            \"Septiembre\",\n            \"Octubre\"\n        ],\n        \"metodo\": [\n            \"Directa (a golpe)\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 100,\n            \"max\": 100\n        },\n        \"distancia\": {\n            \"entrePlantas\": 90,\n            \"entreLineas\": 120\n        },\n        \"asociacion\": [\n            \"Maíz\",\n            \"Poroto\"\n        ],\n        \"rotacion\": [\n            \"Raíces\",\n            \"Legumbres\",\n            \"Hojas\"\n        ],\n        \"toleranciaSombra\": false,\n        \"aptoMaceta\": false,\n        \"dificultad\": \"Difícil\",\n        \"clima\": \"Muy sensible\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767500172/eco-garden/huerta/melon_eeyxgf.webp\"\n    },\n    {\n        \"id\": \"tomate\",\n        \"nombre\": \"Tomate\",\n        \"familia\": \"Solanáceas\",\n        \"siembra\": [\n            \"Julio\",\n            \"Agosto\",\n            \"Septiembre\",\n            \"Octubre\"\n        ],\n        \"metodo\": [\n            \"Almácigo\",\n            \"Transplante\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 80,\n            \"max\": 100\n        },\n        \"distancia\": {\n            \"entrePlantas\": 45,\n            \"entreLineas\": 80\n        },\n        \"asociacion\": [\n            \"Albahaca\",\n            \"Copete\",\n            \"Zanahoria\"\n        ],\n        \"rotacion\": [\n            \"Legumbres\",\n            \"Crucíferas\"\n        ],\n        \"toleranciaSombra\": false,\n        \"aptoMaceta\": true,\n        \"dificultad\": \"Difícil\",\n        \"clima\": \"Muy sensible\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767500434/eco-garden/huerta/tomate_r70ba8.webp\"\n    }\n]"
+                },
+                {
+                  "id": "77b70e6c-d808-4002-a7e1-1106a78b3a07",
+                  "name": "Media",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{url}}/plants/difficulty/Media",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "plants",
+                        "difficulty",
+                        "Media"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Security-Policy",
+                      "value": "default-src 'self';script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com;style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com;font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com;img-src 'self' data: https://res.cloudinary.com;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+                    },
+                    {
+                      "key": "Cross-Origin-Opener-Policy",
+                      "value": "same-origin"
+                    },
+                    {
+                      "key": "Cross-Origin-Resource-Policy",
+                      "value": "same-origin"
+                    },
+                    {
+                      "key": "Origin-Agent-Cluster",
+                      "value": "?1"
+                    },
+                    {
+                      "key": "Referrer-Policy",
+                      "value": "no-referrer"
+                    },
+                    {
+                      "key": "Strict-Transport-Security",
+                      "value": "max-age=31536000; includeSubDomains"
+                    },
+                    {
+                      "key": "X-Content-Type-Options",
+                      "value": "nosniff"
+                    },
+                    {
+                      "key": "X-DNS-Prefetch-Control",
+                      "value": "off"
+                    },
+                    {
+                      "key": "X-Download-Options",
+                      "value": "noopen"
+                    },
+                    {
+                      "key": "X-Frame-Options",
+                      "value": "SAMEORIGIN"
+                    },
+                    {
+                      "key": "X-Permitted-Cross-Domain-Policies",
+                      "value": "none"
+                    },
+                    {
+                      "key": "X-XSS-Protection",
+                      "value": "0"
+                    },
+                    {
+                      "key": "Access-Control-Allow-Origin",
+                      "value": "*"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "6667"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"1a0b-izTaG1AsmruLRSR8GKaunYBX3OU\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Fri, 16 Jan 2026 17:50:12 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": "2026-01-16T17:50:13.884Z",
+                  "body": "[\n    {\n        \"id\": \"albahaca\",\n        \"nombre\": \"Albahaca\",\n        \"familia\": \"Labiadas\",\n        \"siembra\": [\n            \"Agosto\",\n            \"Septiembre\",\n            \"Octubre\"\n        ],\n        \"metodo\": [\n            \"Almácigo\",\n            \"Transplante\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 90,\n            \"max\": 90\n        },\n        \"distancia\": {\n            \"entrePlantas\": 20,\n            \"entreLineas\": 40\n        },\n        \"asociacion\": [\n            \"Tomate\",\n            \"Pimiento\"\n        ],\n        \"rotacion\": [\n            \"Hortalizas de hoja\"\n        ],\n        \"toleranciaSombra\": false,\n        \"aptoMaceta\": true,\n        \"dificultad\": \"Media\",\n        \"clima\": \"Sensible al frío\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767499202/eco-garden/huerta/albahaca_lnerth.webp\"\n    },\n    {\n        \"id\": \"batata\",\n        \"nombre\": \"Batata\",\n        \"familia\": \"Convolvuláceas\",\n        \"siembra\": [\n            \"Agosto\",\n            \"Septiembre\",\n            \"Octubre\"\n        ],\n        \"metodo\": [\n            \"Guías\",\n            \"Brotes\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 150,\n            \"max\": 150\n        },\n        \"distancia\": {\n            \"entrePlantas\": 40,\n            \"entreLineas\": 80\n        },\n        \"asociacion\": [\n            \"Choclo\",\n            \"Chaucha\",\n            \"Zapallo\"\n        ],\n        \"rotacion\": [\n            \"Hortalizas de hoja\"\n        ],\n        \"toleranciaSombra\": false,\n        \"aptoMaceta\": false,\n        \"dificultad\": \"Media\",\n        \"clima\": \"Sensible\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767499294/eco-garden/huerta/batata_cgxafm.webp\"\n    },\n    {\n        \"id\": \"berenjena\",\n        \"nombre\": \"Berenjena\",\n        \"familia\": \"Solanáceas\",\n        \"siembra\": [\n            \"Agosto\",\n            \"Septiembre\",\n            \"Octubre\"\n        ],\n        \"metodo\": [\n            \"Almácigo\",\n            \"Transplante\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 120,\n            \"max\": 120\n        },\n        \"distancia\": {\n            \"entrePlantas\": 50,\n            \"entreLineas\": 70\n        },\n        \"asociacion\": [\n            \"Poroto\",\n            \"Lechuga\"\n        ],\n        \"rotacion\": [\n            \"Legumbres\"\n        ],\n        \"toleranciaSombra\": false,\n        \"aptoMaceta\": true,\n        \"dificultad\": \"Media\",\n        \"clima\": \"Muy sensible\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767499820/eco-garden/huerta/berenjena_oek4hv.webp\"\n    },\n    {\n        \"id\": \"brocoli\",\n        \"nombre\": \"Brocoli\",\n        \"familia\": \"Brasicáceas\",\n        \"siembra\": [\n            \"Febrero\",\n            \"Marzo\"\n        ],\n        \"metodo\": [\n            \"Almácigo\",\n            \"Transplante\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 100,\n            \"max\": 100\n        },\n        \"distancia\": {\n            \"entrePlantas\": 40,\n            \"entreLineas\": 70\n        },\n        \"asociacion\": [\n            \"Taco de reina\",\n            \"Remolacha\"\n        ],\n        \"rotacion\": [\n            \"Legumbres\",\n            \"Bulbos\"\n        ],\n        \"toleranciaSombra\": true,\n        \"aptoMaceta\": true,\n        \"dificultad\": \"Media\",\n        \"clima\": \"Resistente\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767499797/eco-garden/huerta/brocoli_bkjkun.webp\"\n    },\n    {\n        \"id\": \"cebolla\",\n        \"nombre\": \"Cebolla\",\n        \"familia\": \"Liliáceas\",\n        \"siembra\": [\n            \"Febrero\",\n            \"Marzo\",\n            \"Abril\"\n        ],\n        \"metodo\": [\n            \"Almácigo\",\n            \"Transplante\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 270,\n            \"max\": 270\n        },\n        \"distancia\": {\n            \"entrePlantas\": 15,\n            \"entreLineas\": 40\n        },\n        \"asociacion\": [\n            \"Zanahoria\",\n            \"Lechuga\",\n            \"Remolacha\"\n        ],\n        \"rotacion\": [\n            \"Hojas\",\n            \"Raíces\",\n            \"Legumbres\"\n        ],\n        \"toleranciaSombra\": false,\n        \"aptoMaceta\": true,\n        \"dificultad\": \"Media\",\n        \"clima\": \"Resistente\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767061545/eco-garden/huerta/cebolla_qq7vs1.webp\"\n    },\n    {\n        \"id\": \"frutilla\",\n        \"nombre\": \"Frutilla\",\n        \"familia\": \"Rosáceas\",\n        \"siembra\": [\n            \"Abril\",\n            \"Mayo\"\n        ],\n        \"metodo\": [\n            \"Transplante\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 150,\n            \"max\": 150\n        },\n        \"distancia\": {\n            \"entrePlantas\": 25,\n            \"entreLineas\": 40\n        },\n        \"asociacion\": [\n            \"Hojas\",\n            \"Bulbos\"\n        ],\n        \"rotacion\": [\n            \"Bulbos\",\n            \"Raíces\",\n            \"Legumbres\"\n        ],\n        \"toleranciaSombra\": false,\n        \"aptoMaceta\": true,\n        \"dificultad\": \"Media\",\n        \"clima\": \"Resistente\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767499939/eco-garden/huerta/frutilla_xysukc.webp\"\n    },\n    {\n        \"id\": \"hinojo\",\n        \"nombre\": \"Hinojo\",\n        \"familia\": \"Apiáceas\",\n        \"siembra\": [\n            \"Febrero\",\n            \"Marzo\",\n            \"Abril\"\n        ],\n        \"metodo\": [\n            \"Almácigo\",\n            \"Transplante\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 150,\n            \"max\": 150\n        },\n        \"distancia\": {\n            \"entrePlantas\": 30,\n            \"entreLineas\": 60\n        },\n        \"asociacion\": [\n            \"Lechuga\",\n            \"Acelga\",\n            \"Bulbos\"\n        ],\n        \"rotacion\": [\n            \"Bulbos\",\n            \"Raíces\",\n            \"Legumbres\"\n        ],\n        \"toleranciaSombra\": false,\n        \"aptoMaceta\": true,\n        \"dificultad\": \"Media\",\n        \"clima\": \"Resistente\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767500120/eco-garden/huerta/hinojo_zgvzmu.webp\"\n    },\n    {\n        \"id\": \"papa\",\n        \"nombre\": \"Papa\",\n        \"familia\": \"Solanáceas\",\n        \"siembra\": [\n            \"Agosto\",\n            \"Septiembre\"\n        ],\n        \"metodo\": [\n            \"Directa (tubérculo)\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 120,\n            \"max\": 120\n        },\n        \"distancia\": {\n            \"entrePlantas\": 30,\n            \"entreLineas\": 70\n        },\n        \"asociacion\": [\n            \"Lechuga\",\n            \"Cardo\",\n            \"Berro\",\n            \"Espinaca\"\n        ],\n        \"rotacion\": [\n            \"Legumbres\",\n            \"Bulbos\"\n        ],\n        \"toleranciaSombra\": false,\n        \"aptoMaceta\": false,\n        \"dificultad\": \"Media\",\n        \"clima\": \"Sensible\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767061544/eco-garden/papa_dxbki1.webp\"\n    },\n    {\n        \"id\": \"pepino\",\n        \"nombre\": \"Pepino\",\n        \"familia\": \"Cucurbitáceas\",\n        \"siembra\": [\n            \"Septiembre\",\n            \"Octubre\"\n        ],\n        \"metodo\": [\n            \"Directa (a golpe)\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 60,\n            \"max\": 80\n        },\n        \"distancia\": {\n            \"entrePlantas\": 70,\n            \"entreLineas\": 120\n        },\n        \"asociacion\": [\n            \"Chaucha de veraneo\",\n            \"Maíz\"\n        ],\n        \"rotacion\": [\n            \"Raíces\",\n            \"Legumbres\",\n            \"Hojas\"\n        ],\n        \"toleranciaSombra\": false,\n        \"aptoMaceta\": false,\n        \"dificultad\": \"Media\",\n        \"clima\": \"Muy sensible\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767500341/eco-garden/huerta/pepino_tcqvjg.webp\"\n    },\n    {\n        \"id\": \"pimiento\",\n        \"nombre\": \"Pimiento\",\n        \"familia\": \"Solanáceas\",\n        \"siembra\": [\n            \"Julio\",\n            \"Agosto\",\n            \"Septiembre\"\n        ],\n        \"metodo\": [\n            \"Almácigo\",\n            \"Transplante\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 80,\n            \"max\": 100\n        },\n        \"distancia\": {\n            \"entrePlantas\": 45,\n            \"entreLineas\": 75\n        },\n        \"asociacion\": [\n            \"Zanahoria\",\n            \"Albahaca\"\n        ],\n        \"rotacion\": [\n            \"Legumbres\"\n        ],\n        \"toleranciaSombra\": false,\n        \"aptoMaceta\": true,\n        \"dificultad\": \"Media\",\n        \"clima\": \"Muy sensible\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767061536/eco-garden/huerta/pimiento_buq4cz.webp\"\n    },\n    {\n        \"id\": \"puerro\",\n        \"nombre\": \"Puerro\",\n        \"familia\": \"Liliáceas\",\n        \"siembra\": [\n            \"Enero\",\n            \"Febrero\",\n            \"Marzo\",\n            \"Abril\",\n            \"Mayo\",\n            \"Junio\",\n            \"Julio\",\n            \"Agosto\",\n            \"Septiembre\",\n            \"Octubre\",\n            \"Noviembre\",\n            \"Diciembre\"\n        ],\n        \"metodo\": [\n            \"Almácigo\",\n            \"Transplante\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 120,\n            \"max\": 150\n        },\n        \"distancia\": {\n            \"entrePlantas\": 10,\n            \"entreLineas\": 40\n        },\n        \"asociacion\": [\n            \"Zanahoria\",\n            \"Apio\",\n            \"Lechuga\"\n        ],\n        \"rotacion\": [\n            \"Hojas\",\n            \"Raíces\",\n            \"Legumbres\"\n        ],\n        \"toleranciaSombra\": true,\n        \"aptoMaceta\": true,\n        \"dificultad\": \"Media\",\n        \"clima\": \"Resistente\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767061537/eco-garden/huerta/puerro_tatzvp.webp\"\n    },\n    {\n        \"id\": \"repollo\",\n        \"nombre\": \"Repollo\",\n        \"familia\": \"Brasicáceas\",\n        \"siembra\": [\n            [\n                \"Febrero\",\n                \"Marzo\"\n            ],\n            [\n                \"Septiembre\",\n                \"Octubre\",\n                \"Noviembre\"\n            ]\n        ],\n        \"metodo\": [\n            \"Almácigo\",\n            \"Transplante\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 90,\n            \"max\": 130\n        },\n        \"distancia\": {\n            \"entrePlantas\": 45,\n            \"entreLineas\": 70\n        },\n        \"asociacion\": [\n            \"Remolacha\",\n            \"Taco de reina\",\n            \"Ajenjo\",\n            \"Lechuga\"\n        ],\n        \"rotacion\": [\n            \"Legumbres\",\n            \"Bulbos\",\n            \"Raíces\",\n            \"Hojas\",\n            \"Frutos\"\n        ],\n        \"toleranciaSombra\": false,\n        \"aptoMaceta\": true,\n        \"dificultad\": \"Media\",\n        \"clima\": \"Resistente\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767500287/eco-garden/huerta/repollo_mar6rj.webp\"\n    },\n    {\n        \"id\": \"zanahoria\",\n        \"nombre\": \"Zanahoria\",\n        \"familia\": \"Umbelíferas\",\n        \"siembra\": [\n            \"Enero\",\n            \"Febrero\",\n            \"Marzo\",\n            \"Abril\",\n            \"Mayo\",\n            \"Junio\",\n            \"Julio\",\n            \"Agosto\",\n            \"Septiembre\",\n            \"Octubre\",\n            \"Noviembre\",\n            \"Diciembre\"\n        ],\n        \"metodo\": [\n            \"Directa (a chorrillo)\"\n        ],\n        \"diasCosecha\": {\n            \"min\": 110,\n            \"max\": 130\n        },\n        \"distancia\": {\n            \"entrePlantas\": 5,\n            \"entreLineas\": 40\n        },\n        \"asociacion\": [\n            \"Repollo\",\n            \"Romero\",\n            \"Salvia\",\n            \"Puerro\",\n            \"Cebolla\"\n        ],\n        \"rotacion\": [\n            \"Bulbos\",\n            \"Raíces\",\n            \"Legumbres\"\n        ],\n        \"toleranciaSombra\": false,\n        \"aptoMaceta\": true,\n        \"dificultad\": \"Media\",\n        \"clima\": \"Resistente\",\n        \"imagen\": \"https://res.cloudinary.com/antonelab/image/upload/v1767061535/eco-garden/huerta/zanahoria_eph5ei.webp\"\n    }\n]"
+                }
+              ]
             }
           ],
-          "id": "790a60d1-3c10-4097-b352-9080e37252f0"
+          "id": "790a60d1-3c10-4097-b352-9080e37252f0",
+          "description": "Endpoints de consulta pública. No requieren autenticación."
         },
         {
           "name": "admin",
@@ -996,7 +1607,8 @@
                   "path": [
                     "plants"
                   ]
-                }
+                },
+                "description": "**Crear Nueva Especie**\n\nAñade una nueva planta al catálogo maestro. Requiere enviar el objeto completo de la planta en el `body`.\n\n- **Seguridad:** Protegido por `verifyToken` y `isAdmin`.\n    \n- **Respuesta Errónea (400):** Ocurre si el ID ya existe o los datos no pasan la validación de Zod."
               },
               "response": [
                 {
@@ -1033,7 +1645,7 @@
                   },
                   "status": "OK",
                   "code": 200,
-                  "_postman_previewlanguage": null,
+                  "_postman_previewlanguage": "Text",
                   "header": [
                     {
                       "key": "X-Powered-By",
@@ -1159,7 +1771,7 @@
                   },
                   "status": "OK",
                   "code": 200,
-                  "_postman_previewlanguage": null,
+                  "_postman_previewlanguage": "Text",
                   "header": [
                     {
                       "key": "X-Powered-By",
@@ -1252,7 +1864,8 @@
                     "plants",
                     "planta-de-prueba"
                   ]
-                }
+                },
+                "description": "**Actualizar una Especie**\n\nModifica uno o más campos de una planta existente. Solo es necesario enviar los campos a cambiar.\n\n- **Seguridad:** Protegido por `verifyToken` y `isAdmin`."
               },
               "response": []
             },
@@ -1294,7 +1907,8 @@
                     "plants",
                     "planta-de-prueba"
                   ]
-                }
+                },
+                "description": "**Eliminar una Especie**\n\nBorra permanentemente una planta del catálogo maestro.\n\n- **Seguridad:** Protegido por `verifyToken` y `isAdmin`."
               },
               "response": []
             },
@@ -1341,533 +1955,486 @@
               "response": []
             }
           ],
-          "id": "3b92d621-65cf-40ad-abb3-1851b3c95f65"
+          "id": "3b92d621-65cf-40ad-abb3-1851b3c95f65",
+          "description": "Endpoints protegidos para la gestión del catálogo. Requieren token de Admin."
         }
       ],
-      "id": "827a1e71-15b0-4330-8f3a-13556fd3d59e"
+      "id": "827a1e71-15b0-4330-8f3a-13556fd3d59e",
+      "description": "### 🌳 Catálogo de Plantas (INTA ProHuerta)\n\nEsta sección agrupa todos los endpoints relacionados con la consulta y gestión del catálogo maestro de plantas.\n\n- **`/public`:** Rutas de acceso público que no requieren autenticación. Permiten a cualquier visitante explorar las especies disponibles.\n- **`/admin`:** Rutas protegidas que requieren un token de administrador (`{{admin_token}}`). Permiten crear, actualizar y eliminar especies del catálogo."
     },
     {
       "name": "Mi Huerta",
       "item": [
         {
-          "name": "getMyProfile",
-          "event": [
+          "name": "profile",
+          "item": [
             {
-              "listen": "test",
-              "script": {
-                "id": "27359804-25c3-4eda-8f9d-1608e9c0016b",
-                "exec": [
-                  "// Script de Depuración para getMyProfile\r",
-                  "\r",
-                  "try {\r",
-                  "    // 1. Intentamos parsear la respuesta\r",
-                  "    const jsonData = pm.response.json();\r",
-                  "\r",
-                  "    // 2. Imprimimos en la Consola de Postman lo que se parseó\r",
-                  "    console.log(\"--- DEBUG: Objeto JSON Parseado ---\");\r",
-                  "    console.log(jsonData);\r",
-                  "\r",
-                  "    // 3. Imprimimos el tipo de dato de 'jsonData' y 'jsonData.email'\r",
-                  "    console.log(\"Tipo de jsonData:\", typeof jsonData);\r",
-                  "    console.log(\"Tipo de jsonData.email:\", typeof jsonData.email);\r",
-                  "\r",
-                  "    // 4. Imprimimos el texto crudo de la respuesta, sin procesar\r",
-                  "    console.log(\"--- DEBUG: Texto Crudo de la Respuesta ---\");\r",
-                  "    console.log(pm.response.text());\r",
-                  "\r",
-                  "    // 5. Ejecutamos los tests\r",
-                  "    pm.test(\"Verificar estado 200\", () => {\r",
-                  "        pm.response.to.have.status(200);\r",
-                  "    });\r",
-                  "\r",
-                  "    pm.test(\"Verificar que la respuesta tiene la propiedad 'email'\", () => {\r",
-                  "        pm.expect(jsonData).to.have.property('email');\r",
-                  "    });\r",
-                  "\r",
-                  "    pm.test(\"Verificar que el email coincide (insensible a mayúsculas)\", () => {\r",
-                  "        const environmentEmail = pm.environment.get(\"gardener_email\");\r",
-                  "        pm.expect(jsonData.email).to.eql(environmentEmail);\r",
-                  "    });\r",
-                  "\r",
-                  "} catch (e) {\r",
-                  "    console.error(\"¡ERROR DENTRO DEL SCRIPT DE POSTMAN!\", e);\r",
-                  "}"
-                ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
-            }
-          ],
-          "id": "51040933-6456-4921-9a9f-bdabbd52cb06",
-          "request": {
-            "auth": {
-              "type": "noauth"
-            },
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{gardener_token}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{url}}/gardener/profile",
-              "host": [
-                "{{url}}"
-              ],
-              "path": [
-                "gardener",
-                "profile"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "updateMyPerfil",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "id": "e74aaf48-dd5f-4796-881c-945ca70b5c02",
-                "exec": [
-                  "// --- TEST PARA PUT (HÍBRIDO) UPDATE PROFILE ---\r",
-                  "\r",
-                  "// 1. Verificar que la operación fue exitosa (200 OK)\r",
-                  "pm.test(\"Verificar estado 200: Perfil actualizado correctamente\", function () {\r",
-                  "    pm.response.to.have.status(200);\r",
-                  "});\r",
-                  "\r",
-                  "// 2. Verificar que la respuesta contiene el objeto de usuario actualizado\r",
-                  "pm.test(\"Validar que la respuesta contiene el usuario y no la contraseña\", function () {\r",
-                  "    const jsonData = pm.response.json();\r",
-                  "    pm.expect(jsonData.user).to.be.an('object');\r",
-                  "    pm.expect(jsonData.user).to.not.have.property('password');\r",
-                  "});\r",
-                  "\r",
-                  "// 3. Comprobar que el campo enviado ('username') realmente cambió\r",
-                  "pm.test(\"Confirmar que el 'username' se actualizó al nuevo valor\", function () {\r",
-                  "    const jsonData = pm.response.json();\r",
-                  "    pm.expect(jsonData.user.username).to.eql(\"Jardinero_PUT\");\r",
-                  "});\r",
-                  "\r",
-                  "// 4. ¡TEST CLAVE! Verificar que los campos NO enviados NO se borraron\r",
-                  "pm.test(\"Verificar que los datos no modificados (email, role) se mantuvieron\", function () {\r",
-                  "    const jsonData = pm.response.json();\r",
-                  "    // Comprobamos que el email sigue siendo el original guardado en las variables de entorno\r",
-                  "    pm.expect(jsonData.user.email).to.eql(pm.environment.get(\"gardener_email\"));\r",
-                  "    // Comprobamos que el rol no cambió\r",
-                  "    pm.expect(jsonData.user.role).to.eql(\"gardener\");\r",
-                  "});\r",
-                  "\r",
-                  "// 5. Actualizar el objeto 'user' completo en el entorno para futuras peticiones\r",
-                  "pm.test(\"Actualizar el objeto 'user' en las variables de entorno\", function () {\r",
-                  "    const jsonData = pm.response.json();\r",
-                  "    // Guardamos el objeto completo para que los siguientes tests tengan la info actualizada\r",
-                  "    pm.environment.set(\"user_object\", JSON.stringify(jsonData.user));\r",
-                  "    // También actualizamos la variable específica del username\r",
-                  "    pm.environment.set(\"gardener_username\", jsonData.user.username);\r",
-                  "});"
-                ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
-            }
-          ],
-          "id": "9ba9e8d8-1e2c-4c3f-bb66-9dff8f0699a3",
-          "request": {
-            "auth": {
-              "type": "noauth"
-            },
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{gardener_token}}",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"username\": \"Jardinero_PUT\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "name": "getMyProfile",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "27359804-25c3-4eda-8f9d-1608e9c0016b",
+                    "exec": [
+                      "// Script de Depuración para getMyProfile\r",
+                      "\r",
+                      "try {\r",
+                      "    // 1. Intentamos parsear la respuesta\r",
+                      "    const jsonData = pm.response.json();\r",
+                      "\r",
+                      "    // 2. Imprimimos en la Consola de Postman lo que se parseó\r",
+                      "    console.log(\"--- DEBUG: Objeto JSON Parseado ---\");\r",
+                      "    console.log(jsonData);\r",
+                      "\r",
+                      "    // 3. Imprimimos el tipo de dato de 'jsonData' y 'jsonData.email'\r",
+                      "    console.log(\"Tipo de jsonData:\", typeof jsonData);\r",
+                      "    console.log(\"Tipo de jsonData.email:\", typeof jsonData.email);\r",
+                      "\r",
+                      "    // 4. Imprimimos el texto crudo de la respuesta, sin procesar\r",
+                      "    console.log(\"--- DEBUG: Texto Crudo de la Respuesta ---\");\r",
+                      "    console.log(pm.response.text());\r",
+                      "\r",
+                      "    // 5. Ejecutamos los tests\r",
+                      "    pm.test(\"Verificar estado 200\", () => {\r",
+                      "        pm.response.to.have.status(200);\r",
+                      "    });\r",
+                      "\r",
+                      "    pm.test(\"Verificar que la respuesta tiene la propiedad 'email'\", () => {\r",
+                      "        pm.expect(jsonData).to.have.property('email');\r",
+                      "    });\r",
+                      "\r",
+                      "    pm.test(\"Verificar que el email coincide (insensible a mayúsculas)\", () => {\r",
+                      "        const environmentEmail = pm.environment.get(\"gardener_email\");\r",
+                      "        pm.expect(jsonData.email).to.eql(environmentEmail);\r",
+                      "    });\r",
+                      "\r",
+                      "} catch (e) {\r",
+                      "    console.error(\"¡ERROR DENTRO DEL SCRIPT DE POSTMAN!\", e);\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
                 }
-              }
-            },
-            "url": {
-              "raw": "{{url}}/gardener/profile",
-              "host": [
-                "{{url}}"
               ],
-              "path": [
-                "gardener",
-                "profile"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "getMyBatches - Vacia",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "id": "bd9bf004-9be8-4144-b5cf-0bf411e85ec1",
-                "exec": [
-                  "// Después de eliminar, la huerta debería estar vacía\r",
-                  "pm.test(\"Verificar que la huerta ahora está vacía\", function () {\r",
-                  "    pm.response.to.have.status(200);\r",
-                  "    const jsonData = pm.response.json();\r",
-                  "    pm.expect(jsonData).to.be.an('array');\r",
-                  "    pm.expect(jsonData.length).to.eql(0);\r",
-                  "});"
+              "id": "51040933-6456-4921-9a9f-bdabbd52cb06",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gardener_token}}",
+                    "type": "text"
+                  }
                 ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
-            }
-          ],
-          "id": "d295e8be-fd7d-4939-ac4d-652e161178fd",
-          "request": {
-            "auth": {
-              "type": "noauth"
+                "url": {
+                  "raw": "{{url}}/gardener/profile",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "gardener",
+                    "profile"
+                  ]
+                },
+                "description": "**Obtener Mi Perfil**\n\nDevuelve la información completa del usuario que corresponde al token enviado."
+              },
+              "response": []
             },
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{gardener_token}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{url}}/gardener/garden",
-              "host": [
-                "{{url}}"
-              ],
-              "path": [
-                "gardener",
-                "garden"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "postBatch",
-          "event": [
             {
-              "listen": "test",
-              "script": {
-                "id": "f8288d02-16c5-43e3-b387-dc3c5d6a402d",
-                "exec": [
-                  "// 1. Verificar que el lote se creó con éxito (201 Created)\r",
-                  "pm.test(\"Verificar estado 201: Lote de cultivo creado\", function () {\r",
-                  "    pm.response.to.have.status(201);\r",
-                  "});\r",
-                  "\r",
-                  "// 2. Validar la estructura de la respuesta\r",
-                  "pm.test(\"Verificar que la respuesta contiene el nuevo lote\", function () {\r",
-                  "    const jsonData = pm.response.json();\r",
-                  "    pm.expect(jsonData.batch).to.be.an('object');\r",
-                  "    pm.expect(jsonData.batch).to.have.property('batchId');\r",
-                  "    pm.expect(jsonData.batch).to.have.property('instances');\r",
-                  "});\r",
-                  "\r",
-                  "// 3. ¡Test Clave! Asegurar que se crearon la cantidad correcta de instancias\r",
-                  "pm.test(\"Verificar que se crearon 3 instancias de plantas\", function () {\r",
-                  "    const jsonData = pm.response.json();\r",
-                  "    pm.expect(jsonData.batch.instances).to.be.an('array');\r",
-                  "    pm.expect(jsonData.batch.instances.length).to.eql(3);\r",
-                  "});\r",
-                  "\r",
-                  "// 4. Capturar IDs para los siguientes tests\r",
-                  "pm.test(\"Capturar IDs del lote y de la primera instancia\", function () {\r",
-                  "    const jsonData = pm.response.json();\r",
-                  "    // Guardamos el ID del lote para poder eliminarlo después\r",
-                  "    pm.environment.set(\"test_batchId\", jsonData.batch.batchId);\r",
-                  "    // Guardamos el ID de la primera semilla para poder cambiar su estado\r",
-                  "    pm.environment.set(\"test_instanceId\", jsonData.batch.instances[0].instanceId);\r",
-                  "});"
-                ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
-            }
-          ],
-          "id": "f0ae0f5a-fbc1-43de-8884-d99fd59b0b90",
-          "request": {
-            "auth": {
-              "type": "noauth"
-            },
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{gardener_token}}",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"plantId\": \"tomate\",\r\n    \"quantity\": 3,\r\n    \"notes\": \"Los de la maceta del balcón\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "name": "updateMyPerfil",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "e74aaf48-dd5f-4796-881c-945ca70b5c02",
+                    "exec": [
+                      "// --- TEST PARA PUT (HÍBRIDO) UPDATE PROFILE ---\r",
+                      "\r",
+                      "// 1. Verificar que la operación fue exitosa (200 OK)\r",
+                      "pm.test(\"Verificar estado 200: Perfil actualizado correctamente\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "// 2. Verificar que la respuesta contiene el objeto de usuario actualizado\r",
+                      "pm.test(\"Validar que la respuesta contiene el usuario y no la contraseña\", function () {\r",
+                      "    const jsonData = pm.response.json();\r",
+                      "    pm.expect(jsonData.user).to.be.an('object');\r",
+                      "    pm.expect(jsonData.user).to.not.have.property('password');\r",
+                      "});\r",
+                      "\r",
+                      "// 3. Comprobar que el campo enviado ('username') realmente cambió\r",
+                      "pm.test(\"Confirmar que el 'username' se actualizó al nuevo valor\", function () {\r",
+                      "    const jsonData = pm.response.json();\r",
+                      "    pm.expect(jsonData.user.username).to.eql(\"Jardinero_PUT\");\r",
+                      "});\r",
+                      "\r",
+                      "// 4. ¡TEST CLAVE! Verificar que los campos NO enviados NO se borraron\r",
+                      "pm.test(\"Verificar que los datos no modificados (email, role) se mantuvieron\", function () {\r",
+                      "    const jsonData = pm.response.json();\r",
+                      "    // Comprobamos que el email sigue siendo el original guardado en las variables de entorno\r",
+                      "    pm.expect(jsonData.user.email).to.eql(pm.environment.get(\"gardener_email\"));\r",
+                      "    // Comprobamos que el rol no cambió\r",
+                      "    pm.expect(jsonData.user.role).to.eql(\"gardener\");\r",
+                      "});\r",
+                      "\r",
+                      "// 5. Actualizar el objeto 'user' completo en el entorno para futuras peticiones\r",
+                      "pm.test(\"Actualizar el objeto 'user' en las variables de entorno\", function () {\r",
+                      "    const jsonData = pm.response.json();\r",
+                      "    // Guardamos el objeto completo para que los siguientes tests tengan la info actualizada\r",
+                      "    pm.environment.set(\"user_object\", JSON.stringify(jsonData.user));\r",
+                      "    // También actualizamos la variable específica del username\r",
+                      "    pm.environment.set(\"gardener_username\", jsonData.user.username);\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
                 }
-              }
-            },
-            "url": {
-              "raw": "{{url}}/gardener/garden/batch",
-              "host": [
-                "{{url}}"
               ],
-              "path": [
-                "gardener",
-                "garden",
-                "batch"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "getMyBatches - Con plantas",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "id": "bd9bf004-9be8-4144-b5cf-0bf411e85ec1",
-                "exec": [
-                  "// Validar que la respuesta es un array y que contiene la planta que agregamos\r",
-                  "pm.test(\"Verificar que la huerta contiene al menos una planta\", function () {\r",
-                  "    pm.response.to.have.status(200);\r",
-                  "    const jsonData = pm.response.json();\r",
-                  "    pm.expect(jsonData).to.be.an('array');\r",
-                  "    pm.expect(jsonData.length).to.be.at.least(1);\r",
-                  "});\r",
-                  "\r",
-                  "pm.test(\"Verificar que la planta 'tomate' está en mi huerta\", function () {\r",
-                  "    const jsonData = pm.response.json();\r",
-                  "    // find() busca un elemento en el array que cumpla la condición\r",
-                  "    const tomatePlant = jsonData.find(plant => plant.plantId === \"tomate\");\r",
-                  "    pm.expect(tomatePlant).to.not.be.undefined;\r",
-                  "});"
+              "id": "9ba9e8d8-1e2c-4c3f-bb66-9dff8f0699a3",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gardener_token}}",
+                    "type": "text"
+                  }
                 ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"username\": \"Jardinero_PUT\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/gardener/profile",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "gardener",
+                    "profile"
+                  ]
+                },
+                "description": "**Actualizar Mi Perfil**\n\nPermite al usuario modificar su `username`, `email` o `password`. Requiere la contraseña actual para cambios sensibles."
+              },
+              "response": []
             }
           ],
-          "id": "42907bf4-1248-46c8-b7f7-ca05ec14b522",
-          "request": {
-            "auth": {
-              "type": "noauth"
-            },
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{gardener_token}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{url}}/gardener/garden",
-              "host": [
-                "{{url}}"
-              ],
-              "path": [
-                "gardener",
-                "garden"
-              ]
-            }
-          },
-          "response": []
+          "id": "4788ba5a-b975-4b86-a2ec-0e18093c98c8",
+          "description": "Endpoints para la gestión del perfil del usuario autenticado."
         },
         {
-          "name": "updateIntance",
-          "event": [
+          "name": "garden",
+          "item": [
             {
-              "listen": "test",
-              "script": {
-                "id": "78351fa7-268c-4942-b9be-8f8960bf04ff",
-                "exec": [
-                  "// Verificar que la actualización fue exitosa\r",
-                  "pm.test(\"Verificar estado 200: Estado de instancia actualizado\", function () {\r",
-                  "    pm.response.to.have.status(200);\r",
-                  "});\r",
-                  "\r",
-                  "// Validar el mensaje de éxito\r",
-                  "pm.test(\"Verificar mensaje de confirmación\", function () {\r",
-                  "    const jsonData = pm.response.json();\r",
-                  "    pm.expect(jsonData.message).to.eql(\"Estado de la instancia actualizado.\");\r",
-                  "});"
-                ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
-            }
-          ],
-          "id": "d3d377b6-9717-468d-a97a-ea34664d5344",
-          "request": {
-            "method": "PATCH",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{gardener_token}}",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"batchId\": \"{{test_batchId}}\",\r\n    \"instanceId\": \"{{test_instanceId}}\",\r\n    \"status\": \"creciendo\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "name": "getMyBatches - Vacia",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "bd9bf004-9be8-4144-b5cf-0bf411e85ec1",
+                    "exec": [
+                      "// Después de eliminar, la huerta debería estar vacía\r",
+                      "pm.test(\"Verificar que la huerta ahora está vacía\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "    const jsonData = pm.response.json();\r",
+                      "    pm.expect(jsonData).to.be.an('array');\r",
+                      "    pm.expect(jsonData.length).to.eql(0);\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
                 }
-              }
-            },
-            "url": {
-              "raw": "{{url}}/gardener/garden/instance",
-              "host": [
-                "{{url}}"
               ],
-              "path": [
-                "gardener",
-                "garden",
-                "instance"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "deleteBatch",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "id": "84d9b7be-3ba9-4e0d-8464-ac1fb99dfac6",
-                "exec": [
-                  "// Verificar que la eliminación fue exitosa\r",
-                  "pm.test(\"Verificar estado 200: Lote de cultivo eliminado\", function () {\r",
-                  "    pm.response.to.have.status(200);\r",
-                  "});"
+              "id": "d295e8be-fd7d-4939-ac4d-652e161178fd",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gardener_token}}",
+                    "type": "text"
+                  }
                 ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
+                "url": {
+                  "raw": "{{url}}/gardener/garden",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "gardener",
+                    "garden"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "postBatch",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "f8288d02-16c5-43e3-b387-dc3c5d6a402d",
+                    "exec": [
+                      "// 1. Verificar que el lote se creó con éxito (201 Created)\r",
+                      "pm.test(\"Verificar estado 201: Lote de cultivo creado\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "});\r",
+                      "\r",
+                      "// 2. Validar la estructura de la respuesta\r",
+                      "pm.test(\"Verificar que la respuesta contiene el nuevo lote\", function () {\r",
+                      "    const jsonData = pm.response.json();\r",
+                      "    pm.expect(jsonData.batch).to.be.an('object');\r",
+                      "    pm.expect(jsonData.batch).to.have.property('batchId');\r",
+                      "    pm.expect(jsonData.batch).to.have.property('instances');\r",
+                      "});\r",
+                      "\r",
+                      "// 3. ¡Test Clave! Asegurar que se crearon la cantidad correcta de instancias\r",
+                      "pm.test(\"Verificar que se crearon 3 instancias de plantas\", function () {\r",
+                      "    const jsonData = pm.response.json();\r",
+                      "    pm.expect(jsonData.batch.instances).to.be.an('array');\r",
+                      "    pm.expect(jsonData.batch.instances.length).to.eql(3);\r",
+                      "});\r",
+                      "\r",
+                      "// 4. Capturar IDs para los siguientes tests\r",
+                      "pm.test(\"Capturar IDs del lote y de la primera instancia\", function () {\r",
+                      "    const jsonData = pm.response.json();\r",
+                      "    // Guardamos el ID del lote para poder eliminarlo después\r",
+                      "    pm.environment.set(\"test_batchId\", jsonData.batch.batchId);\r",
+                      "    // Guardamos el ID de la primera semilla para poder cambiar su estado\r",
+                      "    pm.environment.set(\"test_instanceId\", jsonData.batch.instances[0].instanceId);\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "id": "f0ae0f5a-fbc1-43de-8884-d99fd59b0b90",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gardener_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"plantId\": \"tomate\",\r\n    \"quantity\": 3,\r\n    \"notes\": \"Los de la maceta del balcón\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/gardener/garden/batch",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "gardener",
+                    "garden",
+                    "batch"
+                  ]
+                },
+                "description": "**Añadir un Lote de Cultivo**\n\nCrea un nuevo lote de siembra en la huerta del usuario. Requiere `plantId` y `quantity`.\n\n- **Script de Test:** Captura `batchId` e `instanceId` para usarlos en los siguientes tests."
+              },
+              "response": []
+            },
+            {
+              "name": "getMyBatches - Con plantas",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "bd9bf004-9be8-4144-b5cf-0bf411e85ec1",
+                    "exec": [
+                      "// Validar que la respuesta es un array y que contiene la planta que agregamos\r",
+                      "pm.test(\"Verificar que la huerta contiene al menos una planta\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "    const jsonData = pm.response.json();\r",
+                      "    pm.expect(jsonData).to.be.an('array');\r",
+                      "    pm.expect(jsonData.length).to.be.at.least(1);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Verificar que la planta 'tomate' está en mi huerta\", function () {\r",
+                      "    const jsonData = pm.response.json();\r",
+                      "    // find() busca un elemento en el array que cumpla la condición\r",
+                      "    const tomatePlant = jsonData.find(plant => plant.plantId === \"tomate\");\r",
+                      "    pm.expect(tomatePlant).to.not.be.undefined;\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "id": "42907bf4-1248-46c8-b7f7-ca05ec14b522",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gardener_token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/gardener/garden",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "gardener",
+                    "garden"
+                  ]
+                },
+                "description": "**Obtener Mi Huerta**\n\nDevuelve un array con todos los lotes de cultivo del usuario, incluyendo las estadísticas y las instancias individuales."
+              },
+              "response": []
+            },
+            {
+              "name": "updateIntance",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "78351fa7-268c-4942-b9be-8f8960bf04ff",
+                    "exec": [
+                      "// Verificar que la actualización fue exitosa\r",
+                      "pm.test(\"Verificar estado 200: Estado de instancia actualizado\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "// Validar el mensaje de éxito\r",
+                      "pm.test(\"Verificar mensaje de confirmación\", function () {\r",
+                      "    const jsonData = pm.response.json();\r",
+                      "    pm.expect(jsonData.message).to.eql(\"Estado de la instancia actualizado.\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "id": "d3d377b6-9717-468d-a97a-ea34664d5344",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gardener_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"batchId\": \"{{test_batchId}}\",\r\n    \"instanceId\": \"{{test_instanceId}}\",\r\n    \"status\": \"creciendo\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/gardener/garden/instance",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "gardener",
+                    "garden",
+                    "instance"
+                  ]
+                },
+                "description": "**Actualizar Estado de una Instancia**\n\nCambia el estado de una planta individual (`germinando`, `creciendo`, etc.) dentro de un lote."
+              },
+              "response": []
+            },
+            {
+              "name": "deleteBatch",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "84d9b7be-3ba9-4e0d-8464-ac1fb99dfac6",
+                    "exec": [
+                      "// Verificar que la eliminación fue exitosa\r",
+                      "pm.test(\"Verificar estado 200: Lote de cultivo eliminado\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "id": "9e81dfbc-81b3-45ba-81a2-b18c8ad71766",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{gardener_token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/gardener/garden/batch/{{test_batchId}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "gardener",
+                    "garden",
+                    "batch",
+                    "{{test_batchId}}"
+                  ]
+                },
+                "description": "**Eliminar un Lote de Cultivo**\n\nBorra un lote completo, incluyendo todas sus instancias, de la huerta del usuario."
+              },
+              "response": []
             }
           ],
-          "id": "9e81dfbc-81b3-45ba-81a2-b18c8ad71766",
-          "request": {
-            "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{gardener_token}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{url}}/gardener/garden/batch/{{test_batchId}}",
-              "host": [
-                "{{url}}"
-              ],
-              "path": [
-                "gardener",
-                "garden",
-                "batch",
-                "{{test_batchId}}"
-              ]
-            }
-          },
-          "response": []
+          "id": "73f0df4e-fed7-4c74-9c4a-08209b1011dd",
+          "description": "Endpoints para gestionar la huerta personal (lotes e instancias)."
         }
       ],
-      "id": "d6edd863-dbb6-4ad0-a7ba-e3583a4023cf"
-    },
-    {
-      "name": "Bienvenida",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "id": "f2e49947-d59f-4c7d-ace2-ee6bce040354",
-            "exec": [
-              "// Validar que la API está online y responde correctamente\r",
-              "pm.test(\"Verificar estado 200: API Online\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "// Comprobar que el mensaje de bienvenida incluya el nombre de la App\r",
-              "pm.test(\"Validar que la respuesta contiene el nombre de la API\", function () {\r",
-              "    const jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData.app).to.eql(\"Eco-Garden API 🌱\");\r",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {},
-            "requests": {}
-          }
-        }
-      ],
-      "id": "67f5397e-d52e-4ef7-b24a-fb6f1e40d0e7",
-      "request": {
-        "auth": {
-          "type": "noauth"
-        },
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{url}}/",
-          "host": [
-            "{{url}}"
-          ],
-          "path": [
-            ""
-          ]
-        }
-      },
-      "response": []
-    }
-  ],
-  "event": [
-    {
-      "listen": "prerequest",
-      "script": {
-        "id": "425430d6-a3d5-4603-a6dd-b90b56a01046",
-        "type": "text/javascript",
-        "packages": {},
-        "requests": {},
-        "exec": [
-          ""
-        ]
-      }
-    },
-    {
-      "listen": "test",
-      "script": {
-        "id": "4ca2b623-1087-498e-a43f-68bb39c55e3c",
-        "type": "text/javascript",
-        "packages": {},
-        "requests": {},
-        "exec": [
-          ""
-        ]
-      }
+      "id": "d6edd863-dbb6-4ad0-a7ba-e3583a4023cf",
+      "description": "### 🌿 Mi Huerta y Perfil\n\nEstos endpoints están protegidos y requieren un token de autenticación (`{{gardener_token}}` o `{{admin_token}}`). Permiten al usuario autenticado gestionar su información personal y su huerta de cultivos.\n\n- **`/profile`****:** Rutas para consultar y actualizar el perfil del usuario.\n    \n- **`/garden`****:** Rutas para la gestión de **Lotes de Cultivo** e **Instancias** individuales de plantas."
     }
   ]
 }

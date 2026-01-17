@@ -40,6 +40,7 @@ const GardenerSchema = new Schema<Gardener>({
     myPlants: [CropBatchSchema],
 }, {
     timestamps: true, // Añade 'createdAt' y 'updatedAt' automáticamente
+    collection: 'gardeners',
     // Opción para transformar el _id a id en las respuestas JSON
     toJSON: {
         transform(doc, ret) {

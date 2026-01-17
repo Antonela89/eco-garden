@@ -47,6 +47,7 @@ const PlantSchema = new Schema<Plant>(
 	},
 	{
 		timestamps: true,
+		collection: 'plants',
 		toJSON: {
 			transform(doc, ret) {
 				// Usar 'any' para decirle a TS que confíe

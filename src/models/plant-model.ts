@@ -29,7 +29,7 @@ const PlantSchema = new Schema<Plant>(
 		},
 		nombre: { type: String, required: true, trim: true },
 		familia: { type: String, required: true, trim: true },
-		siembra: [{ type: String }],
+		siembra: { type: Schema.Types.Mixed, required: true }, // no hay un esquema definido para este campo - caso repollo
 		metodo: [{ type: String }],
 		diasCosecha: { type: DiasCosechaSchema, required: true },
 		distancia: { type: DistanciaSchema, required: true },

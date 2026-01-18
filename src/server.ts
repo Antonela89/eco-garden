@@ -1,5 +1,6 @@
 // Importación de instancia aplicación de express
 import app from './app.js';
+import connectDB from './config/db.js';
 
 /**
  * Definir el puerto de escucha consultando las variables de entorno o asignando el valor 3000 por defecto.
@@ -9,8 +10,12 @@ const PORT = process.env.PORT || 3000;
 /**
  * Establecer la lógica principal para poner en funcionamiento el servidor.
  */
-const startServer = () => {
+const startServer = async () => {
 	try {
+		/**
+		 * Conectar la base de datos en MongoDB
+		 */
+		await connectDB(); 
 		/**
 		 * Iniciar la escucha de peticiones HTTP en el puerto configurado y mostrar el estado en consola.
 		 */

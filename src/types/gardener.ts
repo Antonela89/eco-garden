@@ -44,7 +44,7 @@ export interface CropBatch {
  * Modelo de datos principal para el usuario (Jardinero).
  */
 export interface Gardener {
-	id: string;           // Identificador único (UUID)
+	id?: string;           // Identificador único (MongoDB)
 	username: string;     // Nombre de usuario para mostrar en la interfaz
     email: string;        // Correo electrónico (identificador para login)
 	role: Role;           // Rol asignado (Admin o Jardinero)

@@ -9,7 +9,7 @@ const labelClass =
 
 const inputClass =
 	'mt-1 block w-full rounded-md px-3 py-2 bg-transparent border-2 border-gray-200 focus:border-eco-green-dark focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-dark-surface dark:focus:border-eco-green-light';
-    
+
 export const createAdminPlantForm = (plant = null) => {
 	const isEditing = plant !== null;
 	const title = isEditing ? 'Editar Especie' : 'Añadir Nueva Especie';
@@ -34,8 +34,10 @@ export const createAdminPlantForm = (plant = null) => {
 						}" 
                             ${isEditing ? 'readonly' : 'required'} 
                             class="${inputClass} ${
-		isEditing ? 'bg-gray-100 cursor-not-allowed' : ''
-	}">
+								isEditing
+									? 'bg-gray-100 cursor-not-allowed'
+									: ''
+							}">
                     </div>
                     <div>
                         <label for="nombre" class="${labelClass}">Nombre</label>
@@ -51,6 +53,11 @@ export const createAdminPlantForm = (plant = null) => {
 						}" required 
                             class="${inputClass}">
                     </div>
+                    <label for="metodo" class="${labelClass}">Método (separado por coma)</label>
+                <input type="text" id="metodo" name="metodo" 
+                        value="${plant?.metodo.join(', ') || ''}" required 
+                        class="${inputClass}">
+            </div>
                     <div>
                         <label for="clima" class="${labelClass}">Clima</label>
                         <input type="text" id="clima" name="clima" value="${

@@ -1575,6 +1575,18 @@
                     "packages": {},
                     "requests": {}
                   }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "id": "caa87dfc-d29a-4ef9-8517-78c6565ec11e",
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
                 }
               ],
               "id": "6acc53a0-f6ce-43b0-89b0-e85a41e29ed2",
@@ -1592,7 +1604,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n    \"id\": \"planta-de-prueba\",\r\n    \"nombre\": \"Planta de Prueba\",\r\n    \"familia\": \"Testáceas\",\r\n    \"siembra\": [\"Enero\"],\r\n    \"metodo\": [\"Directa\"],\r\n    \"diasCosecha\": {\"min\": 10, \"max\": 20},\r\n    \"distancia\": {\"entrePlantas\": 5, \"entreLineas\": 10},\r\n    \"asociacion\": [], \"rotacion\": [],\r\n    \"toleranciaSombra\": true, \"aptoMaceta\": true,\r\n    \"dificultad\": \"Fácil\",\r\n    \"clima\": \"Templado\",\r\n    \"imagen\": \"https://via.placeholder.com/150\"\r\n}",
+                  "raw": "{\r\n    \"id\": \"naranja\",\r\n    \"nombre\": \"Naranja\",\r\n    \"familia\": \"Rutáceas\",\r\n    \"siembra\": [\"Septiembre\", \"Octubre\", \"Noviembre\"],\r\n    \"metodo\": [\"Transplante de plantín\"],\r\n    \"diasCosecha\": {\r\n        \"min\": 1095,\r\n        \"max\": 1825\r\n    },\r\n    \"distancia\": {\r\n        \"entrePlantas\": 400,\r\n        \"entreLineas\": 500\r\n    },\r\n    \"asociacion\": [\"Lavanda\", \"Romero\", \"Caléndula\"],\r\n    \"rotacion\": [\"No aplica (perenne)\"],\r\n    \"toleranciaSombra\": false,\r\n    \"aptoMaceta\": true,\r\n    \"dificultad\": \"Difícil\",\r\n    \"clima\": \"Subtropical\",\r\n    \"imagen\": \"https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"

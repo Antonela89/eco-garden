@@ -22,10 +22,10 @@ export const validateSchema =
 				return res.status(400).json({
 					message: 'Error de validación en los datos ingresados',
 					// Mapear los errores para que el frontend sepa exactamente qué falló
-					errors: error.issues.map((e) => ({
-						campo: e.path[0],
-						mensaje: e.message,
-					})),
+					errors: error.issues.map(issue => ({ // Array con los detalles
+                        campo: issue.path.join('.'), // 'path' es un array, lo unimos
+                        mensaje: issue.message
+                    }))
 				});
 			}
 			// Error genérico si algo falla fuera de Zod

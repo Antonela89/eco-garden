@@ -1,4 +1,4 @@
-import { isSowableNow, formatHarvestDays } from "./helpers.js";
+import { isSowableNow, formatHarvestDays } from './helpers.js';
 
 /**
  * Crear el HTML para una tarjeta de planta individual.
@@ -27,8 +27,8 @@ export const createPlantCard = (plant) => {
 		}" class="cursor-pointer bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300 ${cardBorder}"">
             <!-- Imagen de la planta -->
             <img src="${plant.imagen}" alt="${
-		plant.nombre
-	}" class="w-full h-48 object-cover">
+				plant.nombre
+			}" class="w-full h-48 object-cover">
 
             <!-- Badge de "¡Siembra Ahora!" -->
                 ${
@@ -62,7 +62,7 @@ export const createPlantCard = (plant) => {
                 <!-- Tiempos de Cosecha -->
                 <div class="text-sm text-gray-700">
                     <p><strong>Cosecha en:</strong> ${formatHarvestDays(
-						plant
+						plant,
 					)} días</p>
                 </div>
             </div>
@@ -76,61 +76,60 @@ export const createPlantCard = (plant) => {
  * @returns {string} El string HTML de la tarjeta del lote.
  */
 export const createCropBatchCard = (batch) => {
-    const plantInfo = batch.plantInfo;
-    if (!plantInfo) return ''; // Seguridad por si no se encuentra la info de la planta
+	const plantInfo = batch.plantInfo;
+	if (!plantInfo) return ''; // Seguridad por si no se encuentra la info de la planta
 
-    // --- LÓGICA DE FECHA DE COSECHA ---
-    const plantedDate = new Date(batch.plantedAt);
+	// --- LÓGICA DE FECHA DE COSECHA ---
+	const plantedDate = new Date(batch.plantedAt);
+	// Calcular la fecha mínima de cosecha
+	const minHarvestDate = new Date(plantedDate);
+	minHarvestDate.setDate(plantedDate.getDate() + plantInfo.diasCosecha.min);
+	const minHarvestDateString = minHarvestDate.toLocaleDateString();
 
-    // --- LÓGICA DE FECHA DE COSECHA (CORREGIDA) ---
-    // Calcular la fecha mínima de cosecha
-    const minHarvestDate = new Date(plantedDate);
-    minHarvestDate.setDate(plantedDate.getDate() + plantInfo.diasCosecha.min);
-    const minHarvestDateString = minHarvestDate.toLocaleDateString();
+	// Calcular la fecha máxima de cosecha
+	const maxHarvestDate = new Date(plantedDate);
+	maxHarvestDate.setDate(plantedDate.getDate() + plantInfo.diasCosecha.max);
+	const maxHarvestDateString = maxHarvestDate.toLocaleDateString();
 
-    // Calcular la fecha máxima de cosecha
-    const maxHarvestDate = new Date(plantedDate);
-    maxHarvestDate.setDate(plantedDate.getDate() + plantInfo.diasCosecha.max);
-    const maxHarvestDateString = maxHarvestDate.toLocaleDateString();
+	// Crear el string final para mostrar
+	const harvestRangeString =
+		minHarvestDateString === maxHarvestDateString
+			? minHarvestDateString // Si son iguales, mostrar solo una
+			: `${minHarvestDateString} - ${maxHarvestDateString}`;
+	// Calcular estadísticas del lote
+	const totalInstances = batch.instances.length;
+	const growingCount = batch.instances.filter(
+		(i) => i.status === 'creciendo' || i.status === 'germinando',
+	).length;
+	const readyCount = batch.instances.filter(
+		(i) => i.status === 'lista',
+	).length;
+	const harvestedCount = batch.instances.filter(
+		(i) => i.status === 'cosechada',
+	).length;
+	const failedCount = batch.instances.filter(
+		(i) => i.status === 'fallida',
+	).length;
 
-    // Crear el string final para mostrar
-    const harvestRangeString = (minHarvestDateString === maxHarvestDateString)
-        ? minHarvestDateString // Si son iguales, mostrar solo una
-        : `${minHarvestDateString} - ${maxHarvestDateString}`;
-    // Calcular estadísticas del lote
-    const totalInstances = batch.instances.length;
-    const growingCount = batch.instances.filter(
-        (i) => i.status === 'creciendo' || i.status === 'germinando'
-    ).length;
-    const readyCount = batch.instances.filter(
-        (i) => i.status === 'lista'
-    ).length;
-    const harvestedCount = batch.instances.filter(
-        (i) => i.status === 'cosechada'
-    ).length;
-    const failedCount = batch.instances.filter(
-        (i) => i.status === 'fallida'
-    ).length;
-
-    return `
+	return `
         <article data-batch-id="${
-            batch.batchId
-        }" class="crop-card opacity-0 transform translate-y-4 bg-white dark:bg-dark-surface rounded-lg shadow-lg overflow-hidden flex flex-col transition-all duration-300 hover:shadow-xl">
+			batch.batchId
+		}" class="crop-card opacity-0 transform translate-y-4 bg-white dark:bg-dark-surface rounded-lg shadow-lg overflow-hidden flex flex-col transition-all duration-300 hover:shadow-xl">
             <img src="${plantInfo.imagen}" alt="${
-        plantInfo.nombre
-    }" class="w-full h-40 object-cover">
+				plantInfo.nombre
+			}" class="w-full h-40 object-cover">
             
             <div class="p-4 flex flex-col flex-grow">
                 <h3 class="text-xl font-bold text-gray-800 dark:text-white">${
-                    plantInfo.nombre
-                }</h3>
+					plantInfo.nombre
+				}</h3>
                 <p class="text-sm text-gray-500 mb-2">Sembrado el: ${plantedDate.toLocaleDateString()}</p>
                 <p class="text-sm font-bold text-gray-600 mb-2  dark:text-gray-400">Cosecha aprox: ${harvestRangeString}</p>
                 ${
-                    batch.notes
-                        ? `<p class="text-xs italic text-gray-500 mb-3">Notas: "${batch.notes}"</p>`
-                        : `<p class="text-xs italic text-gray-500 mb-3">Notas:</p>`
-                }
+					batch.notes
+						? `<p class="text-xs italic text-gray-500 mb-3">Notas: "${batch.notes}"</p>`
+						: `<p class="text-xs italic text-gray-500 mb-3">Notas:</p>`
+				}
 
                 <!-- Sección de Estadísticas -->
                 <div class="text-sm space-y-2 mb-4 border-t dark:border-gray-700 pt-3 mt-2">
@@ -164,6 +163,19 @@ export const createCropBatchCard = (batch) => {
                     </div>
                 </div>
 
+                
+                <!-- Indicador de progreso de crecmiento  -->
+                <div class="mt-3">
+                    <div class="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400 mb-1">
+                        <span>Progreso a Cosecha</span>
+                        <span class="font-bold">${progressPercentage}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                        <div class="bg-gradient-to-r from-yellow-400 to-eco-green-dark h-2.5 rounded-full" 
+                            style="width: ${progressPercentage}%"></div>
+                    </div>
+                </div>
+
                 <!-- Botones de Acción -->
                 <div class="mt-auto pt-4 flex justify-between items-center border-t dark:border-gray-700">
                     <button data-action="manage-batch" class="bg-blue-500 text-white px-4 py-2 text-sm font-bold rounded hover:bg-blue-600 transition-colors">
@@ -177,5 +189,3 @@ export const createCropBatchCard = (batch) => {
         </article>
     `;
 };
-
-

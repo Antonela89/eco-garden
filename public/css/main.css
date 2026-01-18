@@ -1,0 +1,12 @@
+/* Importación de archivos parciales */
+@import url('./components/_loader.css');
+@import url('./components/_cards.css');
+
+/* ESTILO GLOBAL */
+body {
+    font-family: 'Nunito', sans-serif;
+}
+
+
+
+

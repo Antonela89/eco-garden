@@ -3,9 +3,9 @@
  * Clasificación de la complejidad de cultivo de cada especie.
  */
 export enum Dificultad {
-    FACIL = "facil",
-    MEDIA = "media",
-    DIFICIL = "dificil"
+    FACIL = "Fácil",
+    MEDIA = "Media",
+    DIFICIL = "Difícil"
 }
 
 /**

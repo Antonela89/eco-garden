@@ -141,9 +141,11 @@ export class PlantController {
 			res.status(201).json(newPlant);
 		} catch (error: any) {
 			// Capturar error específico de duplicado de Mongoose
-            if (error.code === 11000) {
-                return res.status(400).json({ message: 'Error: El ID de la planta ya existe.' });
-            }
+			if (error.code === 11000) {
+				return res
+					.status(400)
+					.json({ message: 'Error: El ID de la planta ya existe.' });
+			}
 			res.status(500).json({ message: 'Error', error });
 		}
 	};
@@ -159,11 +161,11 @@ export class PlantController {
 			const formattedBody = formatInputData(req.body);
 			// Llamar al modelo con ID obtenido de la url y los datos formateados
 			// Usar findOneAndUpdate para encontrar por 'id' y devolver el documento actualizado
-            const updatedPlant = await PlantModel.findOneAndUpdate(
-                { id: id }, 
-                formattedBody, 
-                { new: true } // Opción para que devuelva la versión nueva
-            );
+			const updatedPlant = await PlantModel.findOneAndUpdate(
+				{ id: id },
+				formattedBody,
+				{ new: true }, // Opción para que devuelva la versión nueva
+			);
 
 			// Verificación
 			if (!updatedPlant)
@@ -184,7 +186,7 @@ export class PlantController {
 			// Normalizar el ID antes de solicitar la eliminación
 			const id = slugify(req.params.id as string);
 			// Llamar al modelo
-			const result  = await PlantModel.deleteOne({id:id});
+			const result = await PlantModel.deleteOne({ id: id });
 
 			// Verificación
 			if (result.deletedCount === 0)

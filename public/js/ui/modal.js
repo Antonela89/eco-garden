@@ -169,7 +169,7 @@ export const createConfirmModalContent = (
                 <button class="js-close-modal px-6 py-2 rounded-md bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 font-semibold">
                     Cancelar
                 </button>
-                <button id="confirm-action-button" data-entity-id="${entityId}" class="bg-red-500 text-white font-bold px-6 py-2 rounded-md hover:bg-red-600">
+                <button id="confirm-action-button" data-plant-id="${entityId}" class="bg-red-500 text-white font-bold px-6 py-2 rounded-md hover:bg-red-600">
                     ${confirmText}
                 </button>
             </div>

@@ -61,9 +61,13 @@ const handleResponse = async (response) => {
 
 	if (!response.ok) {
 		const errorData = await response.json();
-		throw new Error(
-			errorData.message || 'Ocurrió un error en la petición.',
-		);
+		// Creación de un error personalizado que puede llevar más datos
+		const error = new Error(errorData.message || 'Ocurrió un error.');
+		// Si Zod envió los detalles, adjuntar
+		if (errorData.errors) {
+			error.details = errorData.errors;
+		}
+		throw error;
 	}
 
 	// Para peticiones DELETE que no devuelven contenido, response.json() puede fallar.

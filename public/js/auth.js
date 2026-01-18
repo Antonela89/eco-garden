@@ -179,7 +179,7 @@ export const updateNavOnLogin = (user) => {
 		<div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
         <a href="/html/profile.html" class="${mobileLinkClasses}">Mi Perfil</a>
 		<div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
-		<div class="${mobileLinkClasses} flex justify-between items-center cursor-pointer">
+		<div id="mobile-theme-switcher" class="${mobileLinkClasses} flex justify-between items-center cursor-pointer">
             <span>Cambiar Tema</span>
             ${getThemeButtonHTML()}
         </div>

@@ -77,10 +77,18 @@ export const createPlantCard = (plant) => {
  */
 export const createCropBatchCard = (batch) => {
 	const plantInfo = batch.plantInfo;
-	if (!plantInfo) return ''; // Seguridad por si no se encuentra la info de la planta
+	// Seguridad por si no se encuentra la info de la planta
+	if (!plantInfo) {
+		console.error(
+			`No se encontró información para la planta con ID: ${batch.plantId}. Este lote no será renderizado.`,
+		);
+		return ''; 
+	}
 
 	// --- LÓGICA DE FECHA DE COSECHA ---
 	const plantedDate = new Date(batch.plantedAt);
+    const today = new Date();
+
 	// Calcular la fecha mínima de cosecha
 	const minHarvestDate = new Date(plantedDate);
 	minHarvestDate.setDate(plantedDate.getDate() + plantInfo.diasCosecha.min);
@@ -96,6 +104,17 @@ export const createCropBatchCard = (batch) => {
 		minHarvestDateString === maxHarvestDateString
 			? minHarvestDateString // Si son iguales, mostrar solo una
 			: `${minHarvestDateString} - ${maxHarvestDateString}`;
+
+    // El ciclo total de días se basa en el tiempo mínimo para la cosecha
+    const totalDaysToHarvest = (minHarvestDate - plantedDate) / (1000 * 60 * 60 * 24);
+    const daysSincePlanted = (today - plantedDate) / (1000 * 60 * 60 * 24);
+    
+    // El progreso no debe negativo ni mayor a 100
+    let progressPercentage = 0;
+    if (totalDaysToHarvest > 0) {
+        progressPercentage = Math.min(100, Math.max(0, Math.round((daysSincePlanted / totalDaysToHarvest) * 100)));
+    }
+
 	// Calcular estadísticas del lote
 	const totalInstances = batch.instances.length;
 	const growingCount = batch.instances.filter(

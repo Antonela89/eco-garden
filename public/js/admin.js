@@ -13,10 +13,21 @@ import { formatIdData, formatInputData } from '../../shared/formatters.js';
  * @returns {object} - El objeto de planta listo para enviar a la API.
  */
 const processPlantForm = (form) => {
+
+	// Función auxiliar para convertir a array
+	const cleanArray = (value) => {
+		if (!value) return [];
+		return value
+			.split(',')
+			.map((s) => s.trim())
+			.filter(Boolean);
+	};
+
 	return {
 		id: form.id.value,
 		nombre: form.nombre.value,
 		familia: form.familia.value,
+		metodo: cleanArray(form.metodo.value),
 		clima: form.clima.value,
 		imagen: form.imagen.value,
 		diasCosecha: {
@@ -30,9 +41,9 @@ const processPlantForm = (form) => {
 		dificultad: form.dificultad.value,
 		aptoMaceta: form.aptoMaceta.checked,
 		toleranciaSombra: form.toleranciaSombra.checked,
-		siembra: form.siembra.value.split(',').map((s) => s.trim()),
-		asociacion: form.asociacion.value.split(',').map((s) => s.trim()),
-		rotacion: form.rotacion.value.split(',').map((s) => s.trim()), // Asegúrate de que este campo exista en el form
+		siembra: cleanArray(form.siembra.value),
+        asociacion: cleanArray(form.asociacion.value),
+        rotacion: cleanArray(form.rotacion.value) 
 	};
 };
 
@@ -102,15 +113,36 @@ export const initAdmin = async () => {
 				openModal(
 					createAlertModalContent(
 						'¡Éxito!',
-						'La nueva especie ha sido añadida al catálogo.'
+						'La nueva especie ha sido añadida al catálogo.',
 					),
-					'sm'
+					'sm',
 				);
 			} catch (error) {
-				// --- MOSTRAR MODAL DE ERROR ---
+				console.log('--- ERROR CAPTURADO EN EL FORMULARIO ADMIN ---');
+				console.dir(error); // .dir() es mejor para inspeccionar objetos de error
+
+				let detailedMessage =
+					'Ocurrió un error inesperado. Revisa la consola para más detalles.';
+
+				// Verificamos si el error tiene la propiedad 'details'
+				if (error && error.details) {
+					detailedMessage =
+						'Por favor, corrige los siguientes errores:\n' +
+						error.details
+							.map((err) => `- ${err.campo}: ${err.mensaje}`)
+							.join('\n');
+				} else if (error && error.message) {
+					// Si no tiene 'details', usamos el 'message' genérico
+					detailedMessage = error.message;
+				}
+
 				openModal(
-					createAlertModalContent('Error', error.message, 'error'),
-					'sm'
+					createAlertModalContent(
+						'Error de Validación',
+						detailedMessage,
+						'error',
+					),
+					'md',
 				);
 			} finally {
 				// Restaurar el botón en caso de error
@@ -137,7 +169,7 @@ export const initAdmin = async () => {
 			form.addEventListener('submit', async (e) => {
 				e.preventDefault();
 				const submitButton = form.querySelector(
-					'button[type="submit"]'
+					'button[type="submit"]',
 				);
 
 				// LOADER EN EL BOTÓN DE GUARDAR ---
@@ -152,18 +184,18 @@ export const initAdmin = async () => {
 					openModal(
 						createAlertModalContent(
 							'¡Éxito!',
-							'Los datos de la planta han sido actualizados.'
+							'Los datos de la planta han sido actualizados.',
 						),
-						'sm'
+						'sm',
 					);
 				} catch (error) {
 					openModal(
 						createAlertModalContent(
 							'Error',
 							error.message,
-							'error'
+							'error',
 						),
-						'sm'
+						'sm',
 					);
 				} finally {
 					submitButton.disabled = false;
@@ -178,16 +210,16 @@ export const initAdmin = async () => {
 				createConfirmModalContent(
 					`¿Eliminar "${plant.nombre}" del catálogo?`,
 					'Sí, Eliminar',
-					plantId
+					plantId,
 				),
-				'md'
+				'md',
 			);
 
 			// Delegar en el modal para el botón de confirmar
 			const modalContainer = document.getElementById('modal-container');
 			const confirmHandler = async (event) => {
 				const confirmButton = event.target.closest(
-					'#confirm-action-button'
+					'#confirm-action-button',
 				);
 				if (
 					confirmButton &&
@@ -203,18 +235,18 @@ export const initAdmin = async () => {
 						openModal(
 							createAlertModalContent(
 								'¡Eliminado!',
-								`La planta "${plant.nombre}" ha sido eliminada.`
+								`La planta "${plant.nombre}" ha sido eliminada.`,
 							),
-							'sm'
+							'sm',
 						);
 					} catch (error) {
 						openModal(
 							createAlertModalContent(
 								'Error',
 								error.message,
-								'error'
+								'error',
 							),
-							'sm'
+							'sm',
 						);
 					}
 					// Limpiar el listener para evitar ejecuciones múltiples

@@ -27,7 +27,8 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Eco-Garden: Tu Asistente de Huerta Urbana">
     <meta name="twitter:description" content="Planifica, siembra y cosecha con la ayuda de datos profesionales.">
-    <meta name="twitter:image" content="https://res.cloudinary.com/antonelab/image/upload/v1768567218/eco-garden/image/huerta_qwzcw9.webp">
+    <meta name="twitter:image"
+        content="https://res.cloudinary.com/antonelab/image/upload/v1768567218/eco-garden/image/huerta_qwzcw9.webp">
 
     <!-- Favicon (ícono de la pestaña) -->
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -71,7 +72,8 @@
     <link rel="stylesheet" href="/css/main.css">
 </head>
 
-<body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-gray-200 transition-colors duration-300 flex flex-col justify-center items-center gap-6"> 
+<body
+    class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-gray-200 transition-colors duration-300 flex flex-col justify-center items-center gap-6">
 
     <!-- ------------------- HEADER Y NAVEGACIÓN ------------------- -->
     <header class="bg-white dark:bg-dark-surface shadow-md w-full sticky top-0 z-20">
@@ -98,8 +100,7 @@
         </nav>
 
         <!-- Menú Desplegable para Mobile (oculto por defecto) -->
-        <div id="mobile-menu"
-            class="hidden md:hidden bg-white dark:bg-dark-surface">
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-dark-surface">
             <div id="nav-menu-mobile" class="px-2 pb-3 space-y-1 sm:px-3">
                 <!-- JavaScript inyectará aquí los enlaces para Mobile -->
             </div>
@@ -107,71 +108,79 @@
     </header>
 
     <!-- ------------------- CONTENIDO PRINCIPAL ------------------- -->
-    <main class="bg-white dark:bg-dark-surface p-8 rounded-lg shadow-2xl w-full max-w-md">
+    <main class="max-w-md mx-auto">
 
-        <!-- Contenido de Formulario de Registro -->
-        <form id="register-form" class="flex flex-col gap-4">
-            <div class="relative group">
-                <label for="username" class="block text-sm font-medium text-eco-brown dark:text-gray-300">Nombre de
-                    Usuario</label>
-                <div class="relative mt-1">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                        <i class="fas fa-user text-gray-400 group-focus-within:text-eco-green-dark transition"></i>
-                    </span>
-                    <input type="text" id="username" name="username" required placeholder="Ej: Jardineria_Pro"
-                        class="mt-1 block w-full rounded-md px-3 py-2 bg-transparent border-2 pl-10 border-gray-200 focus:border-eco-green-dark focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-dark-surface dark:focus:border-eco-green-light">
-                </div>
-            </div>
-            <div class="relative group">
-                <label for="email" class="block text-sm font-medium text-eco-brown dark:text-gray-300">Email</label>
-                <div class="relative mt-1">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                        <i class="fas fa-envelope text-gray-400 group-focus-within:text-eco-green-dark transition"></i>
-                    </span>
-                    <input type="email" id="email" name="email" required placeholder="tu@email.com"
-                        class="mt-1 block w-full rounded-md px-3 py-2 bg-transparent border-2 pl-10 border-gray-200 focus:border-eco-green-dark focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-dark-surface dark:focus:border-eco-green-light">
-                </div>
-            </div>
-            <div class="relative group">
-                <label for="password"
-                    class="block text-sm font-medium text-eco-brown dark:text-gray-300">Contraseña</label>
-                <div class="relative mt-1">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                        <i class="fas fa-lock text-gray-400 group-focus-within:text-eco-green-dark transition"></i>
-                    </span>
-                    <input type="password" id="password" name="password" required
-                        placeholder="Mín. 8 caracteres, 1 mayús, 1 núm."
-                        class="mt-1 block w-full rounded-md px-3 py-2 bg-transparent border-2 pl-10 border-gray-200 focus:border-eco-green-dark focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-dark-surface dark:focus:border-eco-green-light">
-                </div>
+        <div
+            class="bg-white dark:bg-dark-surface rounded-lg overflow-hidden shadow-2xl w-full flex flex-col max-h-[90vh]">
 
-                <!-- Barra de Fortaleza -->
-                <div class="mt-6 flex items-center gap-2">
-                    <div id="strength-bar" class="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
-                        <div id="strength-indicator" class="h-full bg-red-500 transition-all duration-300"
-                            style="width: 0%;"></div>
+
+
+            <!-- Contenido de Formulario de Registro -->
+            <form id="register-form" class="flex flex-col justify-center aling-center p-10 pb-3">
+                <div class="relative group">
+                    <label for="username" class="block text-sm font-medium text-eco-brown dark:text-gray-300">Nombre de
+                        Usuario</label>
+                    <div class="relative mt-1">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i class="fas fa-user text-gray-400 group-focus-within:text-eco-green-dark transition"></i>
+                        </span>
+                        <input type="text" id="username" name="username" required placeholder="Ej: Jardineria_Pro"
+                            class="mt-1 block w-full rounded-md px-3 py-2 bg-transparent border-2 pl-10 border-gray-200 focus:border-eco-green-dark focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-dark-surface dark:focus:border-eco-green-light">
                     </div>
-                    <span id="strength-text" class="text-xs font-bold text-gray-500 w-20 text-right">Débil</span>
                 </div>
-            </div>
+                <div class="relative group">
+                    <label for="email" class="block text-sm font-medium text-eco-brown dark:text-gray-300">Email</label>
+                    <div class="relative mt-1">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i
+                                class="fas fa-envelope text-gray-400 group-focus-within:text-eco-green-dark transition"></i>
+                        </span>
+                        <input type="email" id="email" name="email" required placeholder="tu@email.com"
+                            class="mt-1 block w-full rounded-md px-3 py-2 bg-transparent border-2 pl-10 border-gray-200 focus:border-eco-green-dark focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-dark-surface dark:focus:border-eco-green-light">
+                    </div>
+                </div>
+                <div class="relative group">
+                    <label for="password"
+                        class="block text-sm font-medium text-eco-brown dark:text-gray-300">Contraseña</label>
+                    <div class="relative mt-1">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i class="fas fa-lock text-gray-400 group-focus-within:text-eco-green-dark transition"></i>
+                        </span>
+                        <input type="password" id="password" name="password" required
+                            placeholder="Mín. 8 caracteres, 1 mayús, 1 núm."
+                            class="mt-1 block w-full rounded-md px-3 py-2 bg-transparent border-2 pl-10 border-gray-200 focus:border-eco-green-dark focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-dark-surface dark:focus:border-eco-green-light">
+                    </div>
 
-            <button type="submit"
-                class="w-full bg-eco-green-dark text-white py-2 rounded-md font-bold hover:bg-opacity-80 transition active:scale-95 mt-4">
-                Crear mi Cuenta
-            </button>
-        </form>
+                    <!-- Barra de Fortaleza -->
+                    <div class="mt-6 flex items-center gap-2">
+                        <div id="strength-bar"
+                            class="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
+                            <div id="strength-indicator" class="h-full bg-red-500 transition-all duration-300"
+                                style="width: 0%;"></div>
+                        </div>
+                        <span id="strength-text" class="text-xs font-bold text-gray-500 w-20 text-right">Débil</span>
+                    </div>
+                </div>
 
-        <footer class="text-center mt-6 text-sm">
-            <p class="dark:text-white">¿Ya tienes una cuenta? <a href="/index.html"
-                    class="text-eco-green-dark font-bold hover:underline">Inicia
-                    sesión aquí</a></p>
-        </footer>
+                <button type="submit"
+                    class="w-full bg-eco-green-dark text-white py-2 rounded-md font-bold hover:bg-opacity-80 transition active:scale-95 mt-4">
+                    Crear mi Cuenta
+                </button>
+            </form>
+
+            <footer class="text-center my-4 pb-6 text-sm">
+                <p class="dark:text-white">¿Ya tienes una cuenta? <a href="/index.html"
+                        class="text-eco-green-dark font-bold hover:underline">Inicia
+                        sesión aquí</a></p>
+            </footer>
+
+        </div>
     </main>
 
     <!-- ------------------- CONTENEDOR GENÉRICO PARA MODALES ------------------- -->
-    <div id="modal-container"
-        class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50">
+    <div id="modal-container" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50">
         <div id="modal-content-area"
-            class="bg-white dark:bg-dark-surface rounded-lg overflow-hidden shadow-2xl w-full flex flex-col m-4 max-h-[90vh]">
+            class="bg-white dark:bg-dark-surface rounded-lg overflow-hidden shadow-2xl w-full flex flex-col max-h-[90vh] m-4">
             <!-- El contenido se inyectará aquí con JavaScript -->
         </div>
     </div>

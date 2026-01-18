@@ -82,12 +82,12 @@ export const createCropBatchCard = (batch) => {
 		console.error(
 			`No se encontró información para la planta con ID: ${batch.plantId}. Este lote no será renderizado.`,
 		);
-		return ''; 
+		return '';
 	}
 
-	// --- LÓGICA DE FECHA DE COSECHA ---
+	// --- LÓGICA DE FECHA DE COSECHA y ESTADO SUGERIDO ---
 	const plantedDate = new Date(batch.plantedAt);
-    const today = new Date();
+	const today = new Date();
 
 	// Calcular la fecha mínima de cosecha
 	const minHarvestDate = new Date(plantedDate);
@@ -105,15 +105,29 @@ export const createCropBatchCard = (batch) => {
 			? minHarvestDateString // Si son iguales, mostrar solo una
 			: `${minHarvestDateString} - ${maxHarvestDateString}`;
 
-    // El ciclo total de días se basa en el tiempo mínimo para la cosecha
-    const totalDaysToHarvest = (minHarvestDate - plantedDate) / (1000 * 60 * 60 * 24);
-    const daysSincePlanted = (today - plantedDate) / (1000 * 60 * 60 * 24);
-    
-    // El progreso no debe negativo ni mayor a 100
-    let progressPercentage = 0;
-    if (totalDaysToHarvest > 0) {
-        progressPercentage = Math.min(100, Math.max(0, Math.round((daysSincePlanted / totalDaysToHarvest) * 100)));
-    }
+	/**
+	 * Determinar el estado calculado automáticamente.
+	 * Si la fecha actual ya superó la fecha mínima de cosecha, el estado sugerido es 'lista'.
+	 */
+	const calculatedStatus = today >= minHarvestDate ? 'lista' : 'creciendo';
+
+	// Porcentaje de progreso
+	// El ciclo total de días se basa en el tiempo mínimo para la cosecha
+	const totalDaysToHarvest =
+		(minHarvestDate - plantedDate) / (1000 * 60 * 60 * 24);
+	const daysSincePlanted = (today - plantedDate) / (1000 * 60 * 60 * 24);
+
+	// El progreso no debe negativo ni mayor a 100
+	let progressPercentage = 0;
+	if (totalDaysToHarvest > 0) {
+		progressPercentage = Math.min(
+			100,
+			Math.max(
+				0,
+				Math.round((daysSincePlanted / totalDaysToHarvest) * 100),
+			),
+		);
+	}
 
 	// Calcular estadísticas del lote
 	const totalInstances = batch.instances.length;
@@ -149,6 +163,18 @@ export const createCropBatchCard = (batch) => {
 						? `<p class="text-xs italic text-gray-500 mb-3">Notas: "${batch.notes}"</p>`
 						: `<p class="text-xs italic text-gray-500 mb-3">Notas:</p>`
 				}
+
+                <!-- MOSTRAR EL ESTADO CALCULADO SI APLICA -->
+                ${
+					calculatedStatus === 'lista' && readyCount === 0
+						? `
+                <div class="my-2 p-2 bg-green-100 dark:bg-green-900/50 border border-green-200 dark:border-green-700 rounded-md text-center text-sm">
+                    <p class="font-bold">🎉 ¡Algunas de tus plantas podrían estar listas para cosechar!</p>
+                </div>
+                `
+					: ''
+				}
+
 
                 <!-- Sección de Estadísticas -->
                 <div class="text-sm space-y-2 mb-4 border-t dark:border-gray-700 pt-3 mt-2">

@@ -1,7 +1,10 @@
 import { getThemeButtonHTML } from './theme.js';
 import { loginUser, registerUser } from './api.js';
 import { openModal, closeModal } from './handle-modal.js';
-import { createAlertModalContent, createLoginModalContent } from './ui/modal.js';
+import {
+	createAlertModalContent,
+	createLoginModalContent,
+} from './ui/modal.js';
 
 // -----------------------------------
 // MANEJADORES DE FORMULARIOS
@@ -31,9 +34,9 @@ export const handleRegister = () => {
 			openModal(
 				createAlertModalContent(
 					'¡Registro Exitoso!',
-					'Tu cuenta ha sido creada. Serás redirigido para iniciar sesión.'
+					'Tu cuenta ha sido creada. Serás redirigido para iniciar sesión.',
 				),
-				'sm'
+				'sm',
 			);
 
 			setTimeout(() => {
@@ -45,9 +48,9 @@ export const handleRegister = () => {
 				createAlertModalContent(
 					'Error en el Registro',
 					error.message,
-					'error'
+					'error',
 				),
-				'sm'
+				'sm',
 			);
 			// --- RESTAURAR BOTÓN ---
 			submitButton.disabled = false;
@@ -86,9 +89,9 @@ export const handleLogin = () => {
 				createAlertModalContent(
 					'Error de Acceso',
 					'Email o contraseña incorrectos.',
-					'error'
+					'error',
 				),
-				'sm'
+				'sm',
 			);
 
 			// --- RESTAURAR BOTÓN EN CASO DE ERROR ---
@@ -166,8 +169,7 @@ export const updateNavOnLogin = (user) => {
 	const mobileLinkClasses =
 		'block p-4 text-base font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors';
 
-	navMenuMobile.innerHTML = `
-	 	${
+	navMenuMobile.innerHTML = `${
 			user.role === 'admin'
 				? `<a href="/html/admin.html" class="${mobileLinkClasses} text-yellow-500">Panel Admin</a>`
 				: ''
@@ -177,7 +179,7 @@ export const updateNavOnLogin = (user) => {
 		<div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
         <a href="/html/profile.html" class="${mobileLinkClasses}">Mi Perfil</a>
 		<div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
-		<div class="${mobileLinkClasses} flex justify-between items-center cursor-pointer">
+		<div id="mobile-theme-switcher" class="${mobileLinkClasses} flex justify-between items-center cursor-pointer">
             <span>Cambiar Tema</span>
             ${getThemeButtonHTML()}
         </div>

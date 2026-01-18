@@ -1,4 +1,4 @@
-import { createSowingCalendar, formatHarvestDays } from './helpers.js'
+import { createSowingCalendar, formatHarvestDays } from './helpers.js';
 
 /**
  * Crear el contenido HTML para el modal de detalles de una planta.
@@ -41,8 +41,8 @@ export const createPlantDetailsContent = (plant, user) => {
                 <!-- Columna de Imagen y Badges -->
                 <div>
                     <img src="${plant.imagen}" alt="${
-		plant.nombre
-	}" class="w-full h-64 object-cover rounded-lg shadow-md mb-4">
+						plant.nombre
+					}" class="w-full h-64 object-cover rounded-lg shadow-md mb-4">
                     <div class="flex flex-wrap gap-2 text-sm">
                         <span class="font-semibold px-3 py-1 rounded-full bg-green-100 text-green-800">${
 							plant.dificultad
@@ -62,28 +62,28 @@ export const createPlantDetailsContent = (plant, user) => {
                     <div class="mb-4">
                         <h4 class="font-bold text-lg mb-2 border-b dark:border-gray-600 pb-1">Siembra</h4>
                         <p><strong>Método:</strong> ${plant.metodo.join(
-							', '
+							', ',
 						)}</p>
                         ${createSowingCalendar(plant.siembra)}
                     </div>
                     <div class="mb-4">
                         <h4 class="font-bold text-lg mb-2 border-b dark:border-gray-600 pb-1">Cosecha y Espacio</h4>
                         <p><strong>Tiempo de Cosecha:</strong> ${formatHarvestDays(
-							plant
+							plant,
 						)} días</p>
                         <p><strong>Distancia:</strong> ${
 							plant.distancia.entrePlantas
 						} cm entre plantas, ${
-		plant.distancia.entreLineas
-	} cm entre líneas</p>
+							plant.distancia.entreLineas
+						} cm entre líneas</p>
                     </div>
                     <div>
                         <h4 class="font-bold text-lg mb-2 border-b dark:border-gray-600 pb-1">Asociaciones y Rotación</h4>
                         <p><strong>Cultivos Amigos:</strong> ${plant.asociacion.join(
-							', '
+							', ',
 						)}</p>
                         <p><strong>Rotación Recomendada:</strong> ${plant.rotacion.join(
-							', '
+							', ',
 						)}</p>
                     </div>
                 </div>
@@ -159,7 +159,7 @@ export const createLoginModalContent = () => {
 export const createConfirmModalContent = (
 	message,
 	confirmText = 'Confirmar',
-	entityId = null
+	entityId = null,
 ) => {
 	return `
         <div class="p-8 text-center flex flex-col items-center gap-6">
@@ -228,18 +228,30 @@ export const createAlertModalContent = (title, message, type = 'success') => {
  * @returns {string}
  */
 export const createManageBatchModalContent = (batch) => {
-    let instancesHTML = '';
-    batch.instances.forEach((instance, index) => {
-        // Objeto para mapear estados a íconos y colores
-        const statusInfo = {
-            germinando: {icon: 'fa-circle-notch', color:'text-gray-500 dark:text-gray-300' },
-            creciendo: {icon: 'fa-leaf', color: 'text-blue-500' },
-            lista: {icon: 'fa-check-circle', color: 'text-green-500' },
-            cosechada: {icon: 'fa-truck-ramp-box', color: 'text-yellow-600' },
-            fallida: {icon: 'fa-times-circle', color: 'text-red-500' }
-        };
+	let instancesHTML = '';
 
-        instancesHTML += `
+	// Determinar si ya es tiempo de cosecha para habilitar opciones
+	const plantedDate = new Date(batch.plantedAt);
+	const minHarvestDate = new Date(plantedDate);
+	minHarvestDate.setDate(
+		plantedDate.getDate() + batch.plantInfo.diasCosecha.min,
+	);
+	const isHarvestTime = new Date() >= minHarvestDate;
+
+	batch.instances.forEach((instance, index) => {
+		// Objeto para mapear estados a íconos y colores
+		const statusInfo = {
+			germinando: {
+				icon: 'fa-circle-notch',
+				color: 'text-gray-500 dark:text-gray-300',
+			},
+			creciendo: { icon: 'fa-leaf', color: 'text-blue-500' },
+			lista: { icon: 'fa-check-circle', color: 'text-green-500' },
+			cosechada: { icon: 'fa-truck-ramp-box', color: 'text-yellow-600' },
+			fallida: { icon: 'fa-times-circle', color: 'text-red-500' },
+		};
+
+		instancesHTML += `
             <div class="flex items-center justify-between p-3 border-b dark:border-gray-700">
                 <div class="flex items-center gap-3">
                     <i class="fas ${statusInfo[instance.status].icon} ${statusInfo[instance.status].color} fa-fw text-lg"></i>
@@ -249,15 +261,21 @@ export const createManageBatchModalContent = (batch) => {
                 <select data-instance-id="${instance.instanceId}" class="instance-status-select bg-gray-100 dark:bg-gray-700 rounded p-1 text-sm">
                     <option value="germinando" ${instance.status === 'germinando' ? 'selected' : ''}>Plantada</option>
                     <option value="creciendo" ${instance.status === 'creciendo' ? 'selected' : ''}>Creciendo</option>
-                    <option value="lista" ${instance.status === 'lista' ? 'selected' : ''}>Lista</option>
-                    <option value="cosechada" ${instance.status === 'cosechada' ? 'selected' : ''}>Cosechada</option>
+                    <option value="lista" ${instance.status === 'lista' ? 'selected' : ''} 
+                            ${!isHarvestTime ? 'disabled' : ''}>
+                        Lista ${!isHarvestTime ? '(aún no)' : ''}
+                    </option>
+                    <option value="cosechada" ${instance.status === 'cosechada' ? 'selected' : ''} 
+                            ${!isHarvestTime ? 'disabled' : ''}>
+                        Cosechada
+                    </option>
                     <option value="fallida" ${instance.status === 'fallida' ? 'selected' : ''}>Fallida</option>
                 </select>
             </div>
         `;
-    });
+	});
 
-    return `
+	return `
     <div data-batch-id-in-modal="${batch.batchId}">
         <header class="p-6 flex justify-between items-center border-b dark:border-gray-700">
             <h2 class="text-2xl font-bold">Gestionar Lote de ${batch.plantInfo.nombre}</h2>
@@ -267,7 +285,7 @@ export const createManageBatchModalContent = (batch) => {
             ${instancesHTML}
         </div>
         <footer class="p-4 bg-gray-50 dark:bg-gray-800 border-t dark:border-gray-700 text-right">
-            <button class="js-close-modal bg-eco-green-dark text-white font-bold px-6 py-2 rounded-md">Cerrar</button>
+            <button class="js-close-modal bg-eco-green-dark text-white font-bold px-6 py-2 rounded-md">Guardar Cambios</button>
         </footer>
     </div>
     `;

@@ -111,25 +111,26 @@ export const createLoginModalContent = () => {
         <div class="p-6">
             <form id="login-form" class="flex flex-col gap-4">
 				<div class="relative group">
-                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                    <label for="email" class="block text-sm font-medium text-eco-brown dark:text-gray-300">Email</label>
                     <div class="relative mt-1">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                             <i
                                 class="fas fa-envelope text-gray-400 group-focus-within:text-eco-green-dark transition"></i>
                         </span>
                         <input type="email" id="email" name="email" required placeholder="tu@email.com"
-                            class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 pl-10 shadow-sm focus:border-eco-green-dark focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-dark-surface dark:focus:border-eco-green-light">
+                            class="mt-1 block w-full rounded-md px-3 py-2 bg-transparent border-2 pl-10 border-gray-200 focus:border-eco-green-dark focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-dark-surface dark:focus:border-eco-green-light";
+">
                     </div>
                 </div>
                 <div class="relative group">
                     <label for="password"
-                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contraseña</label>
+                        class="block text-sm font-medium text-eco-brown dark:text-gray-300">Contraseña</label>
                     <div class="relative mt-1">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                             <i class="fas fa-lock text-gray-400 group-focus-within:text-eco-green-dark transition"></i>
                         </span>
                         <input type="password" id="password" name="password" required placeholder="••••••••"
-                            class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 pl-10 shadow-sm focus:border-eco-green-dark focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-dark-surface dark:focus:border-eco-green-light">
+                            class="mt-1 block w-full rounded-md px-3 py-2 bg-transparent border-2 pl-10 border-gray-200 focus:border-eco-green-dark focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-dark-surface dark:focus:border-eco-green-light">
                     </div>
                 </div>
 

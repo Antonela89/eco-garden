@@ -53,10 +53,9 @@ export const initDashboard = async (user) => {
                     </div>
                 `;
 			} else {
-
 				const enrichedGarden = myGarden.map((batch) => {
 					const info = plantCatalog.find(
-						(p) => p.id === batch.plantId
+						(p) => p.id === batch.plantId,
 					);
 					return {
 						...batch,
@@ -69,37 +68,47 @@ export const initDashboard = async (user) => {
 					// Otro punto crítico: ¿falla createCropBatchCard?
 					gardenContainer.innerHTML += createCropBatchCard(batch);
 				});
+
+				// Seleccionar todas las tarjetas 
+				const cards = gardenContainer.querySelectorAll('.crop-card');
+
+				// Iterar sobre ellas y mostrar una por una con un pequeño retraso
+				cards.forEach((card, index) => {
+					setTimeout(() => {
+						card.classList.remove('opacity-0', 'translate-y-4');
+					}, index * 100); // 100ms de retraso entre cada tarjeta
+				});
 			}
 		} catch (error) {
 			// Verificar si el error es de autenticación
-            if (error.name === 'AuthError') {
-                // El handleResponse ya limpió el localStorage.
-                // Mostrar el modal y redirigimos.
-                openModal(
-                    createAlertModalContent(
-                        'Sesión Expirada',
-                        'Tu sesión ha terminado. Por favor, inicia sesión de nuevo.',
-                        'error'
-                    ),
-                    'sm'
-                );
-                // Esperar un poco antes de redirigir para que el usuario vea el mensaje
-                setTimeout(() => {
-                    window.location.href = '/index.html';
-                }, 3000);
-            } else {
-                // Si es otro tipo de error (ej. de conexión), mostrar el error de carga normal
-                openModal(
-                    createAlertModalContent(
-                        'Error de Carga',
-                        'No se pudo conectar con el servidor para cargar tu huerta.  Por favor, intenta recargar la página.',
-                        'error'
-                    ),
-                    'md'
-                );
-            }
-        }
-    };
+			if (error.name === 'AuthError') {
+				// El handleResponse ya limpió el localStorage.
+				// Mostrar el modal y redirigimos.
+				openModal(
+					createAlertModalContent(
+						'Sesión Expirada',
+						'Tu sesión ha terminado. Por favor, inicia sesión de nuevo.',
+						'error',
+					),
+					'sm',
+				);
+				// Esperar un poco antes de redirigir para que el usuario vea el mensaje
+				setTimeout(() => {
+					window.location.href = '/index.html';
+				}, 3000);
+			} else {
+				// Si es otro tipo de error (ej. de conexión), mostrar el error de carga normal
+				openModal(
+					createAlertModalContent(
+						'Error de Carga',
+						'No se pudo conectar con el servidor para cargar tu huerta.  Por favor, intenta recargar la página.',
+						'error',
+					),
+					'md',
+				);
+			}
+		}
+	};
 
 	// --- MANEJO DE EVENTOS (DELEGACIÓN) ---
 	gardenContainer.addEventListener('click', async (e) => {
@@ -116,9 +125,9 @@ export const initDashboard = async (user) => {
 				createConfirmModalContent(
 					`¿Eliminar el lote de "${plantName}"?`,
 					'Sí, Eliminar',
-					batchId
+					batchId,
 				),
-				'md'
+				'md',
 			);
 		}
 
@@ -154,18 +163,18 @@ export const initDashboard = async (user) => {
 					openModal(
 						createAlertModalContent(
 							'¡Eliminado!',
-							'El lote ha sido eliminado.'
+							'El lote ha sido eliminado.',
 						),
-						'sm'
+						'sm',
 					);
 				} catch (error) {
 					openModal(
 						createAlertModalContent(
 							'Error',
 							'No se pudo eliminar el lote.',
-							'error'
+							'error',
 						),
-						'sm'
+						'sm',
 					);
 				}
 			}
@@ -178,7 +187,7 @@ export const initDashboard = async (user) => {
 				const newStatus = selectElement.value;
 
 				const batchId = document.querySelector(
-					'[data-batch-id-in-modal]'
+					'[data-batch-id-in-modal]',
 				).dataset.batchIdInModal;
 
 				try {
@@ -188,9 +197,9 @@ export const initDashboard = async (user) => {
 						createAlertModalContent(
 							'Error',
 							'No se pudo actualizar el estado.',
-							'error'
+							'error',
 						),
-						'sm'
+						'sm',
 					);
 				}
 

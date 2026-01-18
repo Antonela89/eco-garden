@@ -115,7 +115,7 @@ export const createCropBatchCard = (batch) => {
     return `
         <article data-batch-id="${
             batch.batchId
-        }" class="bg-white dark:bg-dark-surface rounded-lg shadow-lg overflow-hidden flex flex-col transition-all duration-300 hover:shadow-xl">
+        }" class="crop-card opacity-0 transform translate-y-4 bg-white dark:bg-dark-surface rounded-lg shadow-lg overflow-hidden flex flex-col transition-all duration-300 hover:shadow-xl">
             <img src="${plantInfo.imagen}" alt="${
         plantInfo.nombre
     }" class="w-full h-40 object-cover">

@@ -69,23 +69,24 @@ Implementar un CRUD completo y un sistema de autenticación:
 
 ### Frontend
 
--   **Interfaz Moderna e Intuitiva:** Desarrollado con HTML semántico, CSS (Tailwind) y JavaScript modular (ESM).
--   **Diseño Responsive (Mobile First):** La interfaz se adapta a cualquier dispositivo, desde móviles hasta escritorios, utilizando un menú hamburguesa para pantallas pequeñas.
--   **Modo Oscuro/Claro:** El usuario puede elegir su tema visual preferido, y la elección se guarda en `localStorage`.
--   **Componentes Reutilizables:** Un sistema de modales y loaders centralizado para una experiencia de usuario consistente y profesional.
--   **Feedback Visual Avanzado:** Animaciones CSS personalizadas (loader de germinación), loaders en botones y modales de alerta para una comunicación clara con el usuario.
+-  **Interfaz Moderna e Intuitiva:** Desarrollado con HTML semántico, CSS (Tailwind) y JavaScript modular (ESM).
+-  **Diseño Responsive (Mobile First):** La interfaz se adapta a cualquier dispositivo, desde móviles hasta escritorios, utilizando un menú hamburguesa para pantallas pequeñas.
+-  **Modo Oscuro/Claro:** El usuario puede elegir su tema visual preferido, y la elección se guarda en `localStorage`.
+-  **Componentes Reutilizables:** Un sistema de modales y loaders centralizado para una experiencia de usuario consistente y profesional.
+-  **Feedback Visual Avanzado:** Animaciones CSS personalizadas (loader de germinación), loaders en botones y modales de alerta para una comunicación clara con el usuario.
+-  **CSS Organizado:** Los estilos personalizados están modularizados en archivos por componente (loader, tarjetas, etc.) e importados en un archivo principal, siguiendo una arquitectura CSS escalable.
 
 ---
 
 ## 🛠️ Stack Tecnológico
 
--   **Backend:** Node.js, Express, TypeScript
--   **Seguridad:** JSON Web Tokens (JWT), bcrypt.js, Helmet (CSP)
--   **Validación:** Zod
--   **Frontend:** HTML5, CSS3, Tailwind CSS (vía CDN), JavaScript (ESM)
--   **Iconografía:** Font Awesome
--   **Tipografía:** Google Fonts (Nunito)
--   **Despliegue:** Render
+-  **Backend:** Node.js, Express, TypeScript
+-  **Seguridad:** JSON Web Tokens (JWT), bcrypt.js, Helmet (CSP)
+-  **Validación:** Zod
+-  **Frontend:** HTML5, CSS3, Tailwind CSS (vía CDN), JavaScript (ESM)
+-  **Iconografía:** Font Awesome
+-  **Tipografía:** Google Fonts (Nunito)
+-  **Despliegue:** Render
 
 ---
 

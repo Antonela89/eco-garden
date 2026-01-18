@@ -18,6 +18,7 @@ import { getLoaderHTML } from './loader.js';
  * @param {object} user - El objeto de usuario (actualmente no se usa, pero es bueno tenerlo para el futuro).
  */
 export const initDashboard = async (user) => {
+	// Referencia al contenedor principal de la huerta.
 	const gardenContainer = document.getElementById('garden-container');
 	if (!gardenContainer) return;
 
@@ -35,16 +36,19 @@ export const initDashboard = async (user) => {
         	</div>
     	`;
 
+		// Mostrar el loader mientras se procesan los datos.
 		gardenContainer.innerHTML = loaderWrapper;
 
 		try {
-			// Obtener la huerta y el catálogo completo
+			// Realizar ambas llamadas a la API en paralelo para mayor eficiencia.
 			const [myGarden, plantCatalog] = await Promise.all([
 				getMyGarden(),
 				getPlants(),
 			]);
 
+			// Verificar si la huerta del usuario contiene lotes de cultivo.
 			if (myGarden.length === 0) {
+				// Renderizar el mensaje de "Huerta Vacía" si no hay lotes.
 				gardenContainer.innerHTML = `
                     <div class="col-span-full text-center p-8 bg-white dark:bg-dark-surface rounded-lg">
                         <i class="fas fa-leaf text-4xl text-gray-400 mb-4"></i>
@@ -53,6 +57,8 @@ export const initDashboard = async (user) => {
                     </div>
                 `;
 			} else {
+				// "Enriquecer" los datos: combinar la información de la huerta del usuario
+				// con los datos técnicos del catálogo maestro de plantas.
 				const enrichedGarden = myGarden.map((batch) => {
 					const info = plantCatalog.find(
 						(p) => p.id === batch.plantId,
@@ -64,14 +70,16 @@ export const initDashboard = async (user) => {
 				});
 
 				gardenContainer.innerHTML = ''; // Limpiar el loader
+				// Iterar sobre cada lote enriquecido y generar su tarjeta HTML.
 				enrichedGarden.forEach((batch) => {
-					// Otro punto crítico: ¿falla createCropBatchCard?
+					/// La función createCropBatchCard (en ui/cards.js) se encarga de la lógica de presentación.
 					gardenContainer.innerHTML += createCropBatchCard(batch);
 				});
 
-				// Seleccionar todas las tarjetas 
+				// Seleccionar todas las tarjetas
 				const cards = gardenContainer.querySelectorAll('.crop-card');
 
+				// Animación "staggered fade-in"
 				// Iterar sobre ellas y mostrar una por una con un pequeño retraso
 				cards.forEach((card, index) => {
 					setTimeout(() => {

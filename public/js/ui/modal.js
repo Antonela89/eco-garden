@@ -118,7 +118,7 @@ export const createLoginModalContent = () => {
                                 class="fas fa-envelope text-gray-400 group-focus-within:text-eco-green-dark transition"></i>
                         </span>
                         <input type="email" id="email" name="email" required placeholder="tu@email.com"
-                            class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 pl-10 shadow-sm focus:border-eco-green-dark focus:ring-eco-green-dark">
+                            class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 pl-10 shadow-sm focus:border-eco-green-dark focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-dark-surface dark:focus:border-eco-green-light">
                     </div>
                 </div>
                 <div class="relative group">
@@ -129,7 +129,7 @@ export const createLoginModalContent = () => {
                             <i class="fas fa-lock text-gray-400 group-focus-within:text-eco-green-dark transition"></i>
                         </span>
                         <input type="password" id="password" name="password" required placeholder="••••••••"
-                            class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 pl-10 shadow-sm focus:border-eco-green-dark focus:ring-eco-green-dark">
+                            class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 pl-10 shadow-sm focus:border-eco-green-dark focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-dark-surface dark:focus:border-eco-green-light">
                     </div>
                 </div>
 

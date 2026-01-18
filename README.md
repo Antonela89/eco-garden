@@ -212,6 +212,20 @@ Se ha desarrollado una completa colección de tests automatizados en Postman par
 
 ---
 
+## 🗂️ Versiones de la Aplicación
+
+Este repositorio contiene dos implementaciones de la capa de persistencia de datos, demostrando la evolución de una solución simple a una más robusta y escalable.
+
+### 1. Versión con Base de Datos JSON (Rama: `feature/json-database`)
+- **Descripción:** La primera versión de la API utiliza archivos `.json` locales como sistema de almacenamiento. Toda la lógica de lectura y escritura se gestiona de forma síncrona a través del módulo `fs` de Node.js.
+- **Propósito:** Demostrar el manejo de archivos, la estructuración de modelos de datos manuales y la lógica de negocio fundamental de la aplicación.
+- **Para ver el código de esta versión, puedes cambiar a la rama `feature/json-database`.**
+
+### 2. Versión con MongoDB (Rama: `main` / `developer`)
+- **Descripción:** La versión actual y principal de la aplicación. Se ha migrado toda la capa de persistencia a una base de datos NoSQL profesional utilizando **MongoDB Atlas** y la librería **Mongoose**.
+- **Propósito:** Demostrar habilidades en la integración con bases de datos externas, modelado de datos con Schemas, operaciones asíncronas y las mejores prácticas para una aplicación escalable en producción.
+- **Esta es la versión que está desplegada en Render.**
+
 ## 🔮 Posibles Mejoras a Futuro
 
 La arquitectura actual del proyecto permite expandir su funcionalidad de maneras interesantes:

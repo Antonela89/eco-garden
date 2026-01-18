@@ -1,8 +1,13 @@
-// Api Desarrollo
-// const API_URL = 'http://localhost:3000/api';
+/**
+ * @file Módulo de API Client.
+ * @description Centraliza todas las peticiones fetch a la API de Eco-Garden.
+ */
 
-// Api Produccion
-const API_URL = 'https://ecogarden-w8ks.onrender.com/api';
+// --- CONFIGURACIÓN ---
+const API_URL =
+	window.location.hostname === 'localhost'
+		? 'http://localhost:3000/api'
+		: 'https://ecogarden-w8ks.onrender.com/api';
 
 // -----------------------------------
 // FUNCIONES AUXILIARES (HELPERS)
@@ -22,7 +27,7 @@ const createHeaders = (isProtected = false) => {
 		const token = localStorage.getItem('token');
 		if (!token)
 			throw new Error(
-				'Acción no autorizada. Se requiere iniciar sesión.'
+				'Acción no autorizada. Se requiere iniciar sesión.',
 			);
 		headers['Authorization'] = `Bearer ${token}`;
 	}
@@ -51,18 +56,23 @@ const handleResponse = async (response) => {
 		localStorage.removeItem('token');
 		localStorage.removeItem('user');
 
-		
 		throw new AuthError('Sesión expirada');
 	}
 
 	if (!response.ok) {
 		const errorData = await response.json();
 		throw new Error(
-			errorData.message || 'Ocurrió un error en la petición.'
+			errorData.message || 'Ocurrió un error en la petición.',
 		);
 	}
 
-	return response.json();
+	// Para peticiones DELETE que no devuelven contenido, response.json() puede fallar.
+	// Verificar si hay contenido antes de intentar parsearlo.
+	const contentType = response.headers.get('content-type');
+	if (contentType && contentType.indexOf('application/json') !== -1) {
+		return response.json();
+	}
+	return {}; // Devolver un objeto vacío si no hay JSON
 };
 
 // -----------------------------------
@@ -92,7 +102,7 @@ export const registerUser = async (username, email, password) => {
 	if (response.status === 400) {
 		const errorData = await response.json();
 		throw new Error(
-			errorData.errors ? errorData.errors[0].mensaje : errorData.message
+			errorData.errors ? errorData.errors[0].mensaje : errorData.message,
 		);
 	}
 
@@ -177,7 +187,7 @@ export const updateInstanceStatus = async (batchId, instanceId, status) => {
 		const errorData = await response.json();
 		throw new Error(
 			errorData.message ||
-				'No se pudo actualizar el estado de la instancia.'
+				'No se pudo actualizar el estado de la instancia.',
 		);
 	}
 
@@ -195,7 +205,7 @@ export const deleteBatchFromGarden = async (batchId) => {
 		{
 			method: 'DELETE',
 			headers: createHeaders(true), // Ruta protegida
-		}
+		},
 	);
 
 	if (!response.ok) {

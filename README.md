@@ -70,31 +70,31 @@ Implementar un CRUD completo y un sistema de autenticación:
 
 - **Autenticación Segura:** Sistema de registro y login con contraseñas encriptadas (bcrypt) y autenticación basada en tokens (JWT).
 - **Gestión de Roles:** Diferenciación entre usuarios (`gardener`) y administradores (`admin`) con permisos específicos.
-- **Arquitectura de Lotes de Cultivo:** Un modelo de datos avanzado que permite registrar múltiples siembras de la misma especie y hacer un seguimiento individual del estado de cada planta.
+- **Arquitectura de Lotes de Cultivo:** Un modelo de datos avanzado que permite a los usuarios registrar múltiples siembras de la misma especie (`CropBatch`). Cada siembra agrupa "instancias" individuales (`PlantInstance`), permitiendo un seguimiento detallado del estado de cada semilla o planta (germinando, creciendo, fallida, etc.).
 - **Catálogo de Plantas del INTA:** Endpoints para consultar un catálogo detallado con información sobre siembra, cosecha, asociaciones y más.
 - **Validación Robusta:** Uso de **Zod** para validar todos los datos de entrada, asegurando la integridad de la información.
 - **Estructura Modular:** El código está organizado en Controladores, Modelos, Rutas, Schemas y Utilidades, siguiendo el principio DRY.
 
 ### Frontend
 
--  **Interfaz Moderna e Intuitiva:** Desarrollado con HTML semántico, CSS (Tailwind) y JavaScript modular (ESM).
--  **Diseño Responsive (Mobile First):** La interfaz se adapta a cualquier dispositivo, desde móviles hasta escritorios, utilizando un menú hamburguesa para pantallas pequeñas.
--  **Modo Oscuro/Claro:** El usuario puede elegir su tema visual preferido, y la elección se guarda en `localStorage`.
--  **Componentes Reutilizables:** Un sistema de modales y loaders centralizado para una experiencia de usuario consistente y profesional.
--  **Feedback Visual Avanzado:** Animaciones CSS personalizadas (loader de germinación), loaders en botones y modales de alerta para una comunicación clara con el usuario.
--  **CSS Organizado:** Los estilos personalizados están modularizados en archivos por componente (loader, tarjetas, etc.) e importados en un archivo principal, siguiendo una arquitectura CSS escalable.
+- **Interfaz Moderna e Intuitiva:** Desarrollado con HTML semántico, CSS (Tailwind) y JavaScript modular (ESM).
+- **Diseño Responsive (Mobile First):** La interfaz se adapta a cualquier dispositivo, desde móviles hasta escritorios, utilizando un menú hamburguesa para pantallas pequeñas.
+- **Modo Oscuro/Claro:** El usuario puede elegir su tema visual preferido, y la elección se guarda en `localStorage`.
+- **Componentes Reutilizables:** Un sistema de modales y loaders centralizado para una experiencia de usuario consistente y profesional.
+- **Feedback Visual Avanzado:** Animaciones CSS personalizadas (loader de germinación), loaders en botones y modales de alerta para una comunicación clara con el usuario.
+- **CSS Organizado:** Los estilos personalizados están modularizados en archivos por componente (loader, tarjetas, etc.) e importados en un archivo principal, siguiendo una arquitectura CSS escalable.
 
 ---
 
 ## 🛠️ Stack Tecnológico
 
--  **Backend:** Node.js, Express, TypeScript
--  **Seguridad:** JSON Web Tokens (JWT), bcrypt.js, Helmet (CSP)
--  **Validación:** Zod
--  **Frontend:** HTML5, CSS3, Tailwind CSS (vía CDN), JavaScript (ESM)
--  **Iconografía:** Font Awesome
--  **Tipografía:** Google Fonts (Nunito)
--  **Despliegue:** Render
+- **Backend:** Node.js, Express, TypeScript
+- **Seguridad:** JSON Web Tokens (JWT), bcrypt.js, Helmet (CSP)
+- **Validación:** Zod
+- **Frontend:** HTML5, CSS3, Tailwind CSS (vía CDN), JavaScript (ESM)
+- **Iconografía:** Font Awesome
+- **Tipografía:** Google Fonts (Nunito)
+- **Despliegue:** Render
 
 ---
 
@@ -126,11 +126,12 @@ Sigue estos pasos para levantar el proyecto en un entorno local.
     - Crea un archivo `.env` en la raíz del proyecto.
     - Copia el contenido de `.env.example` y rellena los valores.
 
-    -   Crea un archivo `.env` en la raíz del proyecto a partir de `.env.example`.
-    -   Rellena los valores de `PORT`, `JWT_SECRET` y `MONGO_URI`.
+    - Crea un archivo `.env` en la raíz del proyecto a partir de `.env.example`.
+    - Rellena los valores de `PORT`, `JWT_SECRET` y `MONGO_URI`.
 
 4.  **Sembrar la base de datos (Opcional):**
-    -   Para poblar el catálogo de plantas en tu base de datos de MongoDB, ejecuta:
+    - Para poblar el catálogo de plantas en tu base de datos de MongoDB, ejecuta:
+
     ```bash
     npm run seed
     ```
@@ -144,7 +145,7 @@ Sigue estos pasos para levantar el proyecto en un entorno local.
     El backend y el frontend estarán corriendo en `http://localhost:3000`.
 
 6.  **Abrir la aplicación:**
-    -  Abre tu navegador y ve a `http://localhost:3000`.
+    - Abre tu navegador y ve a `http://localhost:3000`.
 
 ---
 
@@ -161,39 +162,44 @@ La URL base para todas las peticiones es `[https://ecogarden-w8ks.onrender.com]`
 ---
 
 ### 🌳 Catálogo de Plantas (Público)
-| Método | Endpoint | Descripción |
-| :--- | :--- | :--- |
-| `GET` | `/api/plants` | Obtener la lista completa de especies. |
-| `GET` | `/api/plants/:id` | Obtener los detalles de una planta por su ID (slug). |
-| `GET`| `/api/plants/difficulty/:level` | Filtrar plantas por nivel de dificultad. |
-| `GET` | `/api/plants/check/:id` | Verificar si una planta está en temporada de siembra. |
+
+| Método | Endpoint                        | Descripción                                           |
+| :----- | :------------------------------ | :---------------------------------------------------- |
+| `GET`  | `/api/plants`                   | Obtener la lista completa de especies.                |
+| `GET`  | `/api/plants/:id`               | Obtener los detalles de una planta por su ID (slug).  |
+| `GET`  | `/api/plants/difficulty/:level` | Filtrar plantas por nivel de dificultad.              |
+| `GET`  | `/api/plants/check/:id`         | Verificar si una planta está en temporada de siembra. |
 
 ### 👤 Autenticación
-| Método | Endpoint | Descripción |
-| :--- | :--- | :--- |
-| `POST` | `/api/auth/register` | Registrar un nuevo usuario. |
-| `POST` | `/api/auth/login` | Iniciar sesión y obtener un token JWT. |
+
+| Método | Endpoint             | Descripción                            |
+| :----- | :------------------- | :------------------------------------- |
+| `POST` | `/api/auth/register` | Registrar un nuevo usuario.            |
+| `POST` | `/api/auth/login`    | Iniciar sesión y obtener un token JWT. |
 
 ### 🌿 Mi Huerta y Perfil (Protegido)
-*Requiere `Authorization: Bearer <token>`.*
 
-| Método | Endpoint | Descripción |
-| :--- | :--- | :--- |
-| `GET` | `/api/gardener/profile` | Obtener el perfil del usuario. |
-| `PUT` | `/api/gardener/profile` | Actualizar datos del perfil. |
-| `GET` | `/api/gardener/garden` | Obtener todos los lotes de cultivo del usuario. |
-| `POST` | `/api/gardener/garden/batch`| Añadir un nuevo lote de cultivo. |
-| `PATCH` | `/api/gardener/garden/instance`| Actualizar el estado de una planta individual. |
-| `DELETE`| `/api/gardener/garden/batch/:batchId`| Eliminar un lote de cultivo. |
+_Requiere `Authorization: Bearer <token>`._
+
+| Método   | Endpoint                              | Descripción                                     |
+| :------- | :------------------------------------ | :---------------------------------------------- |
+| `GET`    | `/api/gardener/profile`               | Obtener el perfil del usuario.                  |
+| `PUT`    | `/api/gardener/profile`               | Actualizar datos del perfil.                    |
+| `GET`    | `/api/gardener/garden`                | Obtener todos los lotes de cultivo del usuario. |
+| `POST`   | `/api/gardener/garden/batch`          | Añadir un nuevo lote de cultivo.                |
+| `PATCH`  | `/api/gardener/garden/instance`       | Actualizar el estado de una planta individual.  |
+| `DELETE` | `/api/gardener/garden/batch/:batchId` | Eliminar un lote de cultivo.                    |
 
 ### 🛡️ Administración (Protegido - Solo Admin)
-*Requiere token con `role: "admin"`.*
 
-| Método | Endpoint | Descripción |
-| :--- | :--- | :--- |
-| `POST` | `/api/plants` | Crear una nueva especie en el catálogo. |
-| `PATCH` | `/api/plants/:id` | Actualizar una especie existente. |
-| `DELETE`| `/api/plants/:id` | Eliminar una especie del catálogo. |
+_Requiere token con `role: "admin"`._
+
+| Método   | Endpoint          | Descripción                             |
+| :------- | :---------------- | :-------------------------------------- |
+| `POST`   | `/api/plants`     | Crear una nueva especie en el catálogo. |
+| `PATCH`  | `/api/plants/:id` | Actualizar una especie existente.       |
+| `DELETE` | `/api/plants/:id` | Eliminar una especie del catálogo.      |
+
 ---
 
 ## 🧪 Testeo con Postman

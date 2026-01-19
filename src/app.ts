@@ -25,43 +25,45 @@ dotenv.config();
 const app = express();
 
 // --- CONFIGURACIÓN DE SEGURIDAD (HELMET Y CSP) ---
-app.use(helmet({
-    contentSecurityPolicy: {
-        directives: {
-            // Permitir que, por defecto, todo se cargue desde dominio propio ('self') o desde la url de deploy
-            defaultSrc: ["'self'", "https://ecogarden-w8ks.onrender.com"],
-            
-            // Definir de dónde se pueden cargar los scripts
-            scriptSrc: [
-                "'self'",                           // Scripts de dominio propio (ej: /js/main.js)
-                "'unsafe-inline'",                  // Permitir scripts inline (necesario para la configuración de Tailwind en el HTML)
-                "https://cdn.tailwindcss.com"     // Permitir el script de la CDN de Tailwind
-            ],
+app.use(
+	helmet({
+		contentSecurityPolicy: {
+			directives: {
+				// Permitir que, por defecto, todo se cargue desde dominio propio ('self') o desde la url de deploy
+				defaultSrc: ["'self'", 'https://ecogarden-w8ks.onrender.com'],
 
-            // Definir de dónde se pueden cargar los estilos
-            styleSrc: [
-                "'self'",                           // Estilos dede dominio propio
-                "'unsafe-inline'",                  // Permitir estilos inline (necesario para la animación del loader)
-                "https://cdnjs.cloudflare.com",   // Permitir los CSS de Font Awesome
-                "https://fonts.googleapis.com"    // Permitir los CSS de Google Fonts
-            ],
+				// Definir de dónde se pueden cargar los scripts
+				scriptSrc: [
+					"'self'", // Scripts de dominio propio (ej: /js/main.js)
+					"'unsafe-inline'", // Permitir scripts inline (necesario para la configuración de Tailwind en el HTML)
+					'https://cdn.tailwindcss.com', // Permitir el script de la CDN de Tailwind
+				],
 
-            // Definir de dónde se pueden cargar las fuentes (tipografías)
-            fontSrc: [
-                "'self'",                           // Fuentes de de dominio propio
-                "https://cdnjs.cloudflare.com",   // Permitir las fuentes de Font Awesome
-                "https://fonts.gstatic.com"       // Permitir las fuentes de Google Fonts
-            ],
+				// Definir de dónde se pueden cargar los estilos
+				styleSrc: [
+					"'self'", // Estilos dede dominio propio
+					"'unsafe-inline'", // Permitir estilos inline (necesario para la animación del loader)
+					'https://cdnjs.cloudflare.com', // Permitir los CSS de Font Awesome
+					'https://fonts.googleapis.com', // Permitir los CSS de Google Fonts
+				],
 
-            // Definir de dónde se pueden cargar las imágenes
-            imgSrc: [
-                "'self'",                           // Imágenes de de dominio propio
-                "data:",                            // Permitir imágenes en base64 (a veces usadas por librerías)
-                "https://res.cloudinary.com"      // Permitir imágenes desde de Cloudinary
-            ]
-        },
-    },
-}));
+				// Definir de dónde se pueden cargar las fuentes (tipografías)
+				fontSrc: [
+					"'self'", // Fuentes de de dominio propio
+					'https://cdnjs.cloudflare.com', // Permitir las fuentes de Font Awesome
+					'https://fonts.gstatic.com', // Permitir las fuentes de Google Fonts
+				],
+
+				// Definir de dónde se pueden cargar las imágenes
+				imgSrc: [
+					"'self'", // Imágenes de de dominio propio
+					'data:', // Permitir imágenes en base64 (a veces usadas por librerías)
+					'https://res.cloudinary.com', // Permitir imágenes desde de Cloudinary
+				],
+			},
+		},
+	}),
+);
 
 // --------------------------------------------
 // MIDDLEWARES GLOBALES
@@ -89,7 +91,7 @@ app.use(express.static(publicPath));
 
 // Servir la carpeta 'shared' para que los archivos JS sean accesibles
 const sharedPath = path.join(__dirname, '../shared');
-app.use('/shared', express.static(sharedPath)); 
+app.use('/shared', express.static(sharedPath));
 
 // --------------------------------------------
 // RUTAS
@@ -100,15 +102,21 @@ app.use('/api', router);
 
 // --- DESHABILITAR CACHÉ PARA RUTAS DE LA API ---
 app.use('/api', (req, res, next) => {
-    res.set('Cache-Control', 'no-store');
-    next();
+	res.set('Cache-Control', 'no-store');
+	next();
+});
+
+// UptimeRobot -> Mantiene el servidor activo de Render
+// Cada 10 min hace una petición
+app.get('/ping', (req, res) => {
+	res.send('pong');
 });
 
 // --- RUTA CATCH-ALL PARA EL FRONTEND (SPA fallback) ---
 // Si ninguna ruta de la API coincide, siempre servimos el index.html
 // Esto es ideal para SPAs donde todas las rutas del frontend se manejan client-side
 app.get('/', (req, res) => {
-    res.sendFile(path.join(publicPath, 'index.html'));
+	res.sendFile(path.join(publicPath, 'index.html'));
 });
 
 // --------------------------------------------

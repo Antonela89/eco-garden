@@ -1,6 +1,7 @@
 /* Importación de archivos parciales */
 @import url('./components/_loader.css');
 @import url('./components/_cards.css');
+@import url('./components/_scroll-to-top.css');
 
 /* ESTILO GLOBAL */
 body {

@@ -28,6 +28,7 @@ import { initPasswordStrengthMeter } from './password-strength.js';
 import { initModal, openModal, closeModal } from './handle-modal.js';
 import { initThemeSwitcher } from './theme.js';
 import { getLoaderHTML } from './loader.js';
+import { initScrollToTopButton } from './scroll-to-top.js';
 
 // ---------------------------------
 // SETUP GLOBAL
@@ -50,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	// Activar el sistema de modales y el de cambio de tema en todas las páginas.
 	initModal();
 	initThemeSwitcher();
+	initScrollToTopButton();
 
 	// --- LÓGICA DEL MENÚ HAMBURGUESA ---
 	const hamburgerButton = document.getElementById('hamburger-button');
@@ -150,7 +152,7 @@ const initializeIndexPage = (user) => {
 				setTimeout(() => {
 					modalContentArea.innerHTML = createPlantDetailsContent(
 						plant,
-						user
+						user,
 					);
 				}, 3000);
 			} catch (error) {
@@ -159,9 +161,9 @@ const initializeIndexPage = (user) => {
 						createAlertModalContent(
 							'Error al Cargar',
 							'No se pudieron obtener los detalles de la planta. Por favor, intenta de nuevo.',
-							'error'
+							'error',
 						),
-						'sm'
+						'sm',
 					);
 				}, 500);
 			}
@@ -190,7 +192,7 @@ const initializeIndexPage = (user) => {
 						async (formEvent) => {
 							formEvent.preventDefault();
 							const submitButton = addBatchForm.querySelector(
-								'button[type="submit"]'
+								'button[type="submit"]',
 							);
 							submitButton.disabled = true;
 							submitButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
@@ -199,7 +201,7 @@ const initializeIndexPage = (user) => {
 								const data = {
 									plantId: addBatchForm.dataset.plantId,
 									quantity: parseInt(
-										addBatchForm.quantity.value
+										addBatchForm.quantity.value,
 									),
 									notes: addBatchForm.notes.value,
 								};
@@ -209,14 +211,14 @@ const initializeIndexPage = (user) => {
 								openModal(
 									createAlertModalContent(
 										'¡Éxito!',
-										'Tu nuevo lote ha sido añadido a la huerta.'
+										'Tu nuevo lote ha sido añadido a la huerta.',
 									),
-									'sm'
+									'sm',
 								);
 							} catch (error) {
 								alert(error.message);
 							}
-						}
+						},
 					);
 				}
 			}
